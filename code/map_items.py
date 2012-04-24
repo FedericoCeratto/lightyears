@@ -591,3 +591,4 @@ class Pipe(Building):
     def toggle_valve(self):
         """Open/close steam valve"""
         self.valve_open = not self.valve_open
+        sound.FX("valve_squeak")
