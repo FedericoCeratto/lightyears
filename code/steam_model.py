@@ -20,6 +20,7 @@ class Voltage_Model:
         # May change:
         self.charge = 0.0
         self.voltage = 0.0
+        self.venting = False
         # Changed by upgrades
         self.capacity = INITIAL_NODE_CAPACITY
 
@@ -57,6 +58,9 @@ class Voltage_Model:
             self.charge = 0
         elif ( self.charge > self.capacity ):
             self.charge = self.capacity # vent
+            self.venting = True
+        else:
+            self.venting = False
 
     def Get_Pressure(self):
         return self.charge

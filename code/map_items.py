@@ -199,6 +199,7 @@ class Node(Building):
         self.base_colour = (255,192,0)
         self.steam = Steam_Model()
         self.draw_obj_finished = draw_obj.Draw_Obj("node.png", 1)
+        self.draw_obj_venting = draw_obj.Draw_Obj("node_venting.png", 1)
         self.draw_obj_incomplete = draw_obj.Draw_Obj("node_u.png", 1)
         self.draw_obj = self.draw_obj_incomplete
 
@@ -240,7 +241,10 @@ class Node(Building):
         if ( self.Is_Broken() ):
             self.draw_obj = self.draw_obj_incomplete
         else:
-            self.draw_obj = self.draw_obj_finished
+            if self.steam.venting:
+                self.draw_obj = self.draw_obj_venting
+            else:
+                self.draw_obj = self.draw_obj_finished
 
 
     def Exits(self):
@@ -504,7 +508,7 @@ class Pipe(Building):
 
 
         # Dark green backing line:
-        colour = (32,128,20)
+        colour = (26,93,17)
         pygame.draw.line(output, colour, (x1,y1), (x2,y2), 3)
 
         if ( self.current_n1_to_n2 == 0.0 ):
@@ -522,7 +526,7 @@ class Pipe(Building):
         pos_a = (x1, y1 + 1)
         pos_b = (x2, y2 + 1)
         interp = self.dot_drawing_offset
-        colour = (0, 255, 0) # brigt green dots
+        colour = (80, 255, 80) # bright green dots
 
         self.dot_positions = [ 
             extra.Partial_Vector(pos_a, pos_b, (interp, positions))
