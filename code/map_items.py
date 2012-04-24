@@ -412,7 +412,7 @@ class Well_Node(Node):
                 "Steam production: %1.1f U" % self.production) ]
 
     def Sound_Effect(self):
-        sound.FX("bamboo1")
+        sound.FX("steam_maker")
 
 
 class Pipe(Building):

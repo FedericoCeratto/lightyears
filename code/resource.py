@@ -36,6 +36,7 @@ AUDIO_TRANS_TBL = {
     "firealrm" : "alert3",      # emergency tone 2
     "stormbeeps" : "alert2",    # emergency tone 3
     "clicker" : "aliens",       # alien noise
+    "steam_maker": "steam2",     # steam maker
 }
 
 
