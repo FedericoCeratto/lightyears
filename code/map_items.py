@@ -438,6 +438,7 @@ class Pipe(Building):
 
         self.dot_drawing_offset = 0
         self.dot_positions = []
+        sound.FX("pipe_construction")
 
     def Begin_Upgrade(self):
         if ( self.tech_level >= PIPE_MAX_TECH_LEVEL ):
@@ -447,7 +448,7 @@ class Pipe(Building):
             New_Mail("Pipe must be operational before an upgrade can begin.")
             sound.FX("error")
         else:
-            sound.FX("crisp")
+            sound.FX("pipe_upgrade")
             # Upgrade a pipe for lower resistance and more health.
             self.tech_level += 1
             self.max_health += int( PIPE_UPGRADE_WORK_FACTOR * 

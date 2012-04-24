@@ -38,7 +38,9 @@ AUDIO_TRANS_TBL = {
     "clicker" : "aliens",       # alien noise
     "steam_maker": "steam2",    # steam maker
     "pipe_flow": "pipe_flow",   # steam flowing in a pipe
-    "valve_squeak": "valve_squeak", # squeaking valve
+    "valve_squeak": "valve_squeak",  # squeaking valve
+    "pipe_construction": "dengdeng", # pipe being built
+    "pipe_upgrade": "pipe_upgrade",  # pipe being upgraded
 }
 
 
