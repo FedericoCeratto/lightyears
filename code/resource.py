@@ -42,6 +42,7 @@ AUDIO_TRANS_TBL = {
     "pipe_construction": "dengdeng", # pipe being built
     "pipe_upgrade": "pipe_upgrade",  # pipe being upgraded
     "hissing_leak": "hissing_leak",  # node venting steam
+    "node_rap": "node_rap",          # node
 }
 
 

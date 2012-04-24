@@ -279,7 +279,7 @@ class Node(Building):
         return Grid_To_Scr_Rect(self.pos).inflate(ra,ra)
 
     def Sound_Effect(self):
-        sound.FX("bamboo")
+        sound.FX("node_rap")
 
 
 class City_Node(Node):
