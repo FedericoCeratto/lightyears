@@ -586,7 +586,7 @@ class Pipe(Building):
             ((128,128,128), 15, "Flow rate: %1.1f U" % abs(self.current_n1_to_n2) ) ]
 
     def Sound_Effect(self):
-        sound.FX("bamboo2")
+        sound.FX("pipe_flow")
 
     def toggle_valve(self):
         """Open/close steam valve"""
