@@ -468,7 +468,11 @@ def Main_Loop(screen, clock, (width, height),
 
             elif e.type == KEYDOWN:
                 if ( not menu_inhibit ):
-                    ui.Key_Press(e.key)
+                    from map_items import Pipe
+                    if e.key == 32 and isinstance(ui.selection, Pipe):
+                        ui.selection.toggle_valve()
+                    else:
+                        ui.Key_Press(e.key)
 
                 elif ( menu_inhibit ):
                     current_menu.Key_Press(e.key)

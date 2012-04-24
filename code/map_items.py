@@ -224,7 +224,7 @@ class Node(Building):
     def Steam_Think(self):
         nl = []
         for p in self.Exits():
-            if ( not p.Is_Broken() ):
+            if p.valve_open and not p.Is_Broken():
                 if ( p.n1 == self ):
                     if ( not p.n2.Is_Broken() ):
                         nl.append((p.n2.steam, p.resistance))
@@ -419,6 +419,10 @@ class Pipe(Building):
     def __init__(self,n1,n2,name="Pipe"):
         Building.__init__(self,name)
         assert n1 != n2
+        self.draw_obj_valve_open = draw_obj.Draw_Obj("valve_open.png", 1)
+        self.draw_obj_valve_closed = draw_obj.Draw_Obj("valve_closed.png", 1)
+        self.draw_obj = self.draw_obj_valve_closed
+        self.valve_open = True
         n1.pipes.append(self)
         n2.pipes.append(self)
         self.n1 = n1
@@ -508,7 +512,11 @@ class Pipe(Building):
 
 
         # Dark green backing line:
-        colour = (26,93,17)
+        if self.valve_open:
+            colour = (32,128,20)
+        else:
+            colour = (22,90,10)
+
         pygame.draw.line(output, colour, (x1,y1), (x2,y2), 3)
 
         if ( self.current_n1_to_n2 == 0.0 ):
@@ -542,8 +550,9 @@ class Pipe(Building):
     FUTZFACTOR = 4.0 * 35.0
 
     def Frame_Advance(self, frame_time):
-        self.dot_drawing_offset += int(self.FUTZFACTOR * 
-                frame_time * self.current_n1_to_n2)
+        if self.valve_open:
+            self.dot_drawing_offset += int(self.FUTZFACTOR * 
+                    frame_time * self.current_n1_to_n2)
 
         if ( self.dot_drawing_offset < 0 ):
             self.dot_drawing_offset = (
@@ -579,4 +588,6 @@ class Pipe(Building):
     def Sound_Effect(self):
         sound.FX("bamboo2")
 
-
+    def toggle_valve(self):
+        """Open/close steam valve"""
+        self.valve_open = not self.valve_open
