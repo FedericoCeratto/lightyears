@@ -12,6 +12,7 @@ from pygame.locals import *
 import bresenham , intersect , extra , stats , resource , draw_obj , sound
 from primitives import *
 from steam_model import Steam_Model
+import time
 from mail import New_Mail
 
 class Item:
@@ -202,6 +203,7 @@ class Node(Building):
         self.draw_obj_venting = draw_obj.Draw_Obj("node_venting.png", 1)
         self.draw_obj_incomplete = draw_obj.Draw_Obj("node_u.png", 1)
         self.draw_obj = self.draw_obj_incomplete
+        self._hissing_started = 0
 
     def Begin_Upgrade(self):
         if ( self.tech_level >= NODE_MAX_TECH_LEVEL ):
@@ -243,6 +245,11 @@ class Node(Building):
         else:
             if self.steam.venting:
                 self.draw_obj = self.draw_obj_venting
+                # start hissing every 30 seconds
+                now = time.time()
+                if now - self._hissing_started > 30:
+                    self._hissing_started = now
+                    sound.FX("hissing_leak")
             else:
                 self.draw_obj = self.draw_obj_finished
 

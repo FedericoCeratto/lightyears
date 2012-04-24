@@ -41,6 +41,7 @@ AUDIO_TRANS_TBL = {
     "valve_squeak": "valve_squeak",  # squeaking valve
     "pipe_construction": "dengdeng", # pipe being built
     "pipe_upgrade": "pipe_upgrade",  # pipe being upgraded
+    "hissing_leak": "hissing_leak",  # node venting steam
 }
 
 
