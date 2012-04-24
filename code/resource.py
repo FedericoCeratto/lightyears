@@ -35,7 +35,7 @@ AUDIO_TRANS_TBL = {
     "emergency" : "alert1",     # emergency tone 1
     "firealrm" : "alert3",      # emergency tone 2
     "stormbeeps" : "alert2",    # emergency tone 3
-    "clicker" : "aliens",       # alien noise
+    "clicker" : "alarm_bell",   # alien noise
     "steam_maker": "steam2",    # steam maker
     "pipe_flow": "pipe_flow",   # steam flowing in a pipe
     "valve_squeak": "valve_squeak",  # squeaking valve
