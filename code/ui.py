@@ -106,7 +106,6 @@ class User_Interface:
                 w.Draw(output)
                 self.Add_Steam_Effect(output, w.pos)
 
-
         # Everything else needs to be redrawn every turn.
 
         if ( self.selection != None ):
@@ -123,6 +122,9 @@ class User_Interface:
                 self.Add_Steam_Effect(output, n.pos)
 
                 
+        for w in self.net.rock_list:
+            w.Draw(output)
+
         season_fx.Draw(output, self.Update_Area)
 
 

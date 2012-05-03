@@ -13,6 +13,10 @@ from map_items import *
 from primitives import *
 from mail import New_Mail
 
+def distance(a, b):
+    """Calculate distance between two points (tuples)"""
+    d = (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
+    return d ** (.5)
 
 class Network:
     def __init__(self, teaching):
@@ -21,6 +25,7 @@ class Network:
         self.well_list = []
         self.node_list = []
         self.pipe_list = []
+        self.rock_list = []
 
         # UI updates required?
         self.dirty = False
@@ -59,6 +64,24 @@ class Network:
 
         self.connection_value = 1
         self.Work_Pulse(0) # used to make connection map
+
+        # Add some rocks
+        while len(self.rock_list) < 5:
+            pos = (x + random.randint(-20, 20), y + random.randint(-20, 20))
+            # keep distance from wells
+            for well in self.well_list:
+                if distance(pos, well.pos) < 5:
+                    continue
+            # keep distance from the City
+            if distance(pos, GRID_CENTRE) < 7:
+                continue
+            # keep distance from other rocks
+            for rock in self.rock_list:
+                if distance(pos, rock.pos) < 5:
+                    continue
+
+            self.rock_list.append(Rock(pos))
+
 
 
     def Add_Finished_Node(self, node):
@@ -190,6 +213,24 @@ class Network:
                     sound.FX("error")
                     New_Mail("That crosses an existing pipe.")
                     return False
+
+        for r in self.rock_list:
+            # Check for collisions with rocks by modeling each rock with
+            # a big X (urgh!) Better collisions could be performed by using
+            # the Sprite class
+            lower_left =  (r.pos[0] - 1, r.pos[1] - 1)
+            lower_right = (r.pos[0] - 1, r.pos[1] + 1)
+            upper_right = (r.pos[0] + 1, r.pos[1] + 1)
+            upper_left =  (r.pos[0] + 1, r.pos[1] - 1)
+            if intersect.Intersect((lower_left, upper_right), (n1.pos, n2.pos)):
+                sound.FX("error")
+                New_Mail("Pipe collides with a rock.")
+                return False
+            if intersect.Intersect((lower_right, upper_left), (n1.pos, n2.pos)):
+                sound.FX("error")
+                New_Mail("Pipe collides with a rock.")
+                return False
+
 
         sound.FX("bamboo1")
         pipe = Pipe(n1, n2)

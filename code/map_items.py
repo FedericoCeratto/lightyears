@@ -11,6 +11,7 @@ from pygame.locals import *
 
 import bresenham , intersect , extra , stats , resource , draw_obj , sound
 from primitives import *
+from random import randint
 from steam_model import Steam_Model
 import time
 from mail import New_Mail
@@ -58,6 +59,12 @@ class Well(Item):
         self.draw_obj = draw_obj.Draw_Obj("well.png", 1)
         self.emits_steam = True
 
+class Rock(Item):
+    """Just a big rock, of random size"""
+    def __init__(self, (x,y), name="Rock"):
+        Item.__init__(self, name)
+        self.pos = (x,y)
+        self.draw_obj = draw_obj.Draw_Obj("rock.png", randint(1, 3))
 
 class Building(Item):
     def __init__(self, name):
