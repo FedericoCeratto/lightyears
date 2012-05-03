@@ -55,9 +55,6 @@ class User_Interface:
                     # Area overlaps an existing area, which gets expanded.
                     self.update_area_list[ ci ].union_ip(area)
 
-    def Update_All(self):
-        self.full_update = True
-
     def Draw_Game(self, output, season_fx):
         blink = self.blink
 
@@ -69,44 +66,17 @@ class User_Interface:
             r.top += random.randint(-m, m)
             r = output.get_rect().clip(r)
             output = output.subsurface(r)
-            self.Update_All()
 
         if ( self.net.dirty ):
-            self.Update_All()
             self.net.dirty = False
 
-        if ( mail.Has_New_Mail() or tutor.Has_Changed() ):
-            self.Update_All() # force update
+        output.blit(self.background,(0,0))
 
-        # These things may not need to be redrawn
-        # as they are never animated and can't be selected.
+        self.__Update_Reset()
 
-        if ( self.full_update ):
-            output.blit(self.background,(0,0))
-
-            self.__Update_Reset()
-
-            for w in self.net.well_list:
-                w.Draw(output)
-                self.Add_Steam_Effect(output, w.pos)
-
-        else:
-            if ( DEBUG_UPDATES ):
-                x = output.get_rect().width
-                for y in range(0,output.get_rect().height,2):
-                    pygame.draw.line(output, (0,0,0),
-                        (0,y), (x,y))
-            
-            for u in self.update_area_list:
-                output.blit(self.background, u.topleft, u)
-
-            self.__Update_Reset()
-
-            for w in self.net.well_list:
-                w.Draw(output)
-                self.Add_Steam_Effect(output, w.pos)
-
-        # Everything else needs to be redrawn every turn.
+        for w in self.net.well_list:
+            w.Draw(output)
+            self.Add_Steam_Effect(output, w.pos)
 
         if ( self.selection != None ):
             # highlight selection
@@ -121,7 +91,6 @@ class User_Interface:
             if ( n.emits_steam ):
                 self.Add_Steam_Effect(output, n.pos)
 
-                
         for w in self.net.rock_list:
             w.Draw(output)
 
@@ -214,7 +183,6 @@ class User_Interface:
                     self.net.Destroy(self.selection)
                     self.__Clear_Control_Selection()
                     self.selection = None
-                    self.Update_All()
 
                 elif ( self.mode == UPGRADE ):
                     self.selection.Begin_Upgrade()
@@ -241,10 +209,8 @@ class User_Interface:
         self.__Clear_Control_Selection()
         self.stats_hash = 0
         self.__Update_Reset()
-        self.Update_All() # after a reset...
 
     def __Update_Reset(self):
-        self.full_update = False
         self.partial_update = False
         self.update_area_list = []
 
@@ -288,7 +254,6 @@ class User_Interface:
                 if ( pipe != None ):
                     self.net.Destroy(pipe)
                     self.__Clear_Control_Selection()
-                    self.Update_All()
                 self.selection = None
 
             elif ( self.mode == UPGRADE ):
@@ -323,7 +288,6 @@ class User_Interface:
                 self.net.Destroy(n)
                 self.selection = None
                 self.__Clear_Control_Selection()
-                self.Update_All()
 
             elif ( self.mode == UPGRADE ):
                 n.Begin_Upgrade()
