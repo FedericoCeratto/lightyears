@@ -116,6 +116,7 @@ class Difficulty:
             self.CITY_MAX_TECH_LEVEL = 9
             self.BASIC_STEAM_PRODUCTION = 10
             self.STEAM_PRODUCTION_PER_LEVEL = 6
+            self.ROCK_QUANTITY = 3000
 
         elif ( level in [ MENU_INTERMEDIATE, MENU_PEACEFUL ] ):
             self.DAMAGE_FACTOR = 1.4
@@ -124,6 +125,7 @@ class Difficulty:
             self.CITY_MAX_TECH_LEVEL = 12
             self.BASIC_STEAM_PRODUCTION = 6
             self.STEAM_PRODUCTION_PER_LEVEL = 4
+            self.ROCK_QUANTITY = 2000
 
         elif ( level == MENU_EXPERT ):
             self.DAMAGE_FACTOR = 1.7
@@ -132,6 +134,7 @@ class Difficulty:
             self.CITY_MAX_TECH_LEVEL = 15
             self.BASIC_STEAM_PRODUCTION = 4
             self.STEAM_PRODUCTION_PER_LEVEL = 3
+            self.ROCK_QUANTITY = 1000
 
         else:
             print 'Invalid level',level
@@ -164,4 +167,9 @@ def Get_Grid_Size():
 
 Set_Grid_Size(10)
 
+
+def distance(a, b):
+    """Calculate distance between two points (tuples)"""
+    d = (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
+    return d ** (.5)
 

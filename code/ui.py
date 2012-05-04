@@ -241,12 +241,13 @@ class User_Interface:
             # empty (may contain pipes)
             if ( self.mode == BUILD_NODE ):
                 # create new node!
-                n = Node(gpos)
-                n.Sound_Effect()
-                self.selection = None
-                if ( self.net.Add_Grid_Item(n) ):
-                    self.selection = n
-                    tutor.Notify_Add_Node(n)
+                if self.net.use_metal('node'):
+                    n = Node(gpos, rocks=self.net.rock_list)
+                    n.Sound_Effect()
+                    self.selection = None
+                    if ( self.net.Add_Grid_Item(n) ):
+                        self.selection = n
+                        tutor.Notify_Add_Node(n)
 
             elif ( self.mode == DESTROY ):
                 # I presume you are referring to a pipe?
@@ -259,8 +260,9 @@ class User_Interface:
             elif ( self.mode == UPGRADE ):
                 if ( self.selection != None ):
 
-                    self.selection.Begin_Upgrade()
-                    self.__Clear_Control_Selection()
+                    if self.net.use_metal('up_node'):
+                        self.selection.Begin_Upgrade()
+                        self.__Clear_Control_Selection()
 
             elif ( self.selection != None ):
                 self.selection.Sound_Effect()
@@ -290,7 +292,8 @@ class User_Interface:
                 self.__Clear_Control_Selection()
 
             elif ( self.mode == UPGRADE ):
-                n.Begin_Upgrade()
+                if self.net.use_metal('up_node'):
+                    n.Begin_Upgrade()
                 self.selection = n
                 self.__Clear_Control_Selection()
 
@@ -303,12 +306,19 @@ class User_Interface:
             w = self.net.ground_grid[ gpos ]
             if ( self.mode == BUILD_NODE ):
                 # A node is planned on top of the well.
-                self.selection = None
-                n = Well_Node(gpos)
-                if ( self.net.Add_Grid_Item(n) ):
-                    self.selection = n
-                    self.selection.Sound_Effect()
+                if self.net.use_metal('well'):
+                    self.selection = None
+                    n = Well_Node(gpos)
+                    if ( self.net.Add_Grid_Item(n) ):
+                        self.selection = n
+                        self.selection.Sound_Effect()
 
+        ## Select a rock
+        #for rock in self.net.rock_list:
+        #    if rock.pos == gpos:
+        #        self.selection = rock
+        #        rock.Sound_Effect()
+        #        continue
 
         self.net.Popup(self.selection)
         tutor.Notify_Select(self.selection)

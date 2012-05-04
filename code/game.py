@@ -366,6 +366,7 @@ def Main_Loop(screen, clock, (width, height),
             g.work_units_used = g.net.Work_Pulse(g.net.hub.Get_Avail_Work_Units())
 
             g.net.Steam_Think()
+            g.net.dig_metal()
             g.net.Expire_Popups()
             tutor.Examine_Game(g)
 

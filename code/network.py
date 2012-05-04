@@ -13,11 +13,6 @@ from map_items import *
 from primitives import *
 from mail import New_Mail
 
-def distance(a, b):
-    """Calculate distance between two points (tuples)"""
-    d = (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
-    return d ** (.5)
-
 class Network:
     def __init__(self, teaching):
         self.ground_grid = dict()
@@ -82,6 +77,8 @@ class Network:
 
             self.rock_list.append(Rock(pos))
 
+        for node in self.node_list:
+            node.locate_nearby_rocks(self.rock_list)
 
 
     def Add_Finished_Node(self, node):
@@ -89,6 +86,7 @@ class Network:
         node.Do_Work()
         node.complete = True
         self.Add_Grid_Item(node)
+        node.locate_nearby_rocks(self.rock_list)
 
     def Add_Grid_Item(self, item, inhibit_effects=False):
         gpos = item.pos
@@ -123,6 +121,7 @@ class Network:
             if ( self.ground_grid.has_key( gpos )):
                 item.Save(self.ground_grid[ gpos ])
             self.ground_grid[ gpos ] = item
+            item.locate_nearby_rocks(self.rock_list)
         elif ( isinstance(item, Well) ):
             self.well_list.append(item)
             self.ground_grid[ gpos ] = item
@@ -158,6 +157,35 @@ class Network:
                     next |= set(node.Exits())
             now = next
         return used
+
+    def dig_metal(self):
+        """For each existing node close to a rock, extract metal and update
+        the available metal counter in the city node
+        """
+        for node in self.node_list:
+            if self.Is_Connected(node):
+                for rock, distance in node.rocks_nearby:
+                    extracted = rock.dig(distance)
+                    self.hub.metal_quantity += extracted
+
+    def use_metal(self, building_type):
+        """Check if enough metal is available to build something.
+        If so, decrease the remaining metal.
+        """
+        costs = {
+            'up_node': 50,
+            'node': 75,
+            'well': 25,
+        }
+        cost = costs.get(building_type, 40)
+        if self.hub.metal_quantity > cost:
+            self.hub.metal_quantity -= cost
+            return cost
+
+        New_Mail("Insufficient metal: %s metal units required." % cost)
+        return None
+
+
 
     def Popup(self, node):
         if ( node != None ):
@@ -198,7 +226,6 @@ class Network:
         if ( len(other_items) != 0 ):
             sound.FX("error")
             New_Mail("Pipe collides with other items.")
-            print repr(other_items)
             return False
 
         for p in other_pipes:

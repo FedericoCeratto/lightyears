@@ -64,7 +64,26 @@ class Rock(Item):
     def __init__(self, (x,y), name="Rock"):
         Item.__init__(self, name)
         self.pos = (x,y)
-        self.draw_obj = draw_obj.Draw_Obj("rock.png", randint(1, 3))
+        size = randint(1, 3)
+        self.draw_obj = draw_obj.Draw_Obj("rock.png", size)
+        self.quantity = size * DIFFICULTY.ROCK_QUANTITY + \
+            randint(1, DIFFICULTY.ROCK_QUANTITY)
+
+    def dig(self, distance):
+        """Dig an amount of metal"""
+        if self.quantity <= 0:
+            return 0
+        chunk = .1 / (distance + 1)
+        chunk = min(self.quantity, chunk)
+        self.quantity -= chunk
+        return chunk
+
+    def Draw_Selected(self, output, highlight):
+        ra = ( Get_Grid_Size() / 2 ) + 2
+        pygame.draw.circle(output, highlight,
+            Grid_To_Scr(self.pos), ra , 2 )
+        return Grid_To_Scr_Rect(self.pos).inflate(ra,ra)
+
 
 class Building(Item):
     def __init__(self, name):
@@ -180,6 +199,10 @@ class Building(Item):
             else:
                 l += [ (self.Get_Diagram_Colour(), 15, "Not Built") ]
 
+        if isinstance(self, City_Node):
+            l.append((self.Get_Diagram_Colour(), 15,
+                "Metal: %d" % int(self.metal_quantity)))
+
         return l
     
     def Get_Diagram_Colour(self):
@@ -199,7 +222,7 @@ class Building(Item):
         return (r,g,b)
 
 class Node(Building):
-    def __init__(self,(x,y),name="Node"):
+    def __init__(self,(x,y),name="Node", rocks=[]):
         Building.__init__(self,name)
         self.pipes = []
         self.pos = (x,y)
@@ -211,6 +234,15 @@ class Node(Building):
         self.draw_obj_incomplete = draw_obj.Draw_Obj("node_u.png", 1)
         self.draw_obj = self.draw_obj_incomplete
         self._hissing_started = 0
+        self.rocks_nearby = self.locate_nearby_rocks(rocks)
+
+    def locate_nearby_rocks(self, rocks):
+        """Locate rocks close to this node
+        Set sef.rocks_nearby to [(rock, distance), ... ]
+        """
+        li = [(rock, distance(self.pos, rock.pos)) for rock in rocks]
+        self.rocks_nearby = [t for t in li if t[1] < 6]
+
 
     def Begin_Upgrade(self):
         if ( self.tech_level >= NODE_MAX_TECH_LEVEL ):
@@ -299,6 +331,7 @@ class City_Node(Node):
         self.draw_obj = draw_obj.Draw_Obj("city1.png", 3)
         self.draw_obj_finished = self.draw_obj_incomplete = self.draw_obj
         self.total_steam = 0
+        self.metal_quantity = 500
 
     def Begin_Upgrade(self):
         # Upgrade a city for higher capacity
