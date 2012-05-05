@@ -79,6 +79,14 @@ class Rock(Item):
         self.draw_obj = draw_obj.Draw_Obj("rock.png", size)
         self.quantity = size * DIFFICULTY.ROCK_QUANTITY + \
             randint(1, DIFFICULTY.ROCK_QUANTITY)
+        self.reflexes = [
+            # x (0 to 64), y, sequence value for each reflex
+            [10, 30, randint(0, 128)],
+            [32, 40, randint(0, 128)],
+            [25, 15, randint(0, 128)],
+            [30, 50, randint(0, 128)],
+            [22, 25, randint(0, 128)],
+        ]
 
     def dig(self, distance):
         """Dig an amount of metal"""
@@ -89,11 +97,46 @@ class Rock(Item):
         self.quantity -= chunk
         return chunk
 
+    # unused
     def Draw_Selected(self, output, highlight):
         ra = ( Get_Grid_Size() / 2 ) + 2
         pygame.draw.circle(output, highlight,
             Grid_To_Scr(self.pos), ra , 2 )
         return Grid_To_Scr_Rect(self.pos).inflate(ra,ra)
+
+    def Draw(self, output):
+        """Make the rock shine"""
+        # print the rock
+        self.draw_obj.Draw(output, self.pos, (0,0))
+
+        size = self.draw_obj.key[1] * Get_Grid_Size() # in pixels
+        rock_topleft = Point(Grid_To_Scr(self.pos)) - Point(size, size) / 2
+        scale = (size / 64.0)
+        for reflex in self.reflexes:
+            # print a reflex
+            reflex[2] += 1
+            x, y, seq = reflex
+            if seq < 32:
+                alpha = seq * 8
+            elif seq < 64:
+                alpha = 512 - seq * 8
+            else:
+                alpha = 0
+
+            if seq > 128:
+                reflex[2] = 0
+
+            if alpha > 255:
+                alpha = 255
+            p = rock_topleft + Point(x,y) * scale
+            p.round_to_int()
+            col = (255, 255, 255, alpha)
+            col2 = (255, 255, 255, int(alpha * .5))
+            gfxdraw.pixel(output, p.x, p.y, col)
+            gfxdraw.pixel(output, p.x + 1, p.y, col2)
+            gfxdraw.pixel(output, p.x - 1, p.y, col2)
+            gfxdraw.pixel(output, p.x, p.y + 1, col2)
+            gfxdraw.pixel(output, p.x, p.y - 1, col2)
 
 
 class Building(Item):

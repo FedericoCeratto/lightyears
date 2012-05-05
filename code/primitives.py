@@ -173,6 +173,7 @@ class Point(object):
     def __init__(self, x, y=None):
         """Point or vector"""
         if isinstance(x, tuple) and y is None:
+            assert len(x) == 2
             self.tup = x
         else:
             self.tup = (x, y)
@@ -211,6 +212,9 @@ class Point(object):
         if other is not None:
             v = other - self
         return v / v.modulo()
+
+    def round_to_int(self):
+        self.tup = (int(self.x), int(self.y))
 
     def __repr__(self):
         return "Vector {%.3f, %.3f}" % (self.x, self.y)
