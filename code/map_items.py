@@ -517,9 +517,10 @@ class City_Node(Node):
         return False
 
     def Draw_Selected(self, output, highlight):
-        r = Grid_To_Scr_Rect(self.pos).inflate(CITY_BOX_SIZE,CITY_BOX_SIZE)
-        pygame.draw.rect(output, highlight,r,2)
-        return r.inflate(2,2)
+        p = Point(Grid_To_Scr(self.pos))
+        color = highlight + (100,)
+        width, height = self.draw_ellipse(output, p, 2, color, 2)
+        return Grid_To_Scr_Rect(self.pos).inflate(width, height)
 
     def Get_Tech_Level(self):            
         return Building.Get_Tech_Level(self) + (" of %d" % DIFFICULTY.CITY_MAX_TECH_LEVEL )
