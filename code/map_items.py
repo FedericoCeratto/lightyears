@@ -6,7 +6,8 @@
 # Items that you will find on the map.
 # All inherit from the basic Item.
 
-import pygame , math
+import pygame, math
+from pygame import gfxdraw
 from pygame.locals import *
 
 import bresenham , intersect , extra , stats , resource , draw_obj , sound
@@ -97,6 +98,20 @@ class Item:
 
     def Sound_Effect(self):
         pass
+
+    def draw_ellipse(self, surface, p, width, color, line_width):
+        """Draw an antialiased isometric ellipse
+        params: surface, Point, ellipse width (float), color tuple,
+            line width (int)
+        :returns: (width, height) of the bounding box
+        """
+        for x in xrange(line_width):
+            w = width + x
+            height = int(w * .574)
+            gfxdraw.aaellipse(surface, p.x, p.y, int(w), height, color)
+
+        return w, height
+
 
 class Well(Item):
     def __init__(self, (x,y), name="Well"):
@@ -359,11 +374,14 @@ class Node(Building):
         return self.steam.Get_Pressure()
 
     def Draw_Selected(self, output, highlight):
-        ra = ( Get_Grid_Size() / 2 ) + 2
-        pygame.draw.circle(output, highlight,
-            Grid_To_Scr(self.pos), ra , 2 )
 
-        return Grid_To_Scr_Rect(self.pos).inflate(ra,ra)
+        p = Point(Grid_To_Scr(self.pos))
+        width = Get_Grid_Size() * 1.1
+
+        color = highlight + (100,)
+        width, height = self.draw_ellipse(output, p, width, color, 2)
+        return Grid_To_Scr_Rect(self.pos).inflate(width, height)
+
 
     def Draw(self, output):
         """Draw node and conveyors to the closest rocks
