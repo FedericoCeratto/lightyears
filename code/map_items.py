@@ -16,6 +16,52 @@ from steam_model import Steam_Model
 import time
 from mail import New_Mail
 
+class Point(object):
+    def __init__(self, x, y=None):
+        """Point or vector"""
+        if isinstance(x, tuple) and y is None:
+            self.tup = x
+        else:
+            self.tup = (x, y)
+
+    @property
+    def x(self):
+        return self.tup[0]
+
+    @property
+    def y(self):
+        return self.tup[1]
+
+    def __add__(self, other):
+        if isinstance(other, Point):
+            return Point(self.x + other.x, self.y + other.y)
+        return NotImplemented
+
+    def __sub__(self, other):
+        return self + (other * -1)
+
+    def __mul__(self, scalar):
+        return Point(self.x * scalar, self.y * scalar)
+
+    def __div__(self, scalar):
+        return Point(self.x / scalar, self.y / scalar)
+
+    def modulo(self):
+        return (self.x ** 2 + self.y ** 2) ** .5
+
+    def distance(self, other):
+        d = other - self
+        return d.modulo()
+
+    def normalized(self, other=None):
+        v = self
+        if other is not None:
+            v = other - self
+        return v / v.modulo()
+
+    def __repr__(self):
+        return "Vector {%.3f, %.3f}" % (self.x, self.y)
+
 class Item:
     def __init__(self, name):
         self.pos = None
@@ -73,7 +119,7 @@ class Rock(Item):
         """Dig an amount of metal"""
         if self.quantity <= 0:
             return 0
-        chunk = .1 / (distance + 1)
+        chunk = .5 / (distance + 1)
         chunk = min(self.quantity, chunk)
         self.quantity -= chunk
         return chunk
@@ -235,6 +281,7 @@ class Node(Building):
         self.draw_obj = self.draw_obj_incomplete
         self._hissing_started = 0
         self.rocks_nearby = self.locate_nearby_rocks(rocks)
+        self.conveyor_offset = 0
 
     def locate_nearby_rocks(self, rocks):
         """Locate rocks close to this node
@@ -315,11 +362,35 @@ class Node(Building):
         ra = ( Get_Grid_Size() / 2 ) + 2
         pygame.draw.circle(output, highlight,
             Grid_To_Scr(self.pos), ra , 2 )
+
         return Grid_To_Scr_Rect(self.pos).inflate(ra,ra)
+
+    def Draw(self, output):
+        """Draw node and conveyors to the closest rocks
+        """
+        self.conveyor_offset += .01
+        self.conveyor_offset %= 1
+
+        for rock, dist in self.rocks_nearby:
+            np = Grid_To_Scr(self.pos)
+            rp = Grid_To_Scr(rock.pos)
+            colour = (100,) * 3
+            pygame.draw.aaline(output, colour, np, rp, 1)
+
+            np = Point(np)
+            rp = Point(rp)
+            dist = np - rp
+            colour = (0,) * 3
+            for l in xrange(5):
+                p = rp + dist / 5.0 * (l + self.conveyor_offset)
+                p2 = rp + dist / 5.0 * (l + self.conveyor_offset + .2)
+                pygame.draw.aaline(output, colour, p.tup, p2.tup, 1)
+
+        self.draw_obj.Draw(output, self.pos, (0,0))
+
 
     def Sound_Effect(self):
         sound.FX("node_rap")
-
 
 class City_Node(Node):
     def __init__(self,(x,y),name="City"):
