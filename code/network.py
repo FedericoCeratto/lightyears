@@ -61,19 +61,21 @@ class Network:
         self.Work_Pulse(0) # used to make connection map
 
         # Add some rocks
-        while len(self.rock_list) < 5:
+        while len(self.rock_list) < 10:
             pos = (x + random.randint(-20, 20), y + random.randint(-20, 20))
             # keep distance from wells
-            for well in self.well_list:
-                if distance(pos, well.pos) < 5:
-                    continue
+            too_close = [w for w in self.well_list
+                if distance(pos, w.pos) < 3]
+            if too_close:
+                continue
             # keep distance from the City
-            if distance(pos, GRID_CENTRE) < 7:
+            if distance(pos, GRID_CENTRE) < 9:
                 continue
             # keep distance from other rocks
-            for rock in self.rock_list:
-                if distance(pos, rock.pos) < 5:
-                    continue
+            too_close = [r for r in self.rock_list
+                if distance(pos, r.pos) < 3]
+            if too_close:
+                continue
 
             self.rock_list.append(Rock(pos))
 
