@@ -18,21 +18,25 @@ class User_Interface:
         self.net = net
         self.control_menu = None
 
-
         self.Reset()
         self.blink = 0xff
 
-        img = resource.Load_Image("back.jpg").convert() # convert destroys a-channel
-
-        # Although there is only one base image, it is flipped and
-        # rotated on startup to create one of eight possible backdrops.
+        # Although there is only one base image, it is scaled and
+        # cropped on startup to create different backdrops.
         # (Note: These don't get saved, as they're part of the UI. That's bad.)
 
-        img = pygame.transform.rotate(img, 90 * random.randint(0,3))
-        if ( random.randint(0,1) == 0 ):
-            img = pygame.transform.flip(img, True, False)
-            
-        self.background = pygame.transform.scale(img, (width, height))
+        img = resource.Load_Image("moon_surface.jpg")
+        zoom = 1 + random.random() # zoom in between 1 and 2
+        scaled = pygame.transform.smoothscale(img,
+            (int(width * zoom), int(height * zoom))
+        )
+
+        # get random coordinates to extract a background surface
+        x = randint(0, scaled.get_width() - width)
+        y = randint(0, scaled.get_height() - height)
+        self.background = pygame.Surface((width, height),flags=pygame.SRCALPHA)
+        self.background.blit(scaled, (0,0),(x, y, x + width, y + height))
+
 
         self.steam_effect = particle.Make_Particle_Effect(particle.Steam_Particle)
         self.steam_effect_frame = 0
