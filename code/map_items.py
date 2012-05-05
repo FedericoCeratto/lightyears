@@ -293,6 +293,7 @@ class Node(Building):
         self.draw_obj = self.draw_obj_incomplete
         self._hissing_started = 0
         self.conveyor_offset = 0
+        self.metal_yield = 0
         self.max_rock_distance = INITIAL_NODE_EXCAVATION_DISTANCE
         self.rocks_nearby = self.locate_nearby_rocks(rocks)
 
@@ -365,8 +366,14 @@ class Node(Building):
                     int(self.steam.Get_Capacity()), (0, 0, 100))
 
     def Get_Information(self):
-        return Building.Get_Information(self) + [
-            ((128,128,128), 15, "Steam pressure: %1.1f P" % self.steam.Get_Pressure()) ]
+        infos = Building.Get_Information(self)
+        infos.append(
+            ((128,128,128), 15, "Steam pressure: %1.1f P" %
+            self.steam.Get_Pressure())
+        )
+        infos.append((self.Get_Diagram_Colour(), 15,
+                "Metal yield: %d" % int(self.metal_yield * 10)))
+        return infos
 
     def Get_Pressure(self):
         return self.steam.Get_Pressure()

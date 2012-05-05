@@ -163,10 +163,12 @@ class Network:
         the available metal counter in the city node
         """
         for node in self.node_list:
+            node.metal_yield = 0
             if self.Is_Connected(node):
                 for rock, distance in node.rocks_nearby:
                     extracted = rock.dig(distance)
                     self.hub.metal_quantity += extracted
+                    node.metal_yield += extracted
 
     def use_metal(self, building_type):
         """Check if enough metal is available to build something.
