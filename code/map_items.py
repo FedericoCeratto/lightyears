@@ -397,17 +397,24 @@ class Node(Building):
             np = Grid_To_Scr(self.pos)
             rp = Grid_To_Scr(rock.pos)
             colour = (100,) * 3
-            pygame.draw.aaline(output, colour, np, rp, 1)
-            if rock.quantity == 0:
+            if self.metal_yield == 0:
                 continue
 
+            # Create moving dots, in two ways
             np = Point(np)
             rp = Point(rp)
             dist = np - rp
-            colour = (0,) * 3
+            colour = (0, 0, 0, 230)
             for l in xrange(5):
                 p = rp + dist / 5.0 * (l + self.conveyor_offset)
-                p2 = rp + dist / 5.0 * (l + self.conveyor_offset + .2)
+                p2 = rp + dist / 5.0 * (l + self.conveyor_offset + .15)
+                pygame.draw.aaline(output, colour, p.tup, p2.tup, 1)
+
+            # move the return line aside (left-hand traffic ;) )
+            n = dist.orthogonal() * -2
+            for l in xrange(5):
+                p = np + n - dist / 5.0 * (l + self.conveyor_offset)
+                p2 = np + n - dist / 5.0 * (l + self.conveyor_offset + .15)
                 pygame.draw.aaline(output, colour, p.tup, p2.tup, 1)
 
         self.draw_obj.Draw(output, self.pos, (0,0))
@@ -522,7 +529,7 @@ class City_Node(Node):
         width, height = self.draw_ellipse(output, p, 2, color, 2)
         return Grid_To_Scr_Rect(self.pos).inflate(width, height)
 
-    def Get_Tech_Level(self):            
+    def Get_Tech_Level(self):
         return Building.Get_Tech_Level(self) + (" of %d" % DIFFICULTY.CITY_MAX_TECH_LEVEL )
 
     def Sound_Effect(self):

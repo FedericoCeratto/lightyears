@@ -213,6 +213,10 @@ class Point(object):
             v = other - self
         return v / v.modulo()
 
+    def orthogonal(self):
+        """Create an orthogonal vector"""
+        return Point(self.y, -1 * self.x).normalized()
+
     def round_to_int(self):
         self.tup = (int(self.x), int(self.y))
 
