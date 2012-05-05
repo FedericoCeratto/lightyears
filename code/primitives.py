@@ -7,6 +7,7 @@
 import math
 
 from pygame.locals import *
+from pygame import gfxdraw
 
 # Developers's controls:
 DEBUG = False # enables cheats
@@ -167,9 +168,75 @@ def Get_Grid_Size():
 
 Set_Grid_Size(10)
 
+class Point(object):
+    def __init__(self, x, y=None):
+        """Point or vector"""
+        if isinstance(x, tuple) and y is None:
+            self.tup = x
+        else:
+            self.tup = (x, y)
+
+    @property
+    def x(self):
+        return self.tup[0]
+
+    @property
+    def y(self):
+        return self.tup[1]
+
+    def __add__(self, other):
+        if isinstance(other, Point):
+            return Point(self.x + other.x, self.y + other.y)
+        return NotImplemented
+
+    def __sub__(self, other):
+        return self + (other * -1)
+
+    def __mul__(self, scalar):
+        return Point(self.x * scalar, self.y * scalar)
+
+    def __div__(self, scalar):
+        return Point(self.x / scalar, self.y / scalar)
+
+    def modulo(self):
+        return (self.x ** 2 + self.y ** 2) ** .5
+
+    def distance(self, other):
+        d = other - self
+        return d.modulo()
+
+    def normalized(self, other=None):
+        v = self
+        if other is not None:
+            v = other - self
+        return v / v.modulo()
+
+    def __repr__(self):
+        return "Vector {%.3f, %.3f}" % (self.x, self.y)
 
 def distance(a, b):
     """Calculate distance between two points (tuples)"""
     d = (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
     return d ** (.5)
+
+def draw_ellipse(surface, p, width, color, line_width, center=True):
+    """Draw an antialiased isometric ellipse
+    params: surface, Point, ellipse width in grid sizes (float), color tuple,
+        line width (int)
+    The ellipse is centered in p
+    :returns: (width, height) of the bounding box
+    """
+    gs = Get_Grid_Size()
+    width_pix = width * gs
+    if center:
+        # center the ellipse
+        c = p + Point(gs/2, gs/2)
+    else:
+        c = p
+    for x in xrange(line_width):
+        w = width_pix + x
+        height = int(w * .574)
+        gfxdraw.aaellipse(surface, c.x, c.y, int(w), height, color)
+
+    return int(w), height
 

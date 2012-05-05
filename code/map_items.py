@@ -17,51 +17,6 @@ from steam_model import Steam_Model
 import time
 from mail import New_Mail
 
-class Point(object):
-    def __init__(self, x, y=None):
-        """Point or vector"""
-        if isinstance(x, tuple) and y is None:
-            self.tup = x
-        else:
-            self.tup = (x, y)
-
-    @property
-    def x(self):
-        return self.tup[0]
-
-    @property
-    def y(self):
-        return self.tup[1]
-
-    def __add__(self, other):
-        if isinstance(other, Point):
-            return Point(self.x + other.x, self.y + other.y)
-        return NotImplemented
-
-    def __sub__(self, other):
-        return self + (other * -1)
-
-    def __mul__(self, scalar):
-        return Point(self.x * scalar, self.y * scalar)
-
-    def __div__(self, scalar):
-        return Point(self.x / scalar, self.y / scalar)
-
-    def modulo(self):
-        return (self.x ** 2 + self.y ** 2) ** .5
-
-    def distance(self, other):
-        d = other - self
-        return d.modulo()
-
-    def normalized(self, other=None):
-        v = self
-        if other is not None:
-            v = other - self
-        return v / v.modulo()
-
-    def __repr__(self):
-        return "Vector {%.3f, %.3f}" % (self.x, self.y)
 
 class Item:
     def __init__(self, name):
@@ -105,12 +60,7 @@ class Item:
             line width (int)
         :returns: (width, height) of the bounding box
         """
-        for x in xrange(line_width):
-            w = width + x
-            height = int(w * .574)
-            gfxdraw.aaellipse(surface, p.x, p.y, int(w), height, color)
-
-        return w, height
+        return draw_ellipse(surface, p, width, color, line_width, center=False)
 
 
 class Well(Item):
@@ -376,10 +326,9 @@ class Node(Building):
     def Draw_Selected(self, output, highlight):
 
         p = Point(Grid_To_Scr(self.pos))
-        width = Get_Grid_Size() * 1.1
 
         color = highlight + (100,)
-        width, height = self.draw_ellipse(output, p, width, color, 2)
+        width, height = self.draw_ellipse(output, p, 1, color, 2)
         return Grid_To_Scr_Rect(self.pos).inflate(width, height)
 
 

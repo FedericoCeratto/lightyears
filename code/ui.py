@@ -107,7 +107,8 @@ class User_Interface:
                 # could put a node here.
                 r = Grid_To_Scr_Rect(gpos)
                 self.Update_Area(r)
-                pygame.draw.rect(output, (120,120,50), r, 1)
+                color = (255, 255, 0, 200)
+                draw_ellipse(output, Point(r.topleft), 1, color, 1)
 
             elif (( self.mode == BUILD_PIPE )
             and ( self.selection != None )
