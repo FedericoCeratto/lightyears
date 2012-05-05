@@ -245,16 +245,17 @@ class Node(Building):
         self.draw_obj_incomplete = draw_obj.Draw_Obj("node_u.png", 1)
         self.draw_obj = self.draw_obj_incomplete
         self._hissing_started = 0
-        self.rocks_nearby = self.locate_nearby_rocks(rocks)
         self.conveyor_offset = 0
+        self.max_rock_distance = INITIAL_NODE_EXCAVATION_DISTANCE
+        self.rocks_nearby = self.locate_nearby_rocks(rocks)
 
     def locate_nearby_rocks(self, rocks):
         """Locate rocks close to this node
         Set sef.rocks_nearby to [(rock, distance), ... ]
         """
+        maxd = self.max_rock_distance
         li = [(rock, distance(self.pos, rock.pos)) for rock in rocks]
-        self.rocks_nearby = [t for t in li if t[1] < 6]
-
+        self.rocks_nearby = [t for t in li if t[1] < maxd]
 
     def Begin_Upgrade(self):
         if ( self.tech_level >= NODE_MAX_TECH_LEVEL ):
@@ -472,7 +473,7 @@ class City_Node(Node):
 
 
 class Well_Node(Node):
-    def __init__(self,(x,y),name="Steam Maker"):
+    def __init__(self,(x,y),name="Steam Maker", rocks=[]):
         Node.__init__(self,(x,y),name)
         self.base_colour = (255,0,192)
         self.draw_obj_finished = draw_obj.Draw_Obj("maker.png", 1)

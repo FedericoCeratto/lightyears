@@ -109,6 +109,13 @@ class User_Interface:
                 self.Update_Area(r)
                 color = (255, 255, 0, 200)
                 draw_ellipse(output, Point(r.topleft), 1, color, 1)
+                # draw excavation shadow
+                draw_ellipse(output, Point(r.topleft),
+                    INITIAL_NODE_EXCAVATION_DISTANCE, (0, 0, 0, 10), 1,
+                    filled=True)
+                # draw excavation limit
+                draw_ellipse(output, Point(r.topleft),
+                    INITIAL_NODE_EXCAVATION_DISTANCE , (0, 0, 0, 30), 1)
 
             elif (( self.mode == BUILD_PIPE )
             and ( self.selection != None )

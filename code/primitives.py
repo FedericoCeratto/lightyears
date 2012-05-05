@@ -59,6 +59,7 @@ TWO_THIRDS_PI = ( math.pi * 2.0 ) / 3.0
 # Game constants, for tuning:
 # steam:
 INITIAL_NODE_CAPACITY = 50
+INITIAL_NODE_EXCAVATION_DISTANCE = 8
 CAPACITY_UPGRADE = 15
 RESISTANCE_FACTOR = 0.55 # 0.65
 WORK_STEAM_DEMAND = 4.52
@@ -219,7 +220,7 @@ def distance(a, b):
     d = (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
     return d ** (.5)
 
-def draw_ellipse(surface, p, width, color, line_width, center=True):
+def draw_ellipse(surface, p, width, color, line_width, center=True, filled=False):
     """Draw an antialiased isometric ellipse
     params: surface, Point, ellipse width in grid sizes (float), color tuple,
         line width (int)
@@ -233,6 +234,12 @@ def draw_ellipse(surface, p, width, color, line_width, center=True):
         c = p + Point(gs/2, gs/2)
     else:
         c = p
+
+    if filled:
+        w = width_pix
+        height = int(w * .574)
+        gfxdraw.filled_ellipse(surface, c.x, c.y, int(w), height, color)
+
     for x in xrange(line_width):
         w = width_pix + x
         height = int(w * .574)
