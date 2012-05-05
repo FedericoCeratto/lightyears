@@ -109,6 +109,10 @@ class Rock(Item):
         # print the rock
         self.draw_obj.Draw(output, self.pos, (0,0))
 
+        max_reflexes = self.quantity / 200
+        if len(self.reflexes) > max_reflexes:
+            self.reflexes.pop()
+
         size = self.draw_obj.key[1] * Get_Grid_Size() # in pixels
         rock_topleft = Point(Grid_To_Scr(self.pos)) - Point(size, size) / 2
         scale = (size / 64.0)
@@ -131,7 +135,7 @@ class Rock(Item):
             p = rock_topleft + Point(x,y) * scale
             p.round_to_int()
             col = (255, 255, 255, alpha)
-            col2 = (255, 255, 255, int(alpha * .5))
+            col2 = (255, 255, 255, int(alpha * .7))
             gfxdraw.pixel(output, p.x, p.y, col)
             gfxdraw.pixel(output, p.x + 1, p.y, col2)
             gfxdraw.pixel(output, p.x - 1, p.y, col2)
@@ -387,6 +391,8 @@ class Node(Building):
             rp = Grid_To_Scr(rock.pos)
             colour = (100,) * 3
             pygame.draw.aaline(output, colour, np, rp, 1)
+            if rock.quantity == 0:
+                continue
 
             np = Point(np)
             rp = Point(rp)
