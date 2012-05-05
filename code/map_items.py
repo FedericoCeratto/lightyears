@@ -227,7 +227,7 @@ class Building(Item):
         (x,y) = Grid_To_Scr(self.pos)
         x -= 16
         y -= 12
-        return stats.Draw_Bar_Meter(output, self.Get_Popup_Items(), (x,y), 32, 5)
+        return stats.draw_popup_bar_meter(output, self.Get_Popup_Items(), (x,y), 32, 5)
 
     def Get_Tech_Level(self):            
         return ("Tech Level %d" % self.tech_level)

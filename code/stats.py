@@ -5,6 +5,7 @@
 
 
 import pygame
+from pygame import gfxdraw
 from pygame.locals import *
 
 import resource
@@ -50,6 +51,30 @@ def Draw_Bar_Meter(output, items, centre_pos, width, item_height):
             if ( var > total ): var = total
             r3 = Rect(r1.left + 1, y, (( w * var ) / total ), h)
             pygame.draw.rect(output, var_colour, r3)
+
+        y += item_height
+
+    return r1 # bounding box
+
+def draw_popup_bar_meter(output, items, centre_pos, width, item_height):
+    """Draw partially transparent bar meters floating over map items"""
+    alpha = (140, )
+    r1 = Rect(0, 0, width, ( item_height * len(items) ) + 1)
+    r1.center = centre_pos
+    y = r1.top + 1
+    w = width - 2
+    h = item_height - 1
+
+    for (var, var_colour, total, total_colour) in items:
+        r2 = Rect(r1.left + 1, y, w, h) # (total)
+        gfxdraw.box(output, r2, total_colour + alpha)
+
+        if ( var > 0 ):
+            if ( var > total ): var = total
+            if var != total:
+                alpha = (200, ) # highlight broken items
+            r3 = Rect(r1.left + 1, y, (( w * var ) / total ), h)
+            gfxdraw.box(output, r3, var_colour + alpha)
 
         y += item_height
 
