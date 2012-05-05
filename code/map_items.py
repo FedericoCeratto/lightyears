@@ -119,7 +119,7 @@ class Rock(Item):
         """Dig an amount of metal"""
         if self.quantity <= 0:
             return 0
-        chunk = .5 / (distance + 1)
+        chunk = 1.5 / (distance + 1)
         chunk = min(self.quantity, chunk)
         self.quantity -= chunk
         return chunk
