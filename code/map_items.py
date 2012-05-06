@@ -405,6 +405,10 @@ class Node(Building):
             np = Point(np)
             rp = Point(rp)
             dist = np - rp
+
+            if dist.modulo() < 1: # No conveyors when the node is *in* the rock
+                continue
+
             colour = (0, 0, 0, 230)
             for l in xrange(5):
                 p = rp + dist / 5.0 * (l + self.conveyor_offset)
