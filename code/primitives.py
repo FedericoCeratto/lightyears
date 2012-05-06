@@ -186,6 +186,13 @@ class Point(object):
     def y(self):
         return self.tup[1]
 
+    # act as a tuple
+    def __len__(self):
+        return len(self.tup)
+
+    def __getitem__(self, i):
+        return self.tup[i]
+
     def __add__(self, other):
         if isinstance(other, Point):
             return Point(self.x + other.x, self.y + other.y)
@@ -194,8 +201,11 @@ class Point(object):
     def __sub__(self, other):
         return self + (other * -1)
 
-    def __mul__(self, scalar):
-        return Point(self.x * scalar, self.y * scalar)
+    def __mul__(self, other):
+        if isinstance(other, Point): # vector dot product
+            return self.x * other.x + self.y * other.y
+        # scalar product
+        return Point(self.x * other, self.y * other)
 
     def __div__(self, scalar):
         return Point(self.x / scalar, self.y / scalar)
