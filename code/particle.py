@@ -25,10 +25,11 @@ class Steam_Particle:
         m2 = m + 1
 
         (self.x, self.y) = (random.randint(m1,m2), MAX_STEAM_SIZE)
-        self.bright = random.randint(80,160)
+        self.bright = random.randint(200,255)
         self.dx = ( random.random() * 2.0 ) - 1.0
         self.dy = - ( random.random() + 1.0 )
-        self.db = ( random.random() * 2.0 ) + 3.0
+        self.alpha = 255
+        self.dalpha = 15
 
     def Next(self):
         self.x += self.dx
@@ -36,11 +37,12 @@ class Steam_Particle:
         self.dx *= 0.95
         self.dy *= 0.95
         self.dx += 0.02
-        self.bright -= self.db
+        self.alpha -= self.dalpha
         if ( self.bright < 40 ):
             self.bright = 40
         b = int(self.bright)
-        return ((self.x, self.y), (b, b, b, 255))
+        alpha = max(0, self.alpha)
+        return ((self.x, self.y), (b, b, b, alpha))
 
     def Max_Size(self):
         return MAX_STEAM_SIZE
@@ -87,12 +89,12 @@ def Make_Particle_Effect(particle_class):
     NUM_FRAMES = 80
 
     p = particle_class()
-    particle_effect = [ 
-                pygame.Surface((p.Max_Size(), p.Max_Size()))
-                        for i in xrange(NUM_FRAMES) ]
 
-    for frame in particle_effect:
-        frame.set_colorkey((0,0,0))
+    particle_effect = [] # a list of MAX_FRAMES frames (surfaces)
+    for i in xrange(NUM_FRAMES):
+        s = pygame.Surface((p.Max_Size(), p.Max_Size()), flags=pygame.SRCALPHA)
+        s.fill((0, 0, 0, 0))
+        particle_effect.append(s)
 
     sz = p.Particle_Size()
 
