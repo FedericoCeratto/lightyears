@@ -21,6 +21,8 @@ class Gauge(object):
         self.hand_img = resource.Load_Image("gauge_hand.png", scale_to=(d, d))
         self.glass_img = resource.Load_Image("gauge_glass.png", scale_to=(d, d))
         self._pos = Point(x, y)
+        self._animated_pressure = 0
+        self._speed = .2
 
     def rotate_hand(self, bar=None):
         """Rotate pressure hand"""
@@ -34,9 +36,14 @@ class Gauge(object):
         return hand, newrect
 
     def draw(self, output, bar=None):
-        """Draw gauge and hands"""
+        """Draw gauge and hand"""
+        # the pressure displayed by the gauge will reach "bar" eventually
+        delta = (bar - self._animated_pressure) * self._speed
+        self._animated_pressure += delta
+
+        hand, hand_rect = self.rotate_hand(bar=self._animated_pressure)
+
         output.blit(self.back_img, self._pos)
-        hand, hand_rect = self.rotate_hand(bar=bar * .8)
         output.blit(hand, self._pos + hand_rect)
         output.blit(self.glass_img, self._pos)
 
@@ -70,9 +77,10 @@ class User_Interface:
         self.steam_effect = particle.Make_Particle_Effect(particle.Steam_Particle)
         self.steam_effect_frame = 0
 
-        self.gauges_list = [
-            Gauge(0, 0),
-        ]
+        self.gauges = dict(
+            city_pressure = Gauge(0, 0),
+            selected_pressure = Gauge(6 * Get_Grid_Size(), 0)
+        )
 
     def Update_Area(self, area):
         if ( area != None ):
@@ -212,9 +220,24 @@ class User_Interface:
         if ( self.control_menu == None ):
             self.__Make_Control_Menu(output.get_rect().width)
 
-        # draw gauges
-        for g in self.gauges_list:
-            g.draw(output, bar=self.net.hub.Get_Pressure())
+        # draw city pressure gauge
+        self.gauges['city_pressure'].draw(
+            output,
+            bar=self.net.hub.Get_Pressure() * .8,
+        )
+
+        # draw selected item gauge
+        if isinstance(self.selection, Node):
+            bar = self.selection.steam.Get_Pressure() * .4
+        elif isinstance(self.selection, Pipe):
+            bar = self.selection.current_n1_to_n2
+            bar = abs(bar)
+        else:
+            bar = 0
+        self.gauges['selected_pressure'].draw(
+            output,
+            bar=bar,
+        )
 
         self.control_menu.Draw(output)
 
