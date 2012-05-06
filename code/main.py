@@ -147,6 +147,19 @@ def Main_Menu_Loop(name, clock, screen, (width, height)):
             None,
             "Game version " + config.CFG_VERSION ]
 
+
+    # --play-<gametype> starts a game immediately
+    flags = (
+        ('--play-beginner', MENU_BEGINNER),
+        ('--play-intermediate', MENU_INTERMEDIATE),
+        ('--play-expert', MENU_EXPERT),
+        ('--play-peaceful', MENU_PEACEFUL),
+    )
+    for flag, pick_cmd in flags:
+        if flag in sys.argv:
+            quit = game.Main_Loop(screen, clock,
+                (width,height), None, pick_cmd)
+
     # off we go.
 
     quit = False
@@ -168,7 +181,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height)):
             img_r.top = y
             screen.blit(img, img_r.topleft)
             y += img_r.height
-       
+
         (quit, cmd) = extra.Simple_Menu_Loop(screen, current_menu,
                 (( width * 3 ) / 4, 10 + ( height / 2 )))
 
