@@ -7,7 +7,7 @@
 import math
 
 from pygame.locals import *
-from pygame import gfxdraw
+from pygame import gfxdraw, Rect
 
 # Developers's controls:
 DEBUG = False # enables cheats
@@ -196,6 +196,8 @@ class Point(object):
     def __add__(self, other):
         if isinstance(other, Point):
             return Point(self.x + other.x, self.y + other.y)
+        if isinstance(other, Rect):
+            return self + Point(other.topleft)
         return NotImplemented
 
     def __sub__(self, other):

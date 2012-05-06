@@ -52,7 +52,7 @@ def Path(name, audio=False):
     else:
         return os.path.join(DATA_DIR,name)
 
-def Load_Image(name):
+def Load_Image(name, scale_to=None):
     global __img_cache
 
     key = name
@@ -72,8 +72,12 @@ def Load_Image(name):
         img = pygame.Surface((10,10))
         img.fill((255,0,0))
 
-    i = __img_cache[ key ] = img.convert_alpha()
-    return i
+    img = img.convert_alpha()
+    if scale_to is not None:
+        img = pygame.transform.smoothscale(img, scale_to)
+
+    __img_cache[key] = img
+    return img
 
 
 DEB_FONT = "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf"

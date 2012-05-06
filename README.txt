@@ -85,8 +85,9 @@ List of files, with associated copyrights:
     ./data/upgrade.png
     ./data/well.png
 
-
-
+    Files that are copyright by Leo Reynolds, Licence: CC BY-NC-SA 2.0
+    http://www.flickr.com/photos/lwr/105227463/in/photostream/
+    ./data/gauge.png
 
 
 

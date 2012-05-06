@@ -9,8 +9,37 @@ import pygame , random
 from pygame.locals import *
 
 import stats , menu , draw_obj , mail , particle , tutor
+import resource
 from map_items import *
 from primitives import *
+
+class Gauge(object):
+    """Round steampunk gauge"""
+    def __init__(self, x, y):
+        d = 5 * Get_Grid_Size() # diameter
+        self.back_img = resource.Load_Image("gauge.png", scale_to=(d, d))
+        self.hand_img = resource.Load_Image("gauge_hand.png", scale_to=(d, d))
+        self.glass_img = resource.Load_Image("gauge_glass.png", scale_to=(d, d))
+        self._pos = Point(x, y)
+
+    def rotate_hand(self, bar=None):
+        """Rotate pressure hand"""
+        if bar is None:
+            bar = 0
+        angle = 199 - bar / 27.0 * 170
+        center = self.hand_img.get_rect().center
+        hand = pygame.transform.rotate(self.hand_img, angle)
+        newrect = hand.get_rect()
+        newrect.center = center
+        return hand, newrect
+
+    def draw(self, output, bar=None):
+        """Draw gauge and hands"""
+        output.blit(self.back_img, self._pos)
+        hand, hand_rect = self.rotate_hand(bar=bar * .8)
+        output.blit(hand, self._pos + hand_rect)
+        output.blit(self.glass_img, self._pos)
+
 
 
 class User_Interface:
@@ -41,6 +70,9 @@ class User_Interface:
         self.steam_effect = particle.Make_Particle_Effect(particle.Steam_Particle)
         self.steam_effect_frame = 0
 
+        self.gauges_list = [
+            Gauge(0, 0),
+        ]
 
     def Update_Area(self, area):
         if ( area != None ):
@@ -179,6 +211,11 @@ class User_Interface:
     def Draw_Controls(self, output):
         if ( self.control_menu == None ):
             self.__Make_Control_Menu(output.get_rect().width)
+
+        # draw gauges
+        for g in self.gauges_list:
+            g.draw(output, bar=self.net.hub.Get_Pressure())
+
         self.control_menu.Draw(output)
 
     def Control_Mouse_Move(self, spos):
