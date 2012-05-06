@@ -23,6 +23,7 @@ class Gauge(object):
         self._pos = Point(x, y)
         self._animated_pressure = 0
         self._speed = .2
+        self._vibration = random.randint(0, 200)
 
     def rotate_hand(self, bar=None):
         """Rotate pressure hand"""
@@ -41,7 +42,20 @@ class Gauge(object):
         delta = (bar - self._animated_pressure) * self._speed
         self._animated_pressure += delta
 
-        hand, hand_rect = self.rotate_hand(bar=self._animated_pressure)
+        bar = self._animated_pressure
+
+        # animate vibration
+        v = self._vibration
+        if v > 200:
+            self._vibration = 0
+        if v % 2 == 0:
+            if v < 40:
+                bar += v / 100.0
+            elif v < 80:
+                bar += (80 - v) / 100.0
+        self._vibration += 1
+
+        hand, hand_rect = self.rotate_hand(bar=bar)
 
         output.blit(self.back_img, self._pos)
         output.blit(hand, self._pos + hand_rect)
