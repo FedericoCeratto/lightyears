@@ -439,6 +439,7 @@ class City_Node(Node):
         self.draw_obj_finished = self.draw_obj_incomplete = self.draw_obj
         self.total_steam = 0
         self.metal_quantity = 500
+        self.metal_production = 0
 
     def Begin_Upgrade(self):
         # Upgrade a city for higher capacity

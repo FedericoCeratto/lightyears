@@ -30,6 +30,8 @@ def Analyse_Network(game_object):
     hr.work_units_used = g.work_units_used
     hr.work_units_avail = g.net.hub.Get_Avail_Work_Units()
     hr.city_pressure = g.net.hub.Get_Pressure()
+    hr.metal_avail = g.net.hub.metal_quantity
+    hr.metal_production = g.net.hub.metal_production
 
     return hr
 
@@ -107,7 +109,10 @@ def Review(screen, (width, height), game_object, historian):
         ( "City Technology Level", "tech_level", (255,255,0) ),
         ( "Work Unit Usage", "work_units_used", (255,0,255) ),
         ( "Work Unit Availability", "work_units_avail", (0,255,255) ),
-        ( "City Steam Pressure", "city_pressure", (0,0,255) ) ]
+        ( "City Steam Pressure", "city_pressure", (0,0,255) ),
+        ("City Metal Stock", "metal_avail", (0,255,255)),
+        ("City Metal Production", "metal_production", (0,0,255))
+    ]
 
     def Regraph((heading, attribute, colour)):
         pygame.draw.rect(screen, (0, 0, 0), graph_window)

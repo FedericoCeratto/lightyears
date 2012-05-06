@@ -164,12 +164,14 @@ class Network:
         """For each existing node close to a rock, extract metal and update
         the available metal counter in the city node
         """
+        self.hub.metal_production = 0 # total production
         for node in self.node_list:
             node.metal_yield = 0
             if self.Is_Connected(node):
                 for rock, distance in node.rocks_nearby:
                     extracted = rock.dig(distance)
                     self.hub.metal_quantity += extracted
+                    self.hub.metal_production += extracted
                     node.metal_yield += extracted
 
     def use_metal(self, building_type):
