@@ -87,6 +87,7 @@ class Rock(Item):
             [30, 50, randint(0, 128)],
             [22, 25, randint(0, 128)],
         ]
+        self.reflex_color = (255, 255, 255)
 
     def dig(self, distance):
         """Dig an amount of metal"""
@@ -134,8 +135,8 @@ class Rock(Item):
                 alpha = 255
             p = rock_topleft + Point(x,y) * scale
             p.round_to_int()
-            col = (255, 255, 255, alpha)
-            col2 = (255, 255, 255, int(alpha * .7))
+            col = self.reflex_color + (alpha,)
+            col2 = self.reflex_color + (int(alpha * .8),)
             gfxdraw.pixel(output, p.x, p.y, col)
             gfxdraw.pixel(output, p.x + 1, p.y, col2)
             gfxdraw.pixel(output, p.x - 1, p.y, col2)
