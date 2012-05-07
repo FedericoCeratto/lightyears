@@ -13,6 +13,15 @@ from map_items import *
 from primitives import *
 from mail import New_Mail
 
+def is_too_close(pos, li, d):
+    """Check if item position is too close to any element from li
+    """
+    for other in li:
+        if distance(pos, other.pos) < d:
+            return True
+
+    return False
+
 class Network:
     def __init__(self, teaching):
         self.ground_grid = dict()
@@ -37,7 +46,7 @@ class Network:
         (x,y) = GRID_CENTRE
 
         # An additional bootstrap well, plus node, is created close to the city.
-        wgpos = (x + 5,y + random.randint(-3,3))
+        wgpos = (x + 5, y + random.randint(-3,3))
         w = Well(wgpos)
         self.Add_Grid_Item(w)
         wn = Well_Node(wgpos)
@@ -64,17 +73,13 @@ class Network:
         while len(self.rock_list) < 10:
             pos = (x + random.randint(-20, 20), y + random.randint(-20, 20))
             # keep distance from wells
-            too_close = [w for w in self.well_list
-                if distance(pos, w.pos) < 3]
-            if too_close:
+            if is_too_close(pos, self.well_list, 4):
                 continue
             # keep distance from the City
             if distance(pos, GRID_CENTRE) < 9:
                 continue
             # keep distance from other rocks
-            too_close = [r for r in self.rock_list
-                if distance(pos, r.pos) < 3]
-            if too_close:
+            if is_too_close(pos, self.rock_list, 3):
                 continue
 
             self.rock_list.append(Rock(pos))
@@ -128,7 +133,7 @@ class Network:
                 item.Save(self.ground_grid[ gpos ])
             self.ground_grid[ gpos ] = item
             item.locate_nearby_rocks(self.rock_list)
-        elif ( isinstance(item, Well) ):
+        elif isinstance(item, Well):
             self.well_list.append(item)
             self.ground_grid[ gpos ] = item
         else:
@@ -370,19 +375,28 @@ class Network:
 
     def Make_Well(self, teaching=False, inhibit_effects=False):
         self.dirty = True
-        (x, y) = (cx, cy) = GRID_CENTRE
+        (cx, cy) = GRID_CENTRE
         (mx, my) = GRID_SIZE
 
-        while (( self.ground_grid.has_key( (x,y) ))
-        or ( math.hypot( x - cx, y - cy ) < 10 )):
+        while True:
             x = random.randint(0, mx - 1)
             y = random.randint(0, my - 1)
             if ( teaching ):
                 if ( x < cx ):
                     x += cx
+            # occupied
+            if self.ground_grid.has_key((x,y)):
+                continue
+            # too close
+            if math.hypot(x - cx, y - cy) < 10:
+                continue
+            # too close to a rock
+            if is_too_close((x, y), self.rock_list, 3):
+                continue
 
-        w = Well((x,y))
-        self.Add_Grid_Item(w, inhibit_effects or teaching)
+            w = Well((x,y))
+            self.Add_Grid_Item(w, inhibit_effects or teaching)
+            return
 
 
     def Make_Ready_For_Save(self):

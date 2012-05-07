@@ -129,7 +129,7 @@ class Quake_Season(Quiet_Season):
         if ( self.damage < 2.0 ):
             # Some Wells are created.
 
-            num_wells = random.randint(0, 3)
+            num_wells = random.randint(1, 3)
             if ( num_wells == 1 ):
                 New_Mail("A new steam well has appeared!")
             elif ( num_wells > 1 ):
