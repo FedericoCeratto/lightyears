@@ -19,7 +19,7 @@ import time
 from mail import New_Mail
 
 
-class Item:
+class Item(pygame.sprite.Sprite):
     def __init__(self, name):
         self.pos = None
         self.name_type = name

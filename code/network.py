@@ -79,6 +79,10 @@ class Network:
 
             self.rock_list.append(Rock(pos))
 
+        # sort rock_list by "y" value, to be able to draw them in sequence
+        # without incorrect overlapping
+        self.rock_list.sort(key=lambda r: r.entry_point[1])
+
         for node in self.node_list:
             node.locate_nearby_rocks(self.rock_list)
 

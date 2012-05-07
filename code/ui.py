@@ -149,8 +149,8 @@ class User_Interface:
             if ( n.emits_steam ):
                 self.Add_Steam_Effect(output, n.pos)
 
-        for w in self.net.rock_list:
-            w.Draw(output)
+        for r in self.net.rock_list:
+            r.Draw(output)
 
         season_fx.Draw(output, self.Update_Area)
 
