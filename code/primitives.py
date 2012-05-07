@@ -102,7 +102,8 @@ RESOLUTIONS = [
         (1280, 1024, 4),
         (1440, 1080, 6),
         (1600, 1200, 8),
-            ]
+        (1680, 1050, 8),
+]
 CGISCRIPT = "http://www.jwhitham.org/cgi-bin/LYU.cgi?"
 
 # things that are set by the difficulty mode:
