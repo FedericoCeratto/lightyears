@@ -237,7 +237,7 @@ class User_Interface:
         # draw city pressure gauge
         self.gauges['city_pressure'].draw(
             output,
-            bar=self.net.hub.Get_Pressure() * .8,
+            bar=self.net.hub.Get_Pressure() * .4,
         )
 
         # draw selected item gauge

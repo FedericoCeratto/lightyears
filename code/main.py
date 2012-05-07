@@ -3,7 +3,7 @@
 # This game is licensed under GPL v2, and copyright (C) Jack Whitham 2006-07.
 # 
 
-
+from argparse import ArgumentParser
 import pygame , random , sys , math , time , webbrowser , urllib , os
 from pygame.locals import *
 
@@ -13,7 +13,38 @@ from primitives import *
 
 DEB_ICON = '/usr/share/pixmaps/lightyears.xpm'
 DEB_MANUAL = '/usr/share/doc/lightyears/html/index.html'
-                
+
+def parse_args():
+    """Parse CLI options
+    :returns: args
+    """
+    p = ArgumentParser()
+    p.add_argument("-f", "--fullscreen",
+        help="fullscreen", action="store_true")
+    p.add_argument("--safe",
+        help="safe mode", action="store_true")
+    p.add_argument("--no-sound",
+        help="disable sound", action="store_true")
+    for t in ('beginner', 'intermediate', 'expert', 'peaceful'):
+        p.add_argument("--play-%s" % t,
+            help="start %s game" % t, action="store_true")
+
+    x_res_li = [r[0] for r in RESOLUTIONS]
+    x_res = ', '.join(map(str, x_res_li))
+    p.add_argument("--resolution", type=int,
+        help="resolution (one of: %s)" % x_res)
+    args = p.parse_args()
+
+    if args.resolution is None:
+        return args
+
+    for w, h, fs in RESOLUTIONS:
+        if args.resolution == w:
+            args.resolution = (w, h)
+            return args
+
+    print "Incorrect resolution specified."
+    sys.exit(1)
 
 def Main(data_dir):
 
@@ -24,25 +55,26 @@ def Main(data_dir):
     print "Version", config.CFG_VERSION
     print ""
 
+    cli_args = parse_args()
+
     resource.DATA_DIR = data_dir
 
-    config.Initialise("--safe" in sys.argv)
+    config.Initialise(cli_args.safe)
 
     # Pygame things
     flags = 0
-    if ("--fullscreen" in sys.argv):
+    if cli_args.fullscreen:
         flags |= FULLSCREEN
 
     bufsize = 2048
 
-    no_sound = ( "--no-sound" in sys.argv )
-    if not no_sound:
+    if not cli_args.no_sound:
         try:
             pygame.mixer.pre_init(22050, -16, 2, bufsize)
             pygame.mixer.init()
         except pygame.error, message:
             print 'Sound initialization failed. %s' % message
-            no_sound = True
+            cli_args.no_sound = True
 
     pygame.init()
     pygame.font.init()
@@ -54,13 +86,18 @@ def Main(data_dir):
                 RESOLUTIONS.remove(resolution)
 
         
-    if ( no_sound ):
+    if cli_args.no_sound:
         resource.No_Sound()
     else:
         pygame.mixer.init(22050,-16,2,bufsize)
 
+    if cli_args.resolution is None:
+        resolution = config.cfg.resolution
+    else:
+        resolution = cli_args.resolution
+
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode(config.cfg.resolution, flags)
+    screen = pygame.display.set_mode(resolution, flags)
     height = screen.get_rect().height
     width = screen.get_rect().width
 
@@ -82,18 +119,18 @@ def Main(data_dir):
 
     quit = False
     while ( not quit ):
-        if ( config.cfg.resolution != (width, height) ):
+        if resolution != (width, height):
 
             # As the toggle mode thing doesn't work outside of Unix, 
             # the fallback strategy is to do set_mode again.
             # But if you set the same mode, then nothing happens.
             # So:
             screen = pygame.display.set_mode((640,480), flags)  # not the right mode
-            screen = pygame.display.set_mode(config.cfg.resolution, flags) # right mode!
+            screen = pygame.display.set_mode(resolution, flags) # right mode!
             height = screen.get_rect().height
             width = screen.get_rect().width
 
-        quit = Main_Menu_Loop(n, clock, screen, (width, height))
+        quit = Main_Menu_Loop(n, clock, screen, (width, height), cli_args)
 
     config.Save()
 
@@ -102,7 +139,7 @@ def Main(data_dir):
     pygame.quit()
 
 
-def Main_Menu_Loop(name, clock, screen, (width, height)):
+def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
     # Further initialisation
     menu_image = resource.Load_Image("mainmenu.jpg")
 
@@ -150,13 +187,13 @@ def Main_Menu_Loop(name, clock, screen, (width, height)):
 
     # --play-<gametype> starts a game immediately
     flags = (
-        ('--play-beginner', MENU_BEGINNER),
-        ('--play-intermediate', MENU_INTERMEDIATE),
-        ('--play-expert', MENU_EXPERT),
-        ('--play-peaceful', MENU_PEACEFUL),
+        ('play_beginner', MENU_BEGINNER),
+        ('play_intermediate', MENU_INTERMEDIATE),
+        ('play_expert', MENU_EXPERT),
+        ('play_peaceful', MENU_PEACEFUL),
     )
     for flag, pick_cmd in flags:
-        if flag in sys.argv:
+        if getattr(cli_args, flag):
             quit = game.Main_Loop(screen, clock,
                 (width,height), None, pick_cmd)
 
@@ -243,6 +280,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height)):
                 for (w, h, fs) in RESOLUTIONS:
                     if ( w == cmd ):
                         config.cfg.resolution = (w, h)
+                        resolution = config.cfg.resolution
                         config.cfg.font_scale = fs
                         # change res - don't quit
                         return False
