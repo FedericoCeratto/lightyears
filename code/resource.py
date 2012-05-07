@@ -74,6 +74,10 @@ def Load_Image(name, scale_to=None):
 
     img = img.convert_alpha()
     if scale_to is not None:
+        if isinstance(scale_to, int):
+            w = scale_to
+            height = int(float(w) * img.get_height() / img.get_width())
+            scale_to = (w, height)
         img = pygame.transform.smoothscale(img, scale_to)
 
     __img_cache[key] = img

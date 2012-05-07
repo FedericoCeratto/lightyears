@@ -13,6 +13,7 @@ from pygame.locals import *
 import bresenham , intersect , extra , stats , resource , draw_obj , sound
 from primitives import *
 from random import randint
+import random
 from steam_model import Steam_Model
 import time
 from mail import New_Mail
@@ -75,10 +76,24 @@ class Rock(Item):
     def __init__(self, (x,y), name="Rock"):
         Item.__init__(self, name)
         self.pos = (x,y)
-        size = randint(1, 3)
-        self.draw_obj = draw_obj.Draw_Obj("rock.png", size)
-        self.quantity = size * DIFFICULTY.ROCK_QUANTITY + \
-            randint(1, DIFFICULTY.ROCK_QUANTITY)
+        self.rock_img = resource.Load_Image("rock.png")
+        self.shadow_img = resource.Load_Image("rock_shadow.png")
+
+        self._size = 1 + 5 * random.random()
+        width = int(self._size * Get_Grid_Size())
+
+        ratio = float(self.rock_img.get_height()) / self.rock_img.get_width()
+        height = int(width * ratio)
+        # top-left, center, bottom-right, size in pixels
+        self._sizep = scale_to = Point(width, height)
+        self._tlp = Point(self.pos) * Get_Grid_Size()
+        self._brp = self._tlp + self._sizep
+        self._centerp = self._tlp + self._sizep * .5
+        self.rock_img = pygame.transform.smoothscale(self.rock_img, scale_to)
+        self.shadow_img = pygame.transform.smoothscale(self.shadow_img, scale_to)
+        self.shadow_img.set_alpha(50)
+
+        self.quantity = self._size * DIFFICULTY.ROCK_QUANTITY
         self.reflexes = [
             # x (0 to 64), y, sequence value for each reflex
             [10, 30, randint(0, 128)],
@@ -88,6 +103,11 @@ class Rock(Item):
             [22, 25, randint(0, 128)],
         ]
         self.reflex_color = (255, 255, 255)
+
+        # rock entry point (for digging)
+        down = Point(0, self._sizep.y)
+        self.entry_point = self._tlp + self._sizep * .3 + down * .4
+        self.entry_point.round_to_int()
 
     def dig(self, distance):
         """Dig an amount of metal"""
@@ -108,15 +128,18 @@ class Rock(Item):
     def Draw(self, output):
         """Make the rock shine"""
         # print the rock
-        self.draw_obj.Draw(output, self.pos, (0,0))
+        p = self._tlp
+        output.blit(self.shadow_img, p)
+        output.blit(self.rock_img, p)
 
+        # purge reflexes based on the amount of metal
         max_reflexes = self.quantity / 200
         if len(self.reflexes) > max_reflexes:
             self.reflexes.pop()
 
-        size = self.draw_obj.key[1] * Get_Grid_Size() # in pixels
-        rock_topleft = Point(Grid_To_Scr(self.pos)) - Point(size, size) / 2
-        scale = (size / 64.0)
+        # animate reflexes
+
+        scale = self._sizep.modulo() / 120.0
         for reflex in self.reflexes:
             # print a reflex
             reflex[2] += 1
@@ -133,7 +156,8 @@ class Rock(Item):
 
             if alpha > 255:
                 alpha = 255
-            p = rock_topleft + Point(x,y) * scale
+
+            p = self._tlp + Point(x, y) * scale
             p.round_to_int()
             col = self.reflex_color + (alpha,)
             col2 = self.reflex_color + (int(alpha * .8),)
@@ -396,14 +420,13 @@ class Node(Building):
 
         for rock, dist in self.rocks_nearby:
             np = Grid_To_Scr(self.pos)
-            rp = Grid_To_Scr(rock.pos)
             colour = (100,) * 3
             if self.metal_yield == 0:
                 continue
 
-            # Create moving dots, in two ways
+            # Animate moving dots, in two ways
             np = Point(np)
-            rp = Point(rp)
+            rp = rock.entry_point
             dist = np - rp
 
             if dist.modulo() < 1: # No conveyors when the node is *in* the rock

@@ -15,21 +15,21 @@ severity=minor
 
 
 
-status=closed
+status=open
 
 
 
 
 
 
-summary=Prevent cache crash on restore
+summary=add new WU when city upgrade ends
 
 
 
 
 
 
-time=Sat, 05 May 2012 11:39:29 +0000
+time=Mon, 07 May 2012 13:22:02 +0000
 
 
 
