@@ -236,6 +236,13 @@ class Point(object):
     def __repr__(self):
         return "Vector {%.3f, %.3f}" % (self.x, self.y)
 
+    def set_polar(self, angle=None, modulo=None):
+        if modulo == None:
+            modulo = self.modulo()
+        x = math.sin(angle) * modulo
+        y = math.cos(angle) * modulo
+        self.tup = (x, y)
+
 def distance(a, b):
     """Calculate distance between two points (tuples)"""
     d = (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2

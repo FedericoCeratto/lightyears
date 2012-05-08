@@ -96,6 +96,8 @@ class User_Interface:
             selected_pressure = Gauge(6 * Get_Grid_Size(), 0)
         )
 
+        self.vehicle_list = [Transport(network=self.net) for x in xrange(55)]
+
     def Update_Area(self, area):
         if ( area != None ):
             self.partial_update = True
@@ -151,6 +153,9 @@ class User_Interface:
 
         for r in self.net.rock_list:
             r.Draw(output)
+
+        for v in self.vehicle_list:
+            v.draw(output)
 
         season_fx.Draw(output, self.Update_Area)
 

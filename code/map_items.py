@@ -27,6 +27,10 @@ class Item(pygame.sprite.Sprite):
         self.emits_steam = False
         self.tutor_special = False
 
+    @property
+    def _tpl(self):
+        return Point(self.pos) * Get_Grid_Size()
+
     def Draw(self, output):
         self.draw_obj.Draw(output, self.pos, (0,0))
 
@@ -62,6 +66,151 @@ class Item(pygame.sprite.Sprite):
         :returns: (width, height) of the bounding box
         """
         return draw_ellipse(surface, p, width, color, line_width, center=False)
+
+import math
+class Transport(pygame.sprite.Sprite):
+
+    def __init__(self, network=None):
+        self._net = network
+        self._tlp = Point(randint(110, 700), randint(110, 700))
+        self.angle = 0
+        self.speed = 4
+        self.sprites = self._load_sprites("transport.png")
+        self.shadow_sprites = self._load_sprites("transport_shadow.png")
+        self._height = 0
+        self._flight_height = int(Get_Grid_Size() / 2)
+        self._status = 'lift'
+        self._anim_cnt = 0
+        self._anim_startstop_cnt = 0
+        self._actual_speed = 0
+        self._anim_u_turn = 0
+        self._t = None
+
+    def _load_sprites(self, fname):
+        """Load movement sprites from a 3x3 mosaic"""
+        mosaic = resource.Load_Image(fname)
+        sprites = []
+        for n in (5, 8, 7, 6, 3, 0, 1, 2, 5):
+            s = pygame.Surface((40, 40), flags=pygame.SRCALPHA)
+            x = n / 3 * -40
+            y = n % 3 * -40
+            s.blit(mosaic, (x, y))
+            s = pygame.transform.smoothscale(s, (10, 10))
+            sprites.append(s)
+
+        return sprites
+
+    @property
+    def _simple_angle(self):
+        return int(self.angle / math.pi * 4 + .5) % 9
+
+    def _drive(self):
+        """Drive the vehicle forward"""
+        v = Point(0, 0)
+        angle = self._simple_angle / 8.0 * math.pi * 2
+
+        v.set_polar(angle=angle, modulo=self._actual_speed)
+        self._tlp = self._tlp + v
+
+    def _steer(self, angle):
+        """Steer"""
+        self.angle += angle
+        self.angle %= (math.pi * 2)
+
+    def _float(self):
+        """Animate floatation"""
+        self._height += randint(-1, 1) / 2.0
+        if self._height < self._flight_height / 2:
+            self._height = self._flight_height / 2
+        elif self._height > self._flight_height * 2:
+            self._height = self._flight_height * 2
+
+    def _u_turn(self):
+        """Animate U-turn"""
+        self._anim_u_turn += 1
+        self.angle += math.pi / 60
+        #self._float()
+        #print 'u', self.angle
+        if self._anim_u_turn > 60:
+            self._drive()
+            self._anim_u_turn = 0
+
+    def _animate(self, action=None):
+        """Animate"""
+        self._anim_cnt += 1
+        self._anim_cnt %= 500
+        if random.random() > 0.95:
+            self._anim_cnt += 1
+
+        # random turns
+        if self._anim_cnt % 70 == 0 and self._status == 'go':
+            self.angle += randint(-1, 1) * math.pi / 4.5
+
+        if self._anim_cnt == 200:
+            self._status = 'land'
+        elif self._anim_cnt == 300:
+            self._status = 'lift'
+
+        # avoid obstacles
+        for r in self._net.rock_list + self._net.node_list:
+            v = r._tlp - self._tlp
+            dist = v.modulo()
+            if dist < Get_Grid_Size() * 3: # too close, do u-turn
+                self._u_turn()
+                return
+            if dist < Get_Grid_Size() * 6: # try to steer
+                pass
+                #TODO
+
+        # avoid getting out of the screen
+        if not (10 < self._tlp.x < 800) or \
+            not (10 < self._tlp.y < 800):
+                self._u_turn()
+                return
+
+        # lifting from ground
+        if self._status == 'lift':
+            # lift
+            if self._height < self._flight_height:
+                self._height += .2
+            else:
+                # wait
+                self._anim_startstop_cnt += 1
+                if self._anim_startstop_cnt > 10:
+                    # go
+                    self._anim_startstop_cnt = 0
+                    self._status = 'go'
+
+        # landing
+        elif self._status == 'land':
+            if self._actual_speed > .1:
+                # slow down
+                self._actual_speed -= .1
+                self._drive()
+            else:
+                # land
+                if self._height > 0:
+                    self._height -= .2
+
+        # driving
+        elif self._status == 'go':
+            if self._actual_speed != self.speed:
+                self._actual_speed += (self.speed - self._actual_speed) / 50.0
+            self._float()
+            self._drive()
+
+        if self._status != self._t:
+            #print self._status
+            self._t = self._status
+
+    def draw(self, output):
+        """Draw"""
+        self._animate()
+        sp_num = int(self.angle / math.pi * 4 + .5) % 9
+        shadow_v = Point(self._height, self._height / 2)
+        shadow_v.round_to_int()
+        output.blit(self.shadow_sprites[sp_num], self._tlp + shadow_v)
+        output.blit(self.sprites[sp_num], self._tlp)
 
 
 class Well(Item):
@@ -463,6 +612,7 @@ class City_Node(Node):
         self.total_steam = 0
         self.metal_quantity = 500
         self.metal_production = 0
+        self._tlp = Point(self.pos) * Get_Grid_Size()
 
     def Begin_Upgrade(self):
         # Upgrade a city for higher capacity
@@ -574,6 +724,7 @@ class Well_Node(Node):
         self.draw_obj = self.draw_obj_incomplete
         self.emits_steam = True
         self.production = 0
+        self._tlp = Point(self.pos) * Get_Grid_Size()
 
 
     def Steam_Think(self):
