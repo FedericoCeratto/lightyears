@@ -77,6 +77,7 @@ class Transport(pygame.sprite.Sprite):
         self.speed = 4
         self.sprites = self._load_sprites("transport.png")
         self.shadow_sprites = self._load_sprites("transport_shadow.png")
+        self._twopi = math.pi * 2
         self._height = 0
         self._flight_height = int(Get_Grid_Size() / 2)
         self._status = 'lift'
@@ -84,6 +85,7 @@ class Transport(pygame.sprite.Sprite):
         self._anim_startstop_cnt = 0
         self._actual_speed = 0
         self._anim_u_turn = 0
+        self._anim_float = 0
         self._t = None
 
     def _load_sprites(self, fname):
@@ -95,19 +97,20 @@ class Transport(pygame.sprite.Sprite):
             x = n / 3 * -40
             y = n % 3 * -40
             s.blit(mosaic, (x, y))
-            s = pygame.transform.smoothscale(s, (10, 10))
+            s = pygame.transform.smoothscale(s, (20, 20))
+            #s = pygame.transform.smoothscale(s, (10, 10))
             sprites.append(s)
 
         return sprites
 
     @property
     def _simple_angle(self):
-        return int(self.angle / math.pi * 4 + .5) % 9
+        return int(self.angle / self._twopi * 8 + .5) % 9
 
     def _drive(self):
         """Drive the vehicle forward"""
         v = Point(0, 0)
-        angle = self._simple_angle / 8.0 * math.pi * 2
+        angle = self._simple_angle / 8.0 * self._twopi
 
         v.set_polar(angle=angle, modulo=self._actual_speed)
         self._tlp = self._tlp + v
@@ -115,11 +118,15 @@ class Transport(pygame.sprite.Sprite):
     def _steer(self, angle):
         """Steer"""
         self.angle += angle
-        self.angle %= (math.pi * 2)
+        self.angle %= self._twopi
 
     def _float(self):
         """Animate floatation"""
-        self._height += randint(-1, 1) / 2.0
+        self._anim_float += .15
+        self._anim_float %= self._twopi
+        self._height += math.sin(self._anim_float) / 6
+
+        #self._height += randint(-1, 1) / 2.0
         if self._height < self._flight_height / 2:
             self._height = self._flight_height / 2
         elif self._height > self._flight_height * 2:
@@ -128,9 +135,8 @@ class Transport(pygame.sprite.Sprite):
     def _u_turn(self):
         """Animate U-turn"""
         self._anim_u_turn += 1
-        self.angle += math.pi / 60
-        #self._float()
-        #print 'u', self.angle
+        self.angle += self._twopi / 120
+        self._float()
         if self._anim_u_turn > 60:
             self._drive()
             self._anim_u_turn = 0
@@ -144,7 +150,7 @@ class Transport(pygame.sprite.Sprite):
 
         # random turns
         if self._anim_cnt % 70 == 0 and self._status == 'go':
-            self.angle += randint(-1, 1) * math.pi / 4.5
+            self.angle += randint(-1, 1) / 9.0 * self._twopi
 
         if self._anim_cnt == 200:
             self._status = 'land'
@@ -206,7 +212,7 @@ class Transport(pygame.sprite.Sprite):
     def draw(self, output):
         """Draw"""
         self._animate()
-        sp_num = int(self.angle / math.pi * 4 + .5) % 9
+        sp_num = self._simple_angle
         shadow_v = Point(self._height, self._height / 2)
         shadow_v.round_to_int()
         output.blit(self.shadow_sprites[sp_num], self._tlp + shadow_v)
