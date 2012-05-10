@@ -171,12 +171,19 @@ def Get_Grid_Size():
 Set_Grid_Size(10)
 
 class Point(object):
+
     def __init__(self, x, y=None):
         """Point or vector"""
-        if isinstance(x, tuple) and y is None:
+        if isinstance(x, Point):
+            self.tup = x.tup
+
+        elif isinstance(x, tuple):
             assert len(x) == 2
+            assert y is None, 'y cannot be set when the first param is a tuple'
             self.tup = x
+
         else:
+            assert y is not None, 'y must be set'
             self.tup = (x, y)
 
     @property
@@ -208,23 +215,61 @@ class Point(object):
         if isinstance(other, Point): # vector dot product
             return self.x * other.x + self.y * other.y
         # scalar product
+        assert self.y is not None
         return Point(self.x * other, self.y * other)
 
     def __div__(self, scalar):
         return Point(self.x / scalar, self.y / scalar)
 
+
+    # modulo attribute getter and setter
+    @property
     def modulo(self):
         return (self.x ** 2 + self.y ** 2) ** .5
 
+    @modulo.setter
+    def modulo(self, m):
+        a = self.angle
+        x = math.sin(a) * m
+        y = math.cos(a) * m
+        self.tup = (x, y)
+
+    # angle attribute getter and setter
+    @property
+    def angle(self):
+        if self.modulo == 0:
+            return 0
+
+        a = math.acos(self.y / self.modulo)
+        if self.x >= 0:
+            return a
+        return math.pi * 2 - a
+
+    @angle.setter
+    def angle(self, a):
+        m = self.modulo
+        x = math.sin(a) * m
+        y = math.cos(a) * m
+        self.tup = (x, y)
+
+    def angle_against(self, other):
+        """Angle between two vectors"""
+        assert isinstance(other, Point)
+        m = self.modulo
+        om = other.modulo
+        assert m > 0 and om > 0, 'One of the vectors has zero length'
+        cos_alpha = self * other / (m * om)
+        return math.acos(cos_alpha)
+
     def distance(self, other):
         d = other - self
-        return d.modulo()
+        return d.modulo
 
     def normalized(self, other=None):
         v = self
         if other is not None:
             v = other - self
-        return v / v.modulo()
+        return v / v.modulo
 
     def orthogonal(self):
         """Create an orthogonal vector"""
@@ -233,12 +278,16 @@ class Point(object):
     def round_to_int(self):
         self.tup = (int(self.x), int(self.y))
 
+    @property
+    def rounded(self):
+        return Point(int(self.x), int(self.y))
+
     def __repr__(self):
         return "Vector {%.3f, %.3f}" % (self.x, self.y)
 
     def set_polar(self, angle=None, modulo=None):
         if modulo == None:
-            modulo = self.modulo()
+            modulo = self.modulo
         x = math.sin(angle) * modulo
         y = math.cos(angle) * modulo
         self.tup = (x, y)
