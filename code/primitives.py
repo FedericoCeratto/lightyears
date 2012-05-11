@@ -202,24 +202,28 @@ class Point(object):
         return self.tup[i]
 
     def __add__(self, other):
-        if isinstance(other, Point):
-            return Point(self.x + other.x, self.y + other.y)
+        if type(self) == type(other):
+            return type(self)(self.x + other.x, self.y + other.y)
         if isinstance(other, Rect):
-            return self + Point(other.topleft)
-        return NotImplemented
+            return self + type(self)(other.topleft)
+        raise(TypeError("Incompatible Vector/Point types"))
 
     def __sub__(self, other):
         return self + (other * -1)
 
     def __mul__(self, other):
-        if isinstance(other, Point): # vector dot product
+        if type(self) == type(other):
+            # vector dot product
             return self.x * other.x + self.y * other.y
-        # scalar product
-        assert self.y is not None
-        return Point(self.x * other, self.y * other)
+        elif type(other) in (int, float):
+            # scalar product
+            return type(self)(self.x * other, self.y * other)
+        raise(TypeError("Incompatible Vector/Point types"))
 
     def __div__(self, scalar):
-        return Point(self.x / scalar, self.y / scalar)
+        assert isinstance(scalar, int) or isinstance(scalar, float), \
+            "Integer or Float required."
+        return type(self)(self.x / scalar, self.y / scalar)
 
 
     # modulo attribute getter and setter
@@ -229,6 +233,7 @@ class Point(object):
 
     @modulo.setter
     def modulo(self, m):
+        assert isinstance(m, int) or isinstance(m, float), "Integer or Float required."
         a = self.angle
         x = math.sin(a) * m
         y = math.cos(a) * m
@@ -247,6 +252,7 @@ class Point(object):
 
     @angle.setter
     def angle(self, a):
+        assert isinstance(m, int) or isinstance(m, float), "Integer or Float required."
         m = self.modulo
         x = math.sin(a) * m
         y = math.cos(a) * m
@@ -254,7 +260,7 @@ class Point(object):
 
     def angle_against(self, other):
         """Angle between two vectors"""
-        assert isinstance(other, Point)
+        assert type(self) == type(other), "Incompatible Vector/Point types"
         m = self.modulo
         om = other.modulo
         assert m > 0 and om > 0, 'One of the vectors has zero length'
@@ -262,6 +268,7 @@ class Point(object):
         return math.acos(cos_alpha)
 
     def distance(self, other):
+        assert type(self) == type(other), "Incompatible Vector/Point types"
         d = other - self
         return d.modulo
 
@@ -273,14 +280,14 @@ class Point(object):
 
     def orthogonal(self):
         """Create an orthogonal vector"""
-        return Point(self.y, -1 * self.x).normalized()
+        return type(self)(self.y, -1 * self.x).normalized()
 
     def round_to_int(self):
         self.tup = (int(self.x), int(self.y))
 
     @property
     def rounded(self):
-        return Point(int(self.x), int(self.y))
+        return type(self)(int(self.x), int(self.y))
 
     def __repr__(self):
         return "Vector {%.3f, %.3f}" % (self.x, self.y)
@@ -291,6 +298,15 @@ class Point(object):
         x = math.sin(angle) * modulo
         y = math.cos(angle) * modulo
         self.tup = (x, y)
+
+
+class PVector(Point):
+    """2D vector, measured in pixels"""
+    pass
+
+class GVector(Point):
+    """2D vector, measured in game units"""
+    pass
 
 def distance(a, b):
     """Calculate distance between two points (tuples)"""

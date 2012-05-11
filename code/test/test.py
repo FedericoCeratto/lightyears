@@ -48,3 +48,23 @@ def test_angle():
     )
     for x, y, val in correct:
         assert_almost_equal(primitives.Point(x,y).angle, val)
+
+
+@raises(TypeError)
+def test_vector_type_check_mul():
+    primitives.GVector(1,1) * primitives.PVector(3,3)
+
+@raises(TypeError)
+def test_vector_type_check_add():
+    primitives.GVector(1,1) + primitives.PVector(3,3)
+
+def test_vector_type_check():
+    primitives.GVector(1,1) + primitives.GVector(3,3)
+    primitives.GVector(1,1) * primitives.GVector(3,3)
+
+
+
+
+
+
+
