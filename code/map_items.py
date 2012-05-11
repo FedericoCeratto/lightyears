@@ -68,18 +68,16 @@ class Item(pygame.sprite.Sprite):
         return draw_ellipse(surface, p, width, color, line_width, center=False)
 
 
-class Transport(Item):
+class Vehicle(Item):
+    """Abstract class for ground or air vehicles"""
 
-    def __init__(self, network=None):
+    def __init__(self, pos=None, network=None, vehicles=None):
         self._net = network
+        self.pos = pos
         self.pos = Point(randint(1, 30), randint(1, 30))
         #self.pos = Point(5, 20)
         self.cruise_speed = 2
-        self.sprites = self._load_sprites("transport.png")
-        self.shadow_sprites = self._load_sprites("transport_shadow.png")
         self._twopi = math.pi * 2
-        self._height = 0
-        self._flight_height = int(Get_Grid_Size() / 2)
         self._status = 'lift'
         self._anim_cnt = 0
         self._anim_startstop_cnt = 0
@@ -125,23 +123,12 @@ class Transport(Item):
         self._momentum.angle += angle
         self._momentum.angle %= self._twopi
 
-    def _float(self):
-        """Animate floatation"""
-        self._anim_float += .15
-        self._anim_float %= self._twopi
-        self._height += math.sin(self._anim_float) / 6
-
-        #self._height += randint(-1, 1) / 2.0
-        if self._height < self._flight_height / 2:
-            self._height = self._flight_height / 2
-        elif self._height > self._flight_height * 2:
-            self._height = self._flight_height * 2
-
     def _u_turn(self):
         """Animate U-turn"""
         self._anim_u_turn += 1
         self.angle += self._twopi / 120
-        self._float()
+        if hasattr(self, '_float'):
+            self._float()
         if self._anim_u_turn > 60:
             self._drive()
             self._anim_u_turn = 0
@@ -212,7 +199,47 @@ class Transport(Item):
                     if force.modulo > 4:
                         self._momentum.angle -= self._twopi / 64.0
 
+    def draw(self, output):
+        """Draw"""
+        self._surf = output
+        self._animate()
+        sp_num = self._simple_angle
+        shadow_v = Point(self._height, self._height / 2)
+        shadow_v.round_to_int()
 
+        p = self._centerp + self._force * 10
+        p.round_to_int()
+        try:
+            #pygame.draw.aaline(output, self._force_c, self._centerp, p,  1)
+            p = self._centerp + self._momentum * 15 + \
+                self._momentum.normalized() * 15
+            pygame.draw.aaline(output, (0,255,0, 255), self._centerp, p,  1)
+        except Exception, e:
+            pass
+
+        output.blit(self.shadow_sprites[sp_num], self._tlp + shadow_v)
+        output.blit(self.sprites[sp_num], self._tlp)
+
+
+class FloatingVehicle(Vehicle):
+    """Abstract class for floating vehicles"""
+
+    def __init__(self, pos=None, network=None, vehicles=None):
+        super(FloatingVehicle, self).__init__(pos=pos, network=network, vehicles=vehicles)
+        self._height = 0
+        self._flight_height = int(Get_Grid_Size() / 2)
+
+    def _float(self):
+        """Animate floatation"""
+        self._anim_float += .15
+        self._anim_float %= self._twopi
+        self._height += math.sin(self._anim_float) / 6
+
+        #self._height += randint(-1, 1) / 2.0
+        if self._height < self._flight_height / 2:
+            self._height = self._flight_height / 2
+        elif self._height > self._flight_height * 2:
+            self._height = self._flight_height * 2
 
     def _animate(self, action=None):
         """Animate"""
@@ -283,50 +310,24 @@ class Transport(Item):
             self._float()
             self._drive()
 
-
-    def draw(self, output):
-        """Draw"""
-        self._surf = output
-        self._animate()
-        sp_num = self._simple_angle
-        shadow_v = Point(self._height, self._height / 2)
-        shadow_v.round_to_int()
-
-        p = self._centerp + self._force * 10
-        p.round_to_int()
-        try:
-            #pygame.draw.aaline(output, self._force_c, self._centerp, p,  1)
-            p = self._centerp + self._momentum * 15 + \
-                self._momentum.normalized() * 15
-            pygame.draw.aaline(output, (0,255,0, 255), self._centerp, p,  1)
-        except Exception, e:
-            pass
-
-        output.blit(self.shadow_sprites[sp_num], self._tlp + shadow_v)
-        output.blit(self.sprites[sp_num], self._tlp)
+class Transport(FloatingVehicle):
+    """Trasport floating ship"""
+    def __init__(self, pos=None, network=None, vehicles=None):
+        super(Transport, self).__init__(pos=pos, network=network, vehicles=vehicles)
+        self.sprites = self._load_sprites("transport.png")
+        self.shadow_sprites = self._load_sprites("transport_shadow.png")
 
 
-class Tank(Transport):
+class Tank(Vehicle):
 
-    def __init__(self, network=None, vehicles=None):
-        self._net = network
+    def __init__(self, pos=None, network=None, vehicles=None):
+        super(Tank, self).__init__(pos=pos, network=network, vehicles=vehicles)
         self._vehicles = vehicles
-        self.pos = Point(randint(1, 30), randint(1, 30))
-        #self.pos = Point(5, 20)
         self.cruise_speed = 2
         self.turret_sprites = self._load_sprites("upper part ")
         self.body_sprites = self._load_sprites("tank groundpart")
-        self._twopi = math.pi * 2
-        self._height = 0
-        self._flight_height = 0
-        self._status = 'lift'
-        self._anim_cnt = 0
-        self._anim_startstop_cnt = 0
         self._momentum = Point(1, 0)
         self._momentum.angle = random.random() * self._twopi
-        self._anim_u_turn = 0
-        self._anim_float = 0
-        self._force = Point(0, 0)
 
     def _load_sprites(self, fname):
         """Load movement sprites from a 3x3 mosaic"""
@@ -363,6 +364,46 @@ class Tank(Transport):
         output.blit(self.body_sprites[sp_num], self._tlp)
         output.blit(self.turret_sprites[self._turret_angle], self._tlp)
 
+    def _animate(self, action=None):
+        """Animate"""
+        self._anim_cnt += 1
+        self._anim_cnt %= 500
+        if random.random() > 0.95:
+            self._anim_cnt += 1
+
+        # random turns
+        #if self._anim_cnt % 170 == 0 and self._status == 'go':
+        #    self._momentum.angle += randint(-1, 1) / 9.0 * self._twopi
+        #if self._anim_cnt % 10 == 0 and self._status == 'go':
+        #self._momentum.angle += randint(-1, 1) / 90.0
+
+        #if self._anim_cnt == 200:
+        #    self._status = 'land'
+        #elif self._anim_cnt == 300:
+        #    self._status = 'lift'
+
+        ## avoid obstacles
+        #for r in self._net.rock_list + self._net.node_list:
+        #    v = r._tlp - self._tlp
+        #    dist = v.modulo
+        #    if dist < Get_Grid_Size() * 3: # too close, do u-turn
+        #        self._u_turn()
+        #        return
+        #    if dist < Get_Grid_Size() * 6: # try to steer
+        #        pass
+        #        #TODO
+
+        # avoid getting out of the screen
+        #if not (10 < self._tlp.x < 800) or \
+        #    not (10 < self._tlp.y < 800):
+        #        self._u_turn()
+        #        return
+
+        self._avoid()
+        # adjust speed
+        if self._momentum.modulo != self.cruise_speed:
+            self._momentum.modulo += (self.cruise_speed - self._momentum.modulo) / 50.0
+        self._drive()
 
 class Well(Item):
     def __init__(self, (x,y), name="Well"):

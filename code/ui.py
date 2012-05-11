@@ -96,10 +96,13 @@ class User_Interface:
             selected_pressure = Gauge(6 * Get_Grid_Size(), 0)
         )
 
-        self.vehicle_list = [Transport(network=self.net) for x in xrange(1)]
-        self.vehicle_list.extend(
-            [Tank(network=self.net, vehicles=self.vehicle_list) for x in xrange(10)]
-        )
+        self.vehicle_list = []
+        #self.vehicle_list.extend(
+        #    Transport(network=self.net) for x in xrange(2)
+        #)
+        #self.vehicle_list.extend(
+        #    [Tank(network=self.net, vehicles=self.vehicle_list) for x in xrange(10)]
+        #)
 
     def Update_Area(self, area):
         if ( area != None ):
