@@ -61,7 +61,47 @@ class Gauge(object):
         output.blit(hand, self._pos + hand_rect)
         output.blit(self.glass_img, self._pos)
 
+class Valve(object):
+    """Big valve"""
+    def __init__(self, x, y):
+        self._pos = Point(x, y)
+        d = int(1.4 * Get_Grid_Size()) # diameter
+        h = int(6.5 * Get_Grid_Size()) # diameter
+        self._back_img = resource.Load_Image("valve_back.png", scale_to=(d, h))
+        self._handle_img = resource.Load_Image("valve_handle.png", scale_to=(d, h))
+        self._anim_rotation = self._gen_animate_rotation()
+        self._anim_rotation.next()
 
+    def _gen_animate_rotation(self):
+        """Generate handle rotation animation"""
+        angle = 0
+        is_open = True
+        while True:
+            if angle < 250 and not is_open:
+                angle += 4
+            elif angle > 0 and is_open:
+                angle -= 4
+            is_open = (yield angle)
+
+    def rotate_handle(self, is_open):
+        """Rotate handle"""
+        if is_open is None:
+            angle = 0 # no pipe selected
+        else:
+            angle = self._anim_rotation.send(is_open)
+
+        center = self._handle_img.get_rect().center
+        handle = pygame.transform.rotate(self._handle_img, angle)
+        newrect = handle.get_rect()
+        newrect.center = PVector(0, 5) + PVector(center)
+        newrect.center = center
+        return handle, newrect
+
+    def draw(self, output, is_open=None):
+        output.blit(self._back_img, self._pos)
+        if is_open is not None:
+            handle, handle_rect = self.rotate_handle(is_open=is_open)
+            output.blit(handle, self._pos + handle_rect)
 
 class User_Interface:
     def __init__(self, net, (width, height)):
@@ -95,6 +135,7 @@ class User_Interface:
             city_pressure = Gauge(0, 0),
             selected_pressure = Gauge(6 * Get_Grid_Size(), 0)
         )
+        self.valve = Valve(250, -20)
 
         self.vehicle_list = []
         #self.vehicle_list.extend(
@@ -263,6 +304,11 @@ class User_Interface:
             output,
             bar=bar,
         )
+
+        if isinstance(self.selection, Pipe):
+            self.valve.draw(output, is_open=self.selection.valve_open)
+        else:
+            self.valve.draw(output)
 
         self.control_menu.Draw(output)
 

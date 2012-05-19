@@ -938,9 +938,6 @@ class Pipe(Building):
     def __init__(self,n1,n2,name="Pipe"):
         Building.__init__(self,name)
         assert n1 != n2
-        self.draw_obj_valve_open = draw_obj.Draw_Obj("valve_open.png", 1)
-        self.draw_obj_valve_closed = draw_obj.Draw_Obj("valve_closed.png", 1)
-        self.draw_obj = self.draw_obj_valve_closed
         self.valve_open = True
         n1.pipes.append(self)
         n2.pipes.append(self)
