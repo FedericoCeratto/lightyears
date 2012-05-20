@@ -68,7 +68,7 @@ class Valve(object):
         d = int(1.4 * Get_Grid_Size()) # diameter
         h = int(6.5 * Get_Grid_Size()) # diameter
         self._back_img = resource.Load_Image("valve_back.png", scale_to=(d, h))
-        self._handle_img = resource.Load_Image("valve_handle.png", scale_to=(d, h))
+        self._handle_img = resource.Load_Image("valve_handle.png", scale_to=(d, d))
         self._anim_rotation = self._gen_animate_rotation()
         self._anim_rotation.next()
 
@@ -77,7 +77,7 @@ class Valve(object):
         angle = 0
         is_open = True
         while True:
-            if angle < 250 and not is_open:
+            if angle < 30 and not is_open:
                 angle += 4
             elif angle > 0 and is_open:
                 angle -= 4
@@ -93,8 +93,7 @@ class Valve(object):
         center = self._handle_img.get_rect().center
         handle = pygame.transform.rotate(self._handle_img, angle)
         newrect = handle.get_rect()
-        newrect.center = PVector(0, 5) + PVector(center)
-        newrect.center = center
+        newrect.center = PVector(0, 50) + PVector(center)
         return handle, newrect
 
     def draw(self, output, is_open=None):
