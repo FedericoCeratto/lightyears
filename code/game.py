@@ -70,13 +70,13 @@ def Main_Loop(screen, clock, (width, height),
     picture_rect.top = margin
     picture_surf = screen.subsurface(picture_rect)
 
-    stats_rect = Rect(x1, picture_rect.bottom + margin, 
+    stats_rect = Rect(x1, margin,
                 menu_width1, Sc(120))
     stats_surf = screen.subsurface(stats_rect)
     global_stats_rect = Rect(x1, stats_rect.bottom + margin, 
                 menu_width1, Sc(110))
     global_stats_surf = screen.subsurface(global_stats_rect)
-    controls_rect = Rect(x1, global_stats_rect.bottom + margin, 
+    controls_rect = Rect(x1, global_stats_rect.bottom + 4,
                 menu_width1, height - 
                     ( margin + global_stats_rect.bottom + margin ))
     controls_surf = screen.subsurface(controls_rect)
@@ -279,6 +279,7 @@ def Main_Loop(screen, clock, (width, height),
               until_next + 
                 g.season_fx.Get_Extra_Info())
         ui.Draw_Controls(controls_surf)
+
 
         if ( menu_inhibit ):
             current_menu.Draw(screen)

@@ -7,6 +7,7 @@
 
 import pygame
 from pygame.locals import *
+from primitives import Get_Grid_Size
 
 import stats , extra , resource , render , sound
 
@@ -87,11 +88,7 @@ class Menu:
         if ( self.update_required ):
             self.update_required = False
 
-            if ( centre == None ):
-                self.bbox.center = output.get_rect().center
-            else:
-                self.bbox.center = centre
-
+            self.bbox.top = 5 * Get_Grid_Size()
             self.bbox.clamp_ip(output.get_rect())
 
             output.blit(self.surf_store, self.bbox.topleft)

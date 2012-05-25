@@ -15,12 +15,12 @@ from primitives import *
 
 class Gauge(object):
     """Round steampunk gauge"""
-    def __init__(self, x, y):
-        d = 5 * Get_Grid_Size() # diameter
+    def __init__(self, x, y, d):
+        d = d * Get_Grid_Size() # diameter
         self.back_img = resource.Load_Image("gauge.png", scale_to=(d, d))
         self.hand_img = resource.Load_Image("gauge_hand.png", scale_to=(d, d))
         self.glass_img = resource.Load_Image("gauge_glass.png", scale_to=(d, d))
-        self._pos = Point(x, y)
+        self._pos = GVector(x, y).in_pixels
         self._animated_pressure = 0
         self._speed = .2
         self._vibration = random.randint(0, 200)
@@ -63,11 +63,12 @@ class Gauge(object):
 
 class Valve(object):
     """Big valve"""
-    def __init__(self, x, y):
-        self._pos = Point(x, y)
-        d = int(1.4 * Get_Grid_Size()) # diameter
-        h = int(6.5 * Get_Grid_Size()) # diameter
-        self._back_img = resource.Load_Image("valve_back.png", scale_to=(d, h))
+    def __init__(self):
+        self._pos = PVector(9.5 * Get_Grid_Size(), 0)
+        h = 5 * Get_Grid_Size() # height
+        d = Get_Grid_Size() # handle diameter
+
+        self._back_img = resource.Load_Image("valve_back.png", scale_to=(None, h))
         self._handle_img = resource.Load_Image("valve_handle.png", scale_to=(d, d))
         self._anim_rotation = self._gen_animate_rotation()
         self._anim_rotation.next()
@@ -93,7 +94,7 @@ class Valve(object):
         center = self._handle_img.get_rect().center
         handle = pygame.transform.rotate(self._handle_img, angle)
         newrect = handle.get_rect()
-        newrect.center = PVector(0, 50) + PVector(center)
+        newrect.center = GVector(-.55, 1.38).in_pixels + PVector(center)
         return handle, newrect
 
     def draw(self, output, is_open=None):
@@ -131,10 +132,10 @@ class User_Interface:
         self.steam_effect_frame = 0
 
         self.gauges = dict(
-            city_pressure = Gauge(0, 0),
-            selected_pressure = Gauge(6 * Get_Grid_Size(), 0)
+            city_pressure = Gauge(0, 0, 4),
+            selected_pressure = Gauge(4.5, 0, 4)
         )
-        self.valve = Valve(250, -20)
+        self.valve = Valve()
 
         self.vehicle_list = []
         #self.vehicle_list.extend(
