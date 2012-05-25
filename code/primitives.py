@@ -355,3 +355,20 @@ def draw_ellipse(surface, p, width, color, line_width, center=True, filled=False
 
     return int(w), height
 
+
+def draw_border(s, r):
+    """Draw borders around a surface, used for debugging
+
+    :param s: Surface
+    :param r: Rect
+    """
+    c = (255, 255, 0, 200)
+    right = r.right - 1
+    bottom = r.bottom - 1
+    pygame.draw.lines(s, c, True, (
+        (0, 0),
+        (right, 0),
+        (right, bottom),
+        (0, bottom),
+    ))
+
