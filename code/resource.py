@@ -53,6 +53,9 @@ def Path(name, audio=False):
         return os.path.join(DATA_DIR,name)
 
 def Load_Image(name, scale_to=None):
+    """Load image and scale it.
+    scale_to can be (width), (width, None), (None, height), (width, height)
+    """
     global __img_cache
 
     key = name
@@ -74,10 +77,17 @@ def Load_Image(name, scale_to=None):
 
     img = img.convert_alpha()
     if scale_to is not None:
-        if isinstance(scale_to, int):
+
+        if isinstance(scale_to, int) or scale_to[1] is None:
             w = scale_to
-            height = int(float(w) * img.get_height() / img.get_width())
-            scale_to = (w, height)
+            h = int(float(w) * img.get_height() / img.get_width())
+            scale_to = (w, h)
+
+        elif scale_to[0] is None:
+            h = scale_to
+            w = int(float(h) * img.get_width() / img.get_height())
+            scale_to = (w, h)
+
         img = pygame.transform.smoothscale(img, scale_to)
 
     __img_cache[key] = img
