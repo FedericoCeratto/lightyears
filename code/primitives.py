@@ -306,7 +306,22 @@ class PVector(Point):
 
 class GVector(Point):
     """2D vector, measured in game units"""
-    pass
+    @property
+    def pvector(self):
+        """Equivalent vector measured in pixes"""
+        return self.in_pixels
+
+    def __getitem__(self, i):
+        """The Point/Vector behaves as a tuple, mostly for interacting with pyga
+        Return integers measured in pixels
+        """
+        return int(self.tup[i] * Get_Grid_Size())
+
+    @property
+    def in_pixels(self):
+        """Equivalent vector measured in pixes"""
+        return PVector(Grid_To_Scr(self.tup))
+
 
 def distance(a, b):
     """Calculate distance between two points (tuples)"""
