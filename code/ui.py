@@ -310,7 +310,7 @@ class User_Interface:
         else:
             self.valve.draw(output)
 
-        self.control_menu.Draw(output, centered=False)
+        self.control_menu.Draw(output, top=5*Get_Grid_Size())
 
     def Control_Mouse_Move(self, spos):
         if ( self.control_menu != None ):

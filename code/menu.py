@@ -84,17 +84,19 @@ class Menu:
                 sound.FX("click")
                 return
 
-    def Draw(self, output, centered=True):
+    def Draw(self, output, centre=None, top=None):
         if ( self.update_required ):
             self.update_required = False
 
-            if centered:
-                # centered menu, as the main menu
-                self.bbox.center = output.get_rect().center
-            else:
-                # in-game menu
-                self.bbox.top = 5 * Get_Grid_Size()
 
+            if centre is not None:
+                self.bbox.center = centre
+            elif top is not None:
+                # in-game menu
+                self.bbox.top = top
+            else:
+                # centered menu
+                self.bbox.center = output.get_rect().center
 
             self.bbox.clamp_ip(output.get_rect())
 
