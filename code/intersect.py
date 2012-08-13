@@ -10,6 +10,9 @@
 # Note 1: it's not an intersection if the two lines share an endpoint.
 # Note 2: Can't detect overlapping parallel lines.
 
+from logging import getLogger
+log = getLogger(__name__)
+
 def Intersect(((xa1,ya1),(xa2,ya2)),((xb1,yb1),(xb2,yb2))):
     xa = xa2 - xa1
     ya = ya2 - ya1

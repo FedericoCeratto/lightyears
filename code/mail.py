@@ -9,6 +9,9 @@ from pygame.locals import *
 
 import stats
 
+from logging import getLogger
+log = getLogger(__name__)
+
 __messages = []
 __day = 0
 __change = False

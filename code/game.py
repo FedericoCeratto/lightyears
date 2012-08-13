@@ -24,7 +24,8 @@ from network import Network
 from ui import User_Interface
 from mail import New_Mail
 
-
+from logging import getLogger
+log = getLogger(__name__)
 
 class Game_Data:
     pass

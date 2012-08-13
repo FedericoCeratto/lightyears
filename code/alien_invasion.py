@@ -14,6 +14,8 @@ from quiet_season import Quiet_Season
 from primitives import *
 from map_items import *
 
+from logging import getLogger
+log = getLogger(__name__)
 
 
 class Alien_Season(Quiet_Season):

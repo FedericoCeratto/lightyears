@@ -14,6 +14,17 @@ from primitives import *
 DEB_ICON = '/usr/share/pixmaps/lightyears.xpm'
 DEB_MANUAL = '/usr/share/doc/lightyears/html/index.html'
 
+import logging
+log = logging.getLogger(__name__)
+
+def setup_logging():
+    log.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(name)s %(levelname)s %(message)s')
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+
 def parse_args():
     """Parse CLI options
     :returns: args
@@ -63,6 +74,7 @@ def Main(data_dir):
     print "Version", config.CFG_VERSION
     print ""
 
+    setup_logging()
     cli_args = parse_args()
 
     resource.DATA_DIR = data_dir
