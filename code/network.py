@@ -12,24 +12,118 @@ import extra
 from map_items import *
 from primitives import *
 from mail import New_Mail
+import math
 
 def is_too_close(pos, li, d):
     """Check if item position is too close to any element from li
     """
     for other in li:
-        if distance(pos, other.pos) < d:
+        if hasattr(other, 'pos'):
+            other = other.pos
+        if distance(pos, other) < d:
             return True
 
     return False
 
-class Network:
-    def __init__(self, teaching):
+def get_closest(pos, li):
+    """Get the closest element from a list"""
+    dists = dict((distance(pos, i), i) for i in li)
+    min_dist = min(dists)
+    return dists[min_dist]
+
+def rand_pos(margin):
+    """Pick a random x,y gpos"""
+    (mx, my) = GRID_SIZE
+    return (
+        random.randint(margin, mx - margin),
+        random.randint(margin, my - margin)
+    )
+
+def generate_cities(max_num, margin, min_dist):
+    """Generate cities at random locations"""
+    cities = []
+    # split the may by N x N rectangles, so that each quadrant will contain
+    # one city at maximum
+    N = math.ceil(max_num ** (.5))
+    used_quadrants = set()
+    cnt = 0
+    while len(cities) < max_num and cnt < 100:
+        pos = rand_pos(margin)
+        quad = (int(pos[0] / N), int(pos[1] / N))
+        # do not put 2 cities in the same quadrant
+        if quad in used_quadrants:
+            continue
+        # keep distance between cities
+        if is_too_close(pos, cities, min_dist):
+            continue
+
+        cities.append(pos)
+        used_quadrants.add(quad)
+
+    return cities
+
+def generate_map(num_cities, min_dist_between_cities=12):
+    """Generate map items randomly"""
+    (x,y) = GRID_CENTRE
+    (mx, my) = GRID_SIZE
+    rocks = []
+    wells = []
+
+    # Cities
+    if num_cities == 1:
+        cities = [GRID_CENTRE, ]
+    else:
+        cities = generate_cities(num_cities, 4, min_dist_between_cities)
+
+    # Create one well close to each city
+    for c in cities:
+        pos = (c[0] + 5, c[1] + random.randint(-3,3))
+        wells.append(pos)
+
+    # Other wells
+    while len(wells) < len(cities) + 10:
+        pos = rand_pos(2)
+
+        # keep distance from the cities
+        if is_too_close(pos, cities, 10):
+            continue
+        # keep distance from other wells
+        if is_too_close(pos, wells, 1):
+            continue
+
+        wells.append(pos)
+
+    # Rocks
+    cnt = 0
+    while len(rocks) < 10 and cnt < 100:
+        cnt += 1
+        pos = rand_pos(2)
+        size = 1 + 5 * random.random()
+        # keep distance from wells
+        if is_too_close(pos, wells, int(size/8)):
+            continue
+        # keep distance from the cities
+        if is_too_close(pos, cities, 9):
+            continue
+        # keep distance from other rocks
+        rocks_pos = [p for p, s in rocks]
+        if is_too_close(pos, rocks_pos, int(size/8)):
+            continue
+
+        rocks.append((pos, size))
+
+    return cities, rocks, wells
+
+class Network(object):
+    def __init__(self, teaching, multiplayer):
+        self._multiplayer = multiplayer
         self.ground_grid = dict()
         self.pipe_grid = dict()
         self.well_list = []
         self.node_list = []
         self.pipe_list = []
         self.rock_list = []
+        self.cities_list = []
 
         # UI updates required?
         self.dirty = False
@@ -37,31 +131,38 @@ class Network:
         # Popup health meters may appear
         self.popups = set([])
 
-        # Wells are created. All wells must be at least a certain
-        # distance from the city.
-        for i in xrange(10):
-            self.Make_Well(teaching)
 
-        # Get centre: 
-        (x,y) = GRID_CENTRE
+        if multiplayer is None:
+            cities, rocks, wells = generate_map(1)
+        else:
+            cities, rocks, wells = multiplayer.get_static_map()
 
-        # An additional bootstrap well, plus node, is created close to the city.
-        wgpos = (x + 5, y + random.randint(-3,3))
-        w = Well(wgpos)
-        self.Add_Grid_Item(w)
-        wn = Well_Node(wgpos)
-        self.Add_Finished_Node(wn)
-        wn.tutor_special = True
+        # Place wells
+        if teaching:
+            for i in xrange(10):
+                self.Make_Well(teaching)
+        else:
+            for wgpos in wells:
+                self.Add_Grid_Item(Well(wgpos))
 
-        # City is created.
-        cn = City_Node((x,y))
-        self.Add_Finished_Node(cn)
+        for c in cities:
+            # create city
+            cn = City_Node(c)
+            self.Add_Finished_Node(cn)
 
-        # Pipe links the two
-        self.Add_Pipe(cn,wn)
-        pipe = cn.pipes[ 0 ]
-        pipe.health = pipe.max_health
-        pipe.Do_Work()
+            # create closest well
+            wgpos = get_closest(c, wells)
+            w = Well(wgpos)
+            self.Add_Grid_Item(w)
+            wn = Well_Node(wgpos)
+            self.Add_Finished_Node(wn)
+            wn.tutor_special = True
+
+            # Pipe links the two
+            self.Add_Pipe(cn, wn)
+            pipe = cn.pipes[0]
+            pipe.health = pipe.max_health
+            pipe.Do_Work()
 
         # Final setup
         self.hub = cn # hub := city node
@@ -69,20 +170,8 @@ class Network:
         self.connection_value = 1
         self.Work_Pulse(0) # used to make connection map
 
-        # Add some rocks
-        while len(self.rock_list) < 10:
-            pos = (x + random.randint(-20, 20), y + random.randint(-20, 20))
-            # keep distance from wells
-            if is_too_close(pos, self.well_list, 4):
-                continue
-            # keep distance from the City
-            if distance(pos, GRID_CENTRE) < 9:
-                continue
-            # keep distance from other rocks
-            if is_too_close(pos, self.rock_list, 3):
-                continue
-
-            self.rock_list.append(Rock(pos))
+        for pos, size in rocks:
+            self.rock_list.append(Rock(pos, size))
 
         # sort rock_list by "y" value, to be able to draw them in sequence
         # without incorrect overlapping
@@ -93,6 +182,9 @@ class Network:
 
 
     def Add_Finished_Node(self, node):
+        if self._multiplayer:
+            self._multiplayer.set_finished_node(node.pos)
+
         node.health = node.max_health
         node.Do_Work()
         node.complete = True
@@ -200,6 +292,21 @@ class Network:
         New_Mail("Insufficient metal: %s metal units required." % cost)
         return None
 
+    def metal_available(self, building_type):
+        """Check if enough metal is available to build something.
+        If so, decrease the remaining metal.
+        """
+        costs = {
+            'up_node': 50,
+            'node': 75,
+            'well': 25,
+        }
+        cost = costs.get(building_type, 40)
+        if self.hub.metal_quantity > cost:
+            return True
+
+        New_Mail("Insufficient metal: %s metal units required." % cost)
+        return False
 
 
     def Popup(self, node):
@@ -273,6 +380,12 @@ class Network:
                 New_Mail("Pipe collides with a rock.")
                 return False
 
+        if self._multiplayer:
+            try:
+                self._multiplayer.add_pipe((n1.pos, n2.pos))
+            except UserException, e:
+                print e
+                return False
 
         sound.FX("bamboo1")
         pipe = Pipe(n1, n2)
@@ -375,7 +488,6 @@ class Network:
 
     def Make_Well(self, teaching=False, inhibit_effects=False):
         self.dirty = True
-        (cx, cy) = GRID_CENTRE
         (mx, my) = GRID_SIZE
 
         while True:
@@ -387,9 +499,11 @@ class Network:
             # occupied
             if self.ground_grid.has_key((x,y)):
                 continue
-            # too close
-            if math.hypot(x - cx, y - cy) < 10:
-                continue
+
+            # too close to a city?
+            for cx, cy in self.cities_list:
+                if math.hypot(x - cx, y - cy) < 10:
+                    continue
             # too close to a rock
             if is_too_close((x, y), self.rock_list, 3):
                 continue

@@ -18,6 +18,7 @@ from alien_invasion import Alien_Season
 from quakes import Quake_Season
 from storms import Storm_Season
 from map_items import *
+from multiplayer import Reactor
 from steam_model import Steam_Model
 from network import Network
 from ui import User_Interface
@@ -29,7 +30,7 @@ class Game_Data:
     pass
 
 def Main_Loop(screen, clock, (width, height), 
-            restore_pos, challenge):
+            restore_pos, challenge, multiplayer=None):
     # Initialisation of screen things.
 
     menu_margin = height
@@ -113,8 +114,24 @@ def Main_Loop(screen, clock, (width, height),
     g.version = startup.Get_Game_Version()
     g.sysinfo = extra.Get_System_Info()
 
+    # Setup multiplayer reactor
+    if multiplayer:
+        server, subtree, username = multiplayer.split(':')
+        g.multiplayer = Reactor(server, subtree, username, wait=False)
+        try:
+            resp = g.multiplayer.join_game(subtree)
+        except:
+            g.multiplayer.create_game(subtree)
+            resp = g.multiplayer.join_game(subtree)
+
+        print repr(resp)
+        g.multiplayer.players = resp['players']
+        g.multiplayer.max_players = resp['max_players']
+    else:
+        g.multiplayer = None
+
     # Steam network initialisation
-    g.net = Network(teaching)
+    g.net = Network(teaching, g.multiplayer)
 
     DIFFICULTY.Set(MENU_INTERMEDIATE)
 
@@ -129,7 +146,7 @@ def Main_Loop(screen, clock, (width, height),
     assert g.net.hub.Get_Pressure() >= PRESSURE_GOOD
 
     # UI setup
-    ui = User_Interface(g.net, (width,height))
+    ui = User_Interface(g.net, (width,height), g)
     inputs = [
         (controls_rect, ui.Control_Mouse_Down, ui.Control_Mouse_Move),
         (game_screen_rect, ui.Game_Mouse_Down, ui.Game_Mouse_Move) ]
@@ -256,6 +273,9 @@ def Main_Loop(screen, clock, (width, height),
             if ( not tutor.Frozen () ):
                 g.game_time.Advance(rt_frame_length)
             draw_obj.Next_Frame() # Flashing lights on the various items
+
+        if g.multiplayer is not None:
+            g.multiplayer.update()
 
         cur_time = g.game_time.time()
         mail.Set_Day(g.game_time.Get_Day())
@@ -416,6 +436,8 @@ def Main_Loop(screen, clock, (width, height),
         and ( g.game_running )):
             # Game over - you lose
             g.game_running = False
+            if g.multiplayer:
+                g.multiplayer.stop()
             New_Mail("The City ran out of steam.", (255,0,0))
             New_Mail("Game Over!", (255,255,0))
             sound.FX("krankor")
@@ -425,6 +447,8 @@ def Main_Loop(screen, clock, (width, height),
         and ( g.game_running )):
             # Game over - you win!
             g.game_running = False
+            if g.multiplayer:
+                g.multiplayer.stop()
             g.win = True
             New_Mail("The City is now fully upgraded!", (255,255,255))
             New_Mail("You have won the game!", (255,255,255))

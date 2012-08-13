@@ -414,13 +414,13 @@ class Well(Item):
 
 class Rock(Item):
     """Just a big rock, of random size"""
-    def __init__(self, (x,y), name="Rock"):
+    def __init__(self, (x, y), size, name="Rock"):
         Item.__init__(self, name)
         self.pos = (x,y)
         self.rock_img = resource.Load_Image("rock.png")
         self.shadow_img = resource.Load_Image("rock_shadow.png")
 
-        self._size = 1 + 5 * random.random()
+        self._size = size
         width = int(self._size * Get_Grid_Size())
 
         ratio = float(self.rock_img.get_height()) / self.rock_img.get_width()

@@ -13,6 +13,9 @@ import resource
 from map_items import *
 from primitives import *
 
+from mail import New_Mail
+from multiplayer import UserException
+
 class Gauge(object):
     """Round steampunk gauge"""
     def __init__(self, x, y, d):
@@ -104,9 +107,10 @@ class Valve(object):
             output.blit(handle, self._pos + handle_rect)
 
 class User_Interface:
-    def __init__(self, net, (width, height)):
+    def __init__(self, net, (width, height), g):
         self.net = net
         self.control_menu = None
+        self._game_data = g
 
         self.Reset()
         self.blink = 0xff
@@ -383,9 +387,16 @@ class User_Interface:
 
             # empty (may contain pipes)
             if ( self.mode == BUILD_NODE ):
-                # create new node!
-                if self.net.use_metal('node'):
-                    n = Node(gpos, rocks=self.net.rock_list)
+                # create new node
+                n = Node(gpos, rocks=self.net.rock_list)
+                do_create = self.net.metal_available('node')
+                if do_create and self._game_data.multiplayer:
+                    try:
+                        self._game_data.multiplayer.add_node(gpos)
+                    except UserException, e:
+                        do_create = False
+                if do_create:
+                    self.net.use_metal('node')
                     n.Sound_Effect()
                     self.selection = None
                     if ( self.net.Add_Grid_Item(n) ):
@@ -426,6 +437,9 @@ class User_Interface:
                 and ( n != self.selection )):
                     # end pipe here
                     if ( self.net.Add_Pipe(self.selection, n) ):
+                        if self._game_data.multiplayer:
+                            self._game_data.multiplayer.add_pipe(
+                                (self.selection.pos, n.pos))
                         tutor.Notify_Add_Pipe()
                         self.selection = None
 
@@ -452,6 +466,8 @@ class User_Interface:
                 if self.net.use_metal('well'):
                     self.selection = None
                     n = Well_Node(gpos)
+                    if self._game_data.multiplayer:
+                        self._game_data.multiplayer.add_well(gpos)
                     if ( self.net.Add_Grid_Item(n) ):
                         self.selection = n
                         self.selection.Sound_Effect()

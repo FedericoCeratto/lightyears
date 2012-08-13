@@ -25,6 +25,7 @@ def parse_args():
         help="safe mode", action="store_true")
     p.add_argument("--no-sound",
         help="disable sound", action="store_true")
+    p.add_argument("-s", "--server", help="multiplayer server")
     for t in ('beginner', 'intermediate', 'expert', 'peaceful'):
         p.add_argument("--play-%s" % t,
             help="start %s game" % t, action="store_true")
@@ -34,6 +35,13 @@ def parse_args():
     p.add_argument("--resolution", type=int,
         help="resolution (one of: %s)" % x_res)
     args = p.parse_args()
+
+    if args.server:
+        # Only peaceful mode is supported in multiplayer
+        args.play_peaceful = True
+        args.play_beginner = False
+        args.play_intermediate = False
+        args.play_expert = False
 
     if args.resolution is None:
         return args
@@ -194,8 +202,9 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
     )
     for flag, pick_cmd in flags:
         if getattr(cli_args, flag):
+            # Multiplayer is supported only here
             quit = game.Main_Loop(screen, clock,
-                (width,height), None, pick_cmd)
+                (width,height), None, pick_cmd, multiplayer=cli_args.server)
 
     # off we go.
 
