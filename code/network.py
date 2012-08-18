@@ -14,6 +14,11 @@ from primitives import *
 from mail import New_Mail
 import math
 
+from multiplayer import UserException
+
+from logging import getLogger
+log = getLogger(__name__)
+
 def is_too_close(pos, li, d):
     """Check if item position is too close to any element from li
     """
@@ -136,6 +141,7 @@ class Network(object):
             cities, rocks, wells = generate_map(1)
         else:
             cities, rocks, wells = multiplayer.get_static_map()
+            log.debug(repr(cities))
 
         # Place wells
         if teaching:
@@ -160,12 +166,23 @@ class Network(object):
 
             # Pipe links the two
             self.Add_Pipe(cn, wn)
-            pipe = cn.pipes[0]
+            pipe = cn.pipes[-1]
             pipe.health = pipe.max_health
-            pipe.Do_Work()
+            if self._multiplayer:
+                pipe.Do_Work(broadcast_update=self._multiplayer.broadcast)
+            else:
+                pipe.Do_Work()
 
-        # Final setup
-        self.hub = cn # hub := city node
+            # Set hub and update ownership
+            if self._multiplayer and c != self._multiplayer.city:
+                pass # This City is owned by another player
+            else:
+                # Set city as owned hub
+                self.hub = cn
+                self.hub.owned_by_me = True
+                pipe.owned_by_me = True
+                wn.owned_by_me = True
+
 
         self.connection_value = 1
         self.Work_Pulse(0) # used to make connection map
@@ -186,7 +203,10 @@ class Network(object):
             self._multiplayer.set_finished_node(node.pos)
 
         node.health = node.max_health
-        node.Do_Work()
+        if self._multiplayer:
+            node.Do_Work(broadcast_update=self._multiplayer.broadcast)
+        else:
+            node.Do_Work()
         node.complete = True
         self.Add_Grid_Item(node)
         node.locate_nearby_rocks(self.rock_list)
@@ -252,7 +272,10 @@ class Network(object):
             for node in now:
                 if ( node.connection_value < cv ):
                     if (( work_points > 0 ) and node.Needs_Work() ):
-                        node.Do_Work()
+                        if self._multiplayer:
+                            node.Do_Work(broadcast_update=self._multiplayer.broadcast)
+                        else:
+                            node.Do_Work()
                         self.Popup(node)
                         work_points -= 1
                         used += 1
@@ -308,6 +331,14 @@ class Network(object):
         New_Mail("Insufficient metal: %s metal units required." % cost)
         return False
 
+    def is_closed_to_an_owned_node(self, gpos):
+        """Check if a point is in proximity to any player-owned node."""
+        for n in self.node_list:
+            if n.owned_by_me:
+                if distance(n.pos, gpos) < self._multiplayer._max_building_distance:
+                    return True
+
+        return False
 
     def Popup(self, node):
         if ( node != None ):
@@ -384,7 +415,7 @@ class Network(object):
             try:
                 self._multiplayer.add_pipe((n1.pos, n2.pos))
             except UserException, e:
-                print e
+                log.debug(e)
                 return False
 
         sound.FX("bamboo1")

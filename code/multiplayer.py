@@ -1,13 +1,13 @@
 # Copyright (C) 2012 Federico Ceratto <federico.ceratto@gmail.com>
 # This file is licensed under GPL v2
 
+from time import time, sleep
+import json
 import struct
 import sys
-import json
-from time import time, sleep
-from threading import Thread
-
 import zmq
+
+from mail import New_Mail
 
 import logging as log
 log.basicConfig(format='%(levelname)s %(message)s', level=log.DEBUG)
@@ -76,6 +76,7 @@ class Reactor(object):
 
         # Prepare our context and subscriber
         ctx = zmq.Context()
+        self._ctx = ctx
         self._snapshot = ctx.socket(zmq.DEALER)
         self._snapshot.linger = 0
         self._snapshot.connect("tcp://%s:5556" % server)
@@ -90,9 +91,9 @@ class Reactor(object):
         self._requester = ctx.socket(zmq.REQ)
         self._requester.linger = 0
         self._requester.connect("tcp://%s:5555" % server)
+        self._server_name = server
 
         self._poller = zmq.Poller()
-        self._poller.register(self._subscriber, zmq.POLLIN)
 
         self.role = username
         return
@@ -138,11 +139,6 @@ class Reactor(object):
         self[self.role + "hearthbeat"] = time()
         self.update()
 
-        # Start hearthbeat
-        #log.debug("Starting hearthbeat")
-        #Thread(target=self._hearthbeat).start()
-        log.debug("Dump")
-        self._remote_dump()
 
         if wait:
             players_num = sum([p in self for p in player_names])
@@ -164,6 +160,7 @@ class Reactor(object):
         }
         self._requester.send(json.dumps(request))
         resp = json.loads(self._requester.recv())
+        log.debug("Called %s" % name)
         if resp is None or resp.get('status', None) == 'ok':
             return resp
 
@@ -172,6 +169,21 @@ class Reactor(object):
 
         raise RuntimeError('unspecified')
 
+
+    def _setup_broadcast_receiver(self):
+        """Tune in broadcast receiver. Subscribe to the current game"""
+        self._broadcast = self._ctx.socket(zmq.SUB)
+        self._broadcast.linger = 0
+        self._broadcast.connect("tcp://%s:5559" % self._server_name)
+        self._broadcast.setsockopt(zmq.SUBSCRIBE, self._current_game_name)
+        self._poller.register(self._broadcast, zmq.POLLIN)
+
+    def broadcast(self, **payload):
+        """Broadcast updates to every player"""
+        return self._call('broadcast', {
+            'game_name': self._current_game_name,
+            'msg': payload,
+        })
 
     def list_games(self):
         return self._call('list_games', {})
@@ -187,6 +199,11 @@ class Reactor(object):
     def join_game(self, game_name):
         ret = self._call('join_game', {'game_name': game_name})
         self._current_game_name = game_name
+        self.city = ret['city']
+        self._max_building_distance = ret['max_building_distance']
+        self.max_players = ret['max_players']
+        self.players = ret['players']
+        self._setup_broadcast_receiver()
         return ret
 
     def leave_game(self):
@@ -208,6 +225,9 @@ class Reactor(object):
             'node': node,
         })
         return ret
+
+    def add_well_node(self, node):
+        return self.add_node(node)
 
     def set_finished_node(self, node):
         assert self._current_game_name, "Game-related method called while not in a game"
@@ -283,34 +303,47 @@ class Reactor(object):
             self._kvmap[k] = msg.body
 
     def update(self):
-        return
+        """Receive and process broadcast messages on every frame"""
+        self._receive_broadcasts()
 
 
-        """ """
-        #log.debug("Update")
-        # If some keys have been changed, send them to the server
-        for k in self._changed_keys:
-            log.debug("Sending %s" % k)
-            msg = KVMsg(0)
-            msg.key = self._subtree + k
-            msg.body = self[k]
-            msg.send(self._publisher)
-
-        self._changed_keys = []
-
-        self._syncronous_hearthbeat()
-
-        # Poll incoming messages
+    def _receive_broadcasts(self):
+        """Process incoming broadcast messages, if any, on every frame"""
         items = dict(self._poller.poll(1))
+        if self._broadcast in items:
+            r = self._broadcast.recv()
+            try:
+                game_name, msg = r.split(' ', 1)
+                assert game_name == self._current_game_name
+                msg = json.loads(msg)
+                event = msg['event']
+            except Exception, e:
+                log.error("Unexpected broadcast received %s" % repr(r))
+                return
 
-        if self._subscriber in items:
-            kvmsg = KVMsg.recv(self._subscriber)
+            log.debug('ib ' + repr(msg))
+            if event == 'new_player':
+                New_Mail("%s joined the game" % msg['player_name'])
+                return
 
-            # Discard out-of-sequence kvmsgs, incl. heartbeats
-            if kvmsg.sequence > self._sequence:
-                self._sequence = kvmsg.sequence
-                self._insert_from_msg(kvmsg)
-                print "I: received update=%d" % self._sequence
+            elif event == 'new_owner':
+                return
+
+            elif event == 'new_node':
+                raise NotImplementedError
+
+            elif event == 'new_pipe':
+                raise NotImplementedError
+
+            elif event == 'player_parts':
+                raise NotImplementedError
+
+            elif event == 'player_wins':
+                raise NotImplementedError
+
+            else:
+                log.error("Unexpected broadcast received %s" % repr(r))
+
 
     def _receive(self, socket):
         """Receive a key-value message from socket, ."""
@@ -330,21 +363,3 @@ class Reactor(object):
         self._kvmap = {}
 
 
-
-
-if __name__ == '__main__':
-    # test
-    r = Reactor('localhost', '1', 'fede', wait=False)
-    #r._remote_purge()
-    r.update()
-
-    #r._remote_dump()
-
-    try:
-        sleep(2)
-
-    except KeyboardInterrupt:
-        pass
-
-    r._running = False
-    print "END"

@@ -18,8 +18,10 @@ from steam_model import Steam_Model
 import time
 from mail import New_Mail
 
+import logging
+log = logging.getLogger(__name__)
 
-class Item(pygame.sprite.Sprite):
+class Item(pygame.sprite.Sprite, object):
     def __init__(self, name):
         self.pos = None
         self.name_type = name
@@ -44,7 +46,9 @@ class Item(pygame.sprite.Sprite):
         return None
 
     def Get_Information(self):
-        return [ ((255,255,0), 20, self.name_type) ]
+        """Generate a colored item name"""
+        color = (255, 255, 0) if self.owned_by_me else (80, 80, 80)
+        return [(color, 20, self.name_type)]
 
     def Prepare_To_Die(self):
         pass
@@ -521,6 +525,7 @@ class Building(Item):
         self.popup_disappears_at = 0.0
         self.destroyed = False
         self.tech_level = 1
+        self.owned_by_me = False
 
 
     def Exits(self):
@@ -576,6 +581,8 @@ class Building(Item):
                 else:
                     # Construction complete!
                     sound.FX("whoosh1")
+                    #self.owned_by_me = True
+                    #print 'constr compl', type(self)
                 self.complete = True
                 self.was_once_complete = True
 
@@ -669,6 +676,28 @@ class Node(Building):
         maxd = self.max_rock_distance
         li = [(rock, distance(self.pos, rock.pos)) for rock in rocks]
         self.rocks_nearby = [t for t in li if t[1] < maxd]
+
+    @property
+    def is_connectable(self):
+        """Check if the node can receive new pipes: either it's owned by
+        the playerit never had an owner and there are no pipes connected to it
+        """
+        return self.owned_by_me or not self.pipes
+
+    def Do_Work(self, broadcast_update=None):
+        """Do build/repair work on a node"""
+        status = self.complete
+        super(Node, self).Do_Work()
+        # Update ownership if the Node has been completed now
+        if status ^ self.complete:
+            self.owned_by_me = True
+            log.debug('setting node as owned')
+            if broadcast_update:
+                broadcast_update(
+                    item='node',
+                    pos=self.pos,
+                    event='new_owner',
+                )
 
     def Begin_Upgrade(self):
         if ( self.tech_level >= NODE_MAX_TECH_LEVEL ):
@@ -801,7 +830,7 @@ class City_Node(Node):
         self.draw_obj = draw_obj.Draw_Obj("city1.png", 3)
         self.draw_obj_finished = self.draw_obj_incomplete = self.draw_obj
         self.total_steam = 0
-        self.metal_quantity = 500
+        self.metal_quantity = 50000 #FIXME
         self.metal_production = 0
 
     def Begin_Upgrade(self):
@@ -834,7 +863,7 @@ class City_Node(Node):
     def Is_Broken(self):
         return False
 
-    def Do_Work(self):
+    def Do_Work(self, broadcast_update=None):
         if ( self.city_upgrade > 0 ):
             self.city_upgrade -= 1
             if ( self.city_upgrade == 0 ):
@@ -955,6 +984,23 @@ class Pipe(Building):
         self.dot_drawing_offset = 0
         self.dot_positions = []
         sound.FX("pipe_construction")
+
+    def Do_Work(self, broadcast_update=None):
+        """Do build/repair work on a pipe"""
+        status = self.complete
+        super(Pipe, self).Do_Work()
+        # Update ownership if the Pipe has been completed now
+        if status ^ self.complete:
+            log.debug('pipe finished owned')
+            if self.n1.owned_by_me or self.n2.owned_by_me:
+                log.debug('setting pipe owned')
+                self.owned_by_me = True
+                if broadcast_update:
+                    broadcast_update(
+                        item='pipe',
+                        pos=self.pos,
+                        event='new_owner',
+                    )
 
     def Begin_Upgrade(self):
         if ( self.tech_level >= PIPE_MAX_TECH_LEVEL ):

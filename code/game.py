@@ -125,9 +125,6 @@ def Main_Loop(screen, clock, (width, height),
             g.multiplayer.create_game(subtree)
             resp = g.multiplayer.join_game(subtree)
 
-        print repr(resp)
-        g.multiplayer.players = resp['players']
-        g.multiplayer.max_players = resp['max_players']
     else:
         g.multiplayer = None
 

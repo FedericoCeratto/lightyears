@@ -97,6 +97,10 @@ class Server(object):
         self._requester = ctx.socket(zmq.REP)
         self._requester.bind("tcp://*:5555")
 
+        # Broadcast channel
+        self._broadcast = ctx.socket(zmq.PUB)
+        self._broadcast.bind("tcp://*:5559")
+
         self._sequence = 0
         self._kvmap = {}
 
@@ -128,7 +132,15 @@ class Server(object):
             except KeyboardInterrupt:
                 if time() > self._sigint_time + .2:
                     # Dump datastore on Ctrl-C
-                    print(self._pprint_datastore())
+                    #print(self._pprint_datastore())
+                    for g in self._games.itervalues():
+                        for k in sorted(g):
+                            v = g[k]
+                            if isinstance(v, dict):
+                                for k2, v2 in v.iteritems():
+                                    print " ", k2, v2
+                                print k, v
+
                     self._sigint_time = time()
                 else:
                     log.info("Exiting")
@@ -174,6 +186,14 @@ class Server(object):
         else:
             log.error("Unknown request: %s" % repr(request))
 
+    # New methods
+
+    def _broadcast_update(self, game_name, payload):
+        """Broadcast an update to any connected client"""
+        log.debug("Broadcasting update: %s" % repr(payload))
+        msg = "%s %s" % (game_name, json.dumps(payload))
+        self._broadcast.send_unicode(msg)
+
     def _process_client_commands(self):
         """Process client commands: snapshots, purge..."""
         msg = self._requester.recv_multipart()
@@ -208,7 +228,7 @@ class Server(object):
             log.error("Unhandled exception.", exc_info=True)
             self._requester.send(json.dumps({
                 'status': 'error',
-                'error_msg': "Server exception: %s " %str(e),
+                'error_msg': "Server-side exception: %s " %str(e),
             }))
 
 
@@ -315,11 +335,18 @@ class Server(object):
                 'city': city,
             }
 
+            # announce new player
+            self._broadcast_update(game_name, {
+                'event': 'new_player',
+                'player_name': player_name,
+            })
+
         return {
             'status': 'ok',
-            'players': players,
-            'max_players': self._games[game_name]['max_players'],
             'city': city,
+            'max_building_distance': self._games[game_name]['max_building_distance'],
+            'max_players': self._games[game_name]['max_players'],
+            'players': players,
         }
 
 
@@ -331,19 +358,30 @@ class Server(object):
         if node in game['nodes']:
             raise UserException('occupied')
 
+        print 'nodes', len(game['nodes'])
+        game['nodes'][node] = {'owner': None, 'status': None}
+        print 'nodes', len(game['nodes'])
+
+
+        return
+        #
+        # The following code is disabled: the check is performed on client side
+        #
         # Ensure that the node is close enough to another node owned by the
         # player
-        mbd = game['max_building_distance']
-        for npos, ndict in game['nodes'].iteritems():
-            if ndict['owner'] != player_name:
-                continue
-            if distance(node, npos) < mbd:
-                # Found an owned node in the proximity
-                game['nodes'][node] = {'owner': None, 'status': None}
-                return
+        #mbd = game['max_building_distance']
+        #for npos, ndict in game['nodes'].iteritems():
+        #    if ndict['owner'] != player_name:
+        #        continue
+        #    #TODO: the distance should be measured on an isometric surface
+        #    if distance(node, npos) < mbd:
+        #        # Found an owned node in the proximity
+        #        game['nodes'][node] = {'owner': None, 'status': None}
+        #        log.debug(distance(node, npos))
+        #        return
 
-        # No close node has been found
-        raise UserException('toofar')
+        ## No close node has been found
+        #raise UserException('toofar')
 
     def _routed_set_finished_node(self, player_name, params, tstamp):
         """Set node as finished building"""
@@ -382,26 +420,32 @@ class Server(object):
         start_node, end_node = map(tuple, params['nodes'])
         gn = game['nodes']
 
-        if start_node not in gn or end_node not in gn:
+        if start_node not in gn:
+            log.error("%s not in %s" % (repr(start_node), repr(gn)))
+            raise UserException('missing_endpoint')
+        if end_node not in gn:
+            log.error("%s not in %s" % (repr(end_node), repr(gn)))
             raise UserException('missing_endpoint')
 
         st_ow = gn[start_node]['owner']
         end_ow = gn[end_node]['owner']
 
-        if st_ow not in (None, player_name) or \
-            end_ow not in (None, player_name):
-            raise UserException('not_owned')
+        #if st_ow not in (None, player_name) or \
+        #    end_ow not in (None, player_name):
+        #    raise UserException('not_owned')
 
-        if st_ow == player_name and gn[start_node]['status'] == 'built' or \
-            end_ow == player_name and gn[end_node]['status'] == 'built':
-            pass # the user owns at least one fully-built endpoint
-        else:
-            raise UserException('not_owned')
+        #if st_ow == player_name and gn[start_node]['status'] == 'built' or \
+        #    end_ow == player_name and gn[end_node]['status'] == 'built':
+        #    pass # the user owns at least one fully-built endpoint
+        #else:
+        #    raise UserException('not_owned')
 
         # Add pipe
+        print 'pipes', len(game['pipes'])
         game['pipes'][(start_node, end_node)] = {
             'owner': player_name,
         }
+        print 'pipes', len(game['pipes'])
 
         # Gain node ownership
         if gn[start_node]['owner'] != player_name:
@@ -441,6 +485,12 @@ class Server(object):
         gn = game['nodes']
 
 
+    def _routed_broadcast(self, player_name, params, tstamp):
+        """Broadcast messages from a player"""
+        game_name = params['game_name']
+        #game = self._games[game_name]
+        msg = params['msg']
+        self._broadcast_update(game_name, msg)
 
     def _send_store(self, route):
         """Send a state snapshot to a socket"""

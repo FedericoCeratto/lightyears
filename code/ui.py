@@ -16,6 +16,9 @@ from primitives import *
 from mail import New_Mail
 from multiplayer import UserException
 
+import logging
+log = logging.getLogger(__name__)
+
 class Gauge(object):
     """Round steampunk gauge"""
     def __init__(self, x, y, d):
@@ -217,7 +220,14 @@ class User_Interface:
                 # could put a node here.
                 r = Grid_To_Scr_Rect(gpos)
                 self.Update_Area(r)
-                color = (255, 255, 0, 200)
+                # In multiplayer mode, nodes can be placed only in proximity
+                # of owned nodes
+                if self._game_data.multiplayer and \
+                    not self.net.is_closed_to_an_owned_node(gpos):
+                    color = (255, 0, 0, 200)
+                else:
+                    color = (255, 255, 0, 200)
+
                 draw_ellipse(output, Point(r.topleft), 1, color, 1)
                 # draw excavation shadow
                 draw_ellipse(output, Point(r.topleft),
@@ -364,6 +374,75 @@ class User_Interface:
     def Is_Menu_Open(self):
         return ( self.mode == OPEN_MENU )
 
+    def _build_node(self, gpos, tutor):
+        """Create new node if possible"""
+        if not self.net.metal_available('node'):
+            return
+
+        n = Node(gpos, rocks=self.net.rock_list)
+
+        # In multiplayer mode, nodes can be placed only in proximity
+        # of owned nodes
+        if self._game_data.multiplayer:
+            if not self.net.is_closed_to_an_owned_node(gpos):
+                New_Mail("This location is too far from your network.")
+                return
+
+            try:
+                self._game_data.multiplayer.add_node(gpos)
+            except UserException, e:
+                log.error("Not building node: %s" % e)
+                return
+
+        self.net.use_metal('node')
+        n.Sound_Effect()
+        self.selection = None
+        if self.net.Add_Grid_Item(n):
+            self.selection = n
+            tutor.Notify_Add_Node(n)
+
+    def _build_node_on_well(self, gpos, tutor):
+        """Create new well node if possible"""
+        if not self.net.metal_available('node'):
+            return
+
+        n = Well_Node(gpos)
+
+        if self._game_data.multiplayer:
+            try:
+                self._game_data.multiplayer.add_well_node(gpos)
+            except UserException, e:
+                log.debug("Not building well node: %s" % e)
+                return
+
+        self.net.use_metal('well')
+        n.Sound_Effect()
+        if self.net.Add_Grid_Item(n):
+            self.selection = n
+            tutor.Notify_Add_Node(n)
+
+    def _build_pipe(self, start, end, tutor):
+        """Build new pipe if possible"""
+        # In multiplayer mode, pipes can be built only between
+        # owned nodes
+        if self._game_data.multiplayer:
+            if (start.owned_by_me and end.owned_by_me):
+                # Player owns both nodes
+                self._game_data.multiplayer.add_pipe(
+                    (start.pos, end.pos))
+            elif (start.owned_by_me and end.is_connectable) or \
+                (start.is_connectable and end.owned_by_me):
+                # Player owns one node, the other is not connected to anything else
+                self._game_data.multiplayer.add_pipe(
+                    (start.pos, end.pos))
+            else:
+                New_Mail("Endpoint not in your network.")
+                return
+
+        if self.net.Add_Pipe(start, end):
+            tutor.Notify_Add_Pipe()
+            self.selection = None
+
     def Game_Mouse_Down(self, spos):
         gpos = Scr_To_Grid(spos)
 
@@ -388,20 +467,7 @@ class User_Interface:
             # empty (may contain pipes)
             if ( self.mode == BUILD_NODE ):
                 # create new node
-                n = Node(gpos, rocks=self.net.rock_list)
-                do_create = self.net.metal_available('node')
-                if do_create and self._game_data.multiplayer:
-                    try:
-                        self._game_data.multiplayer.add_node(gpos)
-                    except UserException, e:
-                        do_create = False
-                if do_create:
-                    self.net.use_metal('node')
-                    n.Sound_Effect()
-                    self.selection = None
-                    if ( self.net.Add_Grid_Item(n) ):
-                        self.selection = n
-                        tutor.Notify_Add_Node(n)
+                self._build_node(gpos, tutor)
 
             elif ( self.mode == DESTROY ):
                 # I presume you are referring to a pipe?
@@ -436,12 +502,7 @@ class User_Interface:
                 and ( isinstance(self.selection, Node) )
                 and ( n != self.selection )):
                     # end pipe here
-                    if ( self.net.Add_Pipe(self.selection, n) ):
-                        if self._game_data.multiplayer:
-                            self._game_data.multiplayer.add_pipe(
-                                (self.selection.pos, n.pos))
-                        tutor.Notify_Add_Pipe()
-                        self.selection = None
+                    self._build_pipe(self.selection, n, tutor)
 
             elif ( self.mode == DESTROY ):
                 self.net.Destroy(n)
@@ -463,14 +524,7 @@ class User_Interface:
             w = self.net.ground_grid[ gpos ]
             if ( self.mode == BUILD_NODE ):
                 # A node is planned on top of the well.
-                if self.net.use_metal('well'):
-                    self.selection = None
-                    n = Well_Node(gpos)
-                    if self._game_data.multiplayer:
-                        self._game_data.multiplayer.add_well(gpos)
-                    if ( self.net.Add_Grid_Item(n) ):
-                        self.selection = n
-                        self.selection.Sound_Effect()
+                self._build_node_on_well(gpos, tutor)
 
         ## Select a rock
         #for rock in self.net.rock_list:
