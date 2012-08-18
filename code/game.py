@@ -131,6 +131,10 @@ def Main_Loop(screen, clock, (width, height),
     # Steam network initialisation
     g.net = Network(teaching, g.multiplayer)
 
+    if multiplayer:
+        # The Reactor can modify the Network directly
+        g.multiplayer._net = g.net
+
     DIFFICULTY.Set(MENU_INTERMEDIATE)
 
     # Establish equilibrium with initial network.

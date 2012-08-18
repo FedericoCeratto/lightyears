@@ -8,6 +8,7 @@ import sys
 import zmq
 
 from mail import New_Mail
+from map_items import Node, Well_Node, Well
 
 import logging as log
 log.basicConfig(format='%(levelname)s %(message)s', level=log.DEBUG)
@@ -96,6 +97,7 @@ class Reactor(object):
         self._poller = zmq.Poller()
 
         self.role = username
+        self._player_name = username
         return
 
 
@@ -188,7 +190,8 @@ class Reactor(object):
     def list_games(self):
         return self._call('list_games', {})
 
-    def create_game(self, game_name, min_dist_between_cities=12, max_building_distance=5):
+    def create_game(self, game_name, min_dist_between_cities=22,
+        max_building_distance=10):
         return self._call('create_game', {
             'game_name': game_name,
             'max_players': 2,
@@ -269,6 +272,14 @@ class Reactor(object):
         })
         return ret
 
+    def claim_victory(self):
+        """Claim game victory"""
+        ret = self._call('claim_victory', {
+            'game_name': self._current_game_name,
+        })
+        raise NotImplementedError
+        return ret
+
     @property
     def _hearthbeat(self):
         """Update a hearthbeat value"""
@@ -330,15 +341,39 @@ class Reactor(object):
                 return
 
             elif event == 'new_node':
-                raise NotImplementedError
+                # If occupied, ignore the update
+                gpos = msg['position']
+                gpos = tuple(gpos)
+                existing = self._net.ground_grid.get(gpos, None)
+                if isinstance(existing, Well):
+                    # Create a node on a well
+                    n = Well_Node(gpos)
+                    self._net.Add_Grid_Item(n)
+                    log.debug("Created opponent well")
+                elif existing is None:
+                    # Empty location, create node
+                    n = Node(gpos)
+                    self._net.Add_Grid_Item(n)
+                    log.debug("Created opponent node")
+
+                return
 
             elif event == 'new_pipe':
-                raise NotImplementedError
+                # Add a new pipe
+                owner = msg['owner']
+                if owner == self._player_name:
+                    return
+                start_pos = tuple(msg['start_node'])
+                end_pos = tuple(msg['end_node'])
+                start_node = self._net.ground_grid[start_pos]
+                end_node = self._net.ground_grid[end_pos]
+                self._net.Add_Pipe(start_node, end_node)
 
             elif event == 'player_parts':
                 raise NotImplementedError
 
             elif event == 'player_wins':
+                New_Mail("%s won the game" % msg['player_name'])
                 raise NotImplementedError
 
             else:

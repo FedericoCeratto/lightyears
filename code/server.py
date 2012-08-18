@@ -358,9 +358,13 @@ class Server(object):
         if node in game['nodes']:
             raise UserException('occupied')
 
-        print 'nodes', len(game['nodes'])
         game['nodes'][node] = {'owner': None, 'status': None}
-        print 'nodes', len(game['nodes'])
+        log.debug("%s added a node" % player_name)
+        self._broadcast_update(game_name, {
+            'event': 'new_node',
+            'player_name': player_name,
+            'position': node,
+        })
 
 
         return
@@ -441,11 +445,9 @@ class Server(object):
         #    raise UserException('not_owned')
 
         # Add pipe
-        print 'pipes', len(game['pipes'])
         game['pipes'][(start_node, end_node)] = {
             'owner': player_name,
         }
-        print 'pipes', len(game['pipes'])
 
         # Gain node ownership
         if gn[start_node]['owner'] != player_name:
@@ -456,6 +458,14 @@ class Server(object):
             gn[end_node]['owner'] = player_name
             gn[end_node]['status'] = 'building'
 
+
+        log.debug("%s added a pipe" % player_name)
+        self._broadcast_update(game_name, {
+            'event': 'new_pipe',
+            'owner': player_name,
+            'start_node': start_node,
+            'end_node': end_node,
+        })
 
     def _routed_set_finished_pipe(self, player_name, params, tstamp):
         """Finish building a pipe"""
@@ -483,6 +493,16 @@ class Server(object):
         game = self._games[game_name]
         start_node, end_node = params['nodes']
         gn = game['nodes']
+
+    def _routed_claim_victory(self, player_name, params, tstamp):
+        """A player claims victory"""
+        game_name = params['game_name']
+        self._broadcast_update(game_name, {
+            'event': 'player_wins',
+            'player_name': player_name,
+        })
+
+        raise NotImplementedError
 
 
     def _routed_broadcast(self, player_name, params, tstamp):
