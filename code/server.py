@@ -494,15 +494,38 @@ class Server(object):
         start_node, end_node = params['nodes']
         gn = game['nodes']
 
-    def _routed_claim_victory(self, player_name, params, tstamp):
-        """A player claims victory"""
+    def _routed_leave_game(self, player_name, params, tstamp):
+        """A player leaves the game due to victory, loss or abandon"""
         game_name = params['game_name']
+        reason = params['reason']
+        # reason: victory, steam_loss, None
         self._broadcast_update(game_name, {
-            'event': 'player_wins',
+            'event': 'player_leaves',
             'player_name': player_name,
+            'reason': reason,
         })
 
-        raise NotImplementedError
+        log.debug("%s: %s declared %s" % (game_name, player_name, reason))
+        if reason == 'victory':
+            del(self._games[game_name])
+        else:
+            # The player abandoned or lost
+            del(game['players']['player_name'])
+            if len(game['players']) == 1:
+                # only one player left. The player wins.
+                winner = game['players'][0]
+                self._broadcast_update(game_name, {
+                    'event': 'player_leaves',
+                    'player_name': winner,
+                    'reason': 'victory',
+                })
+                del(self._games[game_name])
+            elif len(game['players']) == 0:
+                # No players left, just delete the game.
+                del(self._games[game_name])
+
+
+
 
 
     def _routed_broadcast(self, player_name, params, tstamp):

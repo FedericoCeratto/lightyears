@@ -117,6 +117,7 @@ def Main_Loop(screen, clock, (width, height),
 
     # Setup multiplayer reactor
     if multiplayer:
+        DIFFICULTY.CITY_MAX_TECH_LEVEL  = 2 #FIXME
         server, subtree, username = multiplayer.split(':')
         g.multiplayer = Reactor(server, subtree, username, wait=False)
         try:
@@ -438,19 +439,18 @@ def Main_Loop(screen, clock, (width, height),
         and ( g.game_running )):
             # Game over - you lose
             g.game_running = False
-            if g.multiplayer:
-                g.multiplayer.stop()
             New_Mail("The City ran out of steam.", (255,0,0))
             New_Mail("Game Over!", (255,255,0))
             sound.FX("krankor")
             just_ended = True
-        
+            if g.multiplayer:
+                g.multiplayer.leave_game(reason='steam_loss')
         elif (( g.net.hub.tech_level >= DIFFICULTY.CITY_MAX_TECH_LEVEL )
         and ( g.game_running )):
             # Game over - you win!
             g.game_running = False
             if g.multiplayer:
-                g.multiplayer.stop()
+                g.multiplayer.leave_game(reason='victory')
             g.win = True
             New_Mail("The City is now fully upgraded!", (255,255,255))
             New_Mail("You have won the game!", (255,255,255))
@@ -528,11 +528,17 @@ def Main_Loop(screen, clock, (width, height),
 
                 # It's the normal menu.
                 if ( cmd == MENU_QUIT ):
+                    # From the in-game menu, "Exit to Linux" is selected
+                    if g.multiplayer:
+                        g.multiplayer.leave_game()
                     loop_running = False
                     quit = True
                     ui.Reset() # makes menu disappear
 
                 elif ( cmd == MENU_MENU ):
+                    # From the in-game menu, "Main Menu" is selected
+                    if g.multiplayer:
+                        g.multiplayer.leave_game()
                     loop_running = False
                     ui.Reset()
 

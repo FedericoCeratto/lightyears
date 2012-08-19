@@ -200,6 +200,7 @@ class Reactor(object):
         })
 
     def join_game(self, game_name):
+        """Join an existing game and set related attributes"""
         ret = self._call('join_game', {'game_name': game_name})
         self._current_game_name = game_name
         self.city = ret['city']
@@ -209,9 +210,13 @@ class Reactor(object):
         self._setup_broadcast_receiver()
         return ret
 
-    def leave_game(self):
+    def leave_game(self, reason=None):
+        """Leave the current game"""
         assert self._current_game_name, "leave_game() called while not in a game"
-        ret = self._call('leave_game', {'game_name': self._current_game_name})
+        ret = self._call('leave_game', {
+            'game_name': self._current_game_name,
+            'reason': reason,
+        })
         self._current_game_name = None
         return ret
 
@@ -270,14 +275,6 @@ class Reactor(object):
             'game_name': self._current_game_name,
             'nodes': nodes,
         })
-        return ret
-
-    def claim_victory(self):
-        """Claim game victory"""
-        ret = self._call('claim_victory', {
-            'game_name': self._current_game_name,
-        })
-        raise NotImplementedError
         return ret
 
     @property
@@ -369,12 +366,21 @@ class Reactor(object):
                 end_node = self._net.ground_grid[end_pos]
                 self._net.Add_Pipe(start_node, end_node)
 
-            elif event == 'player_parts':
-                raise NotImplementedError
+            elif event == 'player_leaves':
+                reason = msg['reason']
+                player_name = msg['player_name']
+                if reason == 'victory':
+                    New_Mail("%s won the game" % player_name)
+                elif reason == 'steam_loss':
+                    New_Mail("%s lost the game due to low steam pressure" % player_name)
+                else:
+                    New_Mail("%s left the game" % player_name)
 
-            elif event == 'player_wins':
-                New_Mail("%s won the game" % msg['player_name'])
-                raise NotImplementedError
+                g.game_running = False
+                if winner == self._player_name:
+                    g.win = True
+                else:
+                    g.win = False
 
             else:
                 log.error("Unexpected broadcast received %s" % repr(r))
