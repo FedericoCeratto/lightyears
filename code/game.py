@@ -31,7 +31,7 @@ class Game_Data:
     pass
 
 def Main_Loop(screen, clock, (width, height), 
-            restore_pos, challenge, multiplayer=None):
+            restore_pos, challenge, mreactor=None):
     # Initialisation of screen things.
 
     menu_margin = height
@@ -116,25 +116,24 @@ def Main_Loop(screen, clock, (width, height),
     g.sysinfo = extra.Get_System_Info()
 
     # Setup multiplayer reactor
-    if multiplayer:
+    if mreactor:
+        g.multiplayer = mreactor
         DIFFICULTY.CITY_MAX_TECH_LEVEL  = 2 #FIXME
-        server, subtree, username = multiplayer.split(':')
-        g.multiplayer = Reactor(server, subtree, username, wait=False)
-        try:
-            resp = g.multiplayer.join_game(subtree)
-        except:
-            g.multiplayer.create_game(subtree)
-            resp = g.multiplayer.join_game(subtree)
-
+        ###server, subtree, username = multiplayer.split(':')
+        #try:
+        #    resp = g.multiplayer.join_game(subtree)
+        #except:
+        #    g.multiplayer.create_game(subtree)
+        #    resp = g.multiplayer.join_game(subtree)
     else:
         g.multiplayer = None
 
     # Steam network initialisation
     g.net = Network(teaching, g.multiplayer)
 
-    if multiplayer:
+    if g.multiplayer:
         # The Reactor can modify the Network directly
-        g.multiplayer._net = g.net
+        g.multiplayer.set_net(g.net)
 
     DIFFICULTY.Set(MENU_INTERMEDIATE)
 

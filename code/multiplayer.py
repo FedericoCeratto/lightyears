@@ -66,98 +66,29 @@ class KVMsg(object):
 
 class Reactor(object):
 
-    def __init__(self, server, subtree, username, wait=True):
+    def __init__(self, server, player_name, wait=True):
         """ """
-        self._kvmap = {}
-        self._changed_keys = []
-        self._running = True
-        self._subtree = subtree + '/'
-        self._hearthbeat_time = 0
-        self.role = None
+        self._player_name = player_name
 
         # Prepare our context and subscriber
-        ctx = zmq.Context()
-        self._ctx = ctx
-        self._snapshot = ctx.socket(zmq.DEALER)
-        self._snapshot.linger = 0
-        self._snapshot.connect("tcp://%s:5556" % server)
-        self._subscriber = ctx.socket(zmq.SUB)
-        self._subscriber.linger = 0
-        self._subscriber.setsockopt(zmq.SUBSCRIBE, self._subtree)
-        self._subscriber.connect("tcp://%s:5557" % server)
-        self._publisher = ctx.socket(zmq.PUB)
-        self._publisher.linger = 0
-        self._publisher.connect("tcp://%s:5558" % server)
-
-        self._requester = ctx.socket(zmq.REQ)
+        self._ctx = zmq.Context()
+        self._requester = self._ctx.socket(zmq.REQ)
         self._requester.linger = 0
         self._requester.connect("tcp://%s:5555" % server)
         self._server_name = server
-
         self._poller = zmq.Poller()
+        log.debug("Multiplayer reactor started.")
 
-        self.role = username
-        self._player_name = username
-        return
-
-
-        #-----------------------
-
-        # Purge timed out players
-        # self._remote_purge()
-
-        # Get state snapshot
-        self._sequence = 0
-        self._snapshot.send_multipart(["SNAPSHOT", self._subtree])
-
-        log.debug("Fetching snapshot")
-        while self._running:
-            kvmsg = self._receive(self._snapshot)
-
-            if kvmsg.key == "KTHXBAI":
-                self._sequence = kvmsg.sequence
-                break # Done
-
-            self._insert_from_msg(kvmsg)
-
-
-        self.update()
-
-        # Populate store
-        player_names = ["player%d" % cnt for cnt in xrange(1, 10)]
-        for p in player_names:
-            if p not in self._kvmap.keys():
-
-                self._snapshot.send_multipart(["setup_player", self._subtree])
-
-                self[p] = username
-                self.role = p
-                log.debug("Logged in as %s" % self.role)
-                break
-
-
-        self[self.role + 'nodes'] = []
-        self[self.role + 'pipes'] = []
-        self[self.role + "hearthbeat"] = time()
-        self.update()
-
-
-        if wait:
-            players_num = sum([p in self for p in player_names])
-            while players_num < 2:
-                print "Waiting for second player to join..."
-                sleep(1)
-                self.update()
-                players_num = sum([p in self for p in player_names])
-
-            log.info("Player 2 \"%s\" has joined" % self['player2'])
+    def set_net(self, net):
+        """Set _net attribute"""
+        self._net = net
 
     def _call(self, name, d):
         """Send a syncronous request to the server"""
         request = {
             'name': name,
             'params': d,
-            'client_name': self.role,
+            'client_name': self._player_name,
             'timestamp': time(),
         }
         self._requester.send(json.dumps(request))
@@ -277,38 +208,6 @@ class Reactor(object):
         })
         return ret
 
-    @property
-    def _hearthbeat(self):
-        """Update a hearthbeat value"""
-        try:
-            msg = KVMsg(0)
-            k = "%shearthbeat" % self.role
-            msg.key = self._subtree + k
-
-            while self._running:
-                msg.body = time()
-                msg.send(self._publisher)
-                sleep(1)
-
-        except KeyboardInterrupt:
-            self._running = False
-
-    def _syncronous_hearthbeat(self):
-        """Update a hearthbeat value"""
-        if self.role and time() > self._hearthbeat_time + 1:
-            self._hearthbeat_time = time()
-            msg = KVMsg(0)
-            k = "%shearthbeat" % self.role
-            msg.key = self._subtree + k
-            msg.body = time()
-            msg.send(self._publisher)
-
-
-    def _insert_from_msg(self, msg):
-        """Update the dict using an incoming msg"""
-        if msg.key is not None:
-            k = msg.key.lstrip(self._subtree)
-            self._kvmap[k] = msg.body
 
     def update(self):
         """Receive and process broadcast messages on every frame"""

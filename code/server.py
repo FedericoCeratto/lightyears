@@ -499,12 +499,14 @@ class Server(object):
         game_name = params['game_name']
         reason = params['reason']
         # reason: victory, steam_loss, None
+
         self._broadcast_update(game_name, {
             'event': 'player_leaves',
             'player_name': player_name,
             'reason': reason,
         })
 
+        game = self._games[game_name]
         log.debug("%s: %s declared %s" % (game_name, player_name, reason))
         if reason == 'victory':
             del(self._games[game_name])

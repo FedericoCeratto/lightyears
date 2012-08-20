@@ -1,3 +1,4 @@
+# This Python file uses the following encoding: utf-8
 # 
 # 20,000 Light Years Into Space
 # This game is licensed under GPL v2, and copyright (C) Jack Whitham 2006-07.
@@ -8,13 +9,15 @@
 import pygame
 from pygame.locals import *
 from primitives import Get_Grid_Size
+from primitives import *
 
 import stats , extra , resource , render , sound
 
 
-class Menu:
-    def __init__(self, menu_options, force_width=0):
-        self.options = menu_options
+class Menu(object):
+    def __init__(self, menu_options, force_width=0, title=None):
+        self._options = menu_options
+        self._title = title
 
         self.control_rects = []
         self.hover = None
@@ -30,7 +33,7 @@ class Menu:
 
         # Two attempts at drawing required.
         (discard1, discard2,
-            (width_hint, height_hint)) = self.__Draw((width_hint, height_hint))
+            (width_hint, height_hint)) = self._draw((width_hint, height_hint))
 
         if ( width_hint < 150 ):
             width_hint = 150
@@ -38,7 +41,7 @@ class Menu:
             width_hint = force_width
 
         (self.surf_store, self.control_rects,
-            (discard1, discard2)) = self.__Draw((width_hint, height_hint))
+            (discard1, discard2)) = self._draw((width_hint, height_hint))
 
         self.bbox = Rect(0, 0, width_hint, height_hint)
 
@@ -77,7 +80,7 @@ class Menu:
             sound.FX("click")
 
     def Key_Press(self, k):
-        for (num, name, hotkeys) in self.options:
+        for (num, name, hotkeys) in self._options:
             if (( hotkeys != None ) and ( k in hotkeys )):
                 self.selection = num
                 self.update_required = True
@@ -85,9 +88,8 @@ class Menu:
                 return
 
     def Draw(self, output, centre=None, top=None):
-        if ( self.update_required ):
+        if self.update_required:
             self.update_required = False
-
 
             if centre is not None:
                 self.bbox.center = centre
@@ -108,11 +110,14 @@ class Menu:
                 r.left += self.bbox.left
                 if ( num == self.selection ):
                     pygame.draw.rect(output, (255, 255, 255), r, 1)
-                elif ( num == self.hover ):
-                    pygame.draw.rect(output, (0, 180, 0), r, 1)
+                elif num == self.hover:
+                    if self.hover == MENU_TITLE:
+                        pass # titles do not hover
+                    else:
+                        pygame.draw.rect(output, (0, 180, 0), r, 1)
 
 
-    def __Draw(self, (width_hint, height_hint)):
+    def _draw(self, (width_hint, height_hint)):
         surf = pygame.Surface((width_hint, height_hint))
         bbox = Rect(0, 0, width_hint, height_hint)
 
@@ -126,7 +131,7 @@ class Menu:
         max_width = 0
         first_item = True
 
-        for (num, name, hotkeys) in self.options:
+        for (num, name, hotkeys) in self._options:
             if ( name == None ): # a gap
                 if ( first_item ):
                     img = resource.Load_Image("header.jpg")
@@ -189,5 +194,163 @@ class Enhanced_Menu(Menu):
             img_r.left = rect.left + margin
             surf.blit(img, img_r.topleft)
 
+
+
+class InputMenu(Menu):
+    """Input Menu"""
+    def __init__(self, title, current_value):
+        self.value = current_value
+        self._tmp_value = self.value
+        self.is_focused = False
+        if current_value is None:
+            current_value = '[empty]'
+        menu_options = [
+            (MENU_TITLE, title, []),
+            [MENU_INPUT_FIELD, current_value, []],
+            (MENU_INPUT_SUBMIT, "Submit", []),
+            (MENU_INPUT_CANCEL, "Cancel", []),
+        ]
+        Menu.__init__(self, menu_options, 0)
+
+    def submit(self):
+        self.value = self._tmp_value
+
+    def set_focus_on_input(self):
+        self.is_focused = True
+
+    def Key_Press(self, k):
+        if self.hover == MENU_INPUT_FIELD:
+            if self._tmp_value in (None, '[empty]'):
+                self._tmp_value = ''
+
+            if k in xrange(33, 126):
+                self._tmp_value += chr(k)
+                print self._tmp_value
+            elif k == 8:
+                self._tmp_value = self._tmp_value[:-1]
+                print self._tmp_value
+            else:
+                return
+
+            self._options[1][1] = self._tmp_value
+            self.update_required = True
+            width_hint = height_hint = 10
+
+            # Two attempts at drawing required.
+            (discard1, discard2,
+                (width_hint, height_hint)) = self._draw((width_hint, height_hint))
+
+            if ( width_hint < 150 ):
+                width_hint = 150
+            (self.surf_store, self.control_rects,
+                (discard1, discard2)) = self._draw((width_hint, height_hint))
+
+
+class GamesListMenu(Menu):
+    """Input Menu"""
+    def __init__(self):
+        self.selected_game = None
+        self._scroll_pos = 0
+        self._ndg = 5 # Number of displayed games
+        self._displayed_game_names = [(x, '[empty]') for x in xrange(self._ndg)]
+        self._options = self._build_menu_options()
+        Menu.__init__(self, self._options, 0)
+
+    def update_games_list(self, game_names):
+        """Update existing games list"""
+        self._game_names = sorted(game_names)
+        self._update_screen()
+
+    def scroll_up(self):
+        if self._scroll_pos:
+            self._scroll_pos -= 1
+            self._update_screen()
+
+    def scroll_down(self):
+        if self._scroll_pos < len(self._game_names) / self._ndg:
+            self._scroll_pos += 1
+            self._update_screen()
+
+    def get_game_name(self, n):
+        """Get a game name based on the displayed ones"""
+        n -= MENU_GAME_1
+        return dict(self._displayed_game_names)[n]
+
+    def _build_menu_options(self):
+        games_list = [(n + MENU_GAME_1, gn, [])
+            for n, gn in self._displayed_game_names]
+
+        top = [
+            (MENU_TITLE, "Multiplayer games", []),
+            (None, None, []),
+            (MENU_LBOX_UP, u'▲', []),
+        ]
+
+        bottom = [
+            (MENU_LBOX_DN, u'▼', []),
+            (None, None, []),
+            (MENU_INPUT_CANCEL, "Cancel", []),
+        ]
+        return top + games_list + bottom
+
+    def _update_screen(self):
+        """Rebuild menu items and update screen"""
+        start = self._scroll_pos * self._ndg
+        end = (self._scroll_pos + 1) * self._ndg
+        self._displayed_game_names = list(
+            enumerate(self._game_names[start:end]))
+        self._options = self._build_menu_options()
+
+        width_hint = height_hint = 10
+
+        # Two attempts at drawing required.
+        (discard1, discard2,
+            (width_hint, height_hint)) = self._draw((width_hint, height_hint))
+
+        if ( width_hint < 150 ):
+            width_hint = 150
+        (self.surf_store, self.control_rects,
+            (discard1, discard2)) = self._draw((width_hint, height_hint))
+
+
+class OOMenu(Menu):
+    def __init__(self):
+        Menu.__init__(self, [], 0)
+
+class Input(object):
+    """One-field input box"""
+    def __init__(self, title, current_value=''):
+        self._title = title
+        self._current_value = current_value
+
+    def on_change(self):
+        """Redefine this method to execute actions on value change"""
+        raise NotImplementedError
+
+
+class ListBox(object):
+    def __init__(self, title, current_value=''):
+        self._title = title
+        self._current_value = current_value
+
+    def on_change(self):
+        """Redefine this method to execute actions on value change"""
+        raise NotImplementedError
+
+class Btn(object):
+    def __init__(self, title, hotkey=''):
+        self._title = title
+
+    def on_click(self):
+        """Redefine this method to execute actions on click"""
+        raise NotImplementedError
+
+class MultiplayerMenu(Menu):
+    def __init__(self):
+        self._title = 'Multiplayer'
+        self.server_name = Input('Server name')
+        self.new_game_name = Input('Create new game')
+        self.games_list = Games
+        self._items = (self.server_name, self.new_game_name, self.games_list)
 
 
