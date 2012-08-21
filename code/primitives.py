@@ -270,7 +270,7 @@ class Point(object):
 
     @angle.setter
     def angle(self, a):
-        assert isinstance(m, int) or isinstance(m, float), "Integer or Float required."
+        assert isinstance(a, int) or isinstance(a, float), "Integer or Float required."
         m = self.modulo
         x = math.sin(a) * m
         y = math.cos(a) * m

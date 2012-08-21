@@ -67,12 +67,25 @@ def generate_cities(max_num, margin, min_dist):
 
     return cities
 
+def generate_close_well(city):
+    """Generate one well close to a city but not too close to the screen borders"""
+    mx, my = GRID_SIZE
+    for x in xrange(100):
+        pos = GVector(4, 0)
+        pos.angle = random.random() * 6.28
+        pos += GVector(city)
+        if 5 < pos.x < (mx - 5) and 5 < pos.y < (my - 5):
+            return pos.tup
+
+    log.debug(pos.tup)
+    return pos.tup # return last position as a fallback
+
+
 def generate_map(num_cities, min_dist_between_cities=12):
     """Generate map items randomly"""
-    (x,y) = GRID_CENTRE
-    (mx, my) = GRID_SIZE
+    x,y = GRID_CENTRE
+    mx, my = GRID_SIZE
     rocks = []
-    wells = []
 
     # Cities
     if num_cities == 1:
@@ -80,10 +93,8 @@ def generate_map(num_cities, min_dist_between_cities=12):
     else:
         cities = generate_cities(num_cities, 4, min_dist_between_cities)
 
-    # Create one well close to each city
-    for c in cities:
-        pos = (c[0] + 5, c[1] + random.randint(-3,3))
-        wells.append(pos)
+    # Create one well close to each city, not too close to the screen borders
+    wells = [generate_close_well(c) for c in cities]
 
     # Other wells
     while len(wells) < len(cities) + 10:
