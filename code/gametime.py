@@ -6,7 +6,7 @@
 
 
 
-class Game_Time:
+class Game_Time(object):
     def __init__(self):
         self.__day = 0.0
 
@@ -18,5 +18,3 @@ class Game_Time:
 
     def Get_Day(self):
         return int(self.__day)
-
-

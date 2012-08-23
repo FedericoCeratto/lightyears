@@ -75,7 +75,7 @@ def generate_close_well(city):
         pos.angle = random.random() * 6.28
         pos += GVector(city)
         if 5 < pos.x < (mx - 5) and 5 < pos.y < (my - 5):
-            return pos.tup
+            return map(int, pos.tup)
 
     log.debug(pos.tup)
     return pos.tup # return last position as a fallback
@@ -97,14 +97,17 @@ def generate_map(num_cities, min_dist_between_cities=12):
     wells = [generate_close_well(c) for c in cities]
 
     # Other wells
-    while len(wells) < len(cities) + 10:
+    cnt = 0
+    num_wells = 5 + num_cities * 5
+    while len(wells) < num_wells and cnt < 1000:
+        cnt += 1
         pos = rand_pos(2)
 
         # keep distance from the cities
         if is_too_close(pos, cities, 10):
             continue
         # keep distance from other wells
-        if is_too_close(pos, wells, 1):
+        if is_too_close(pos, wells, 2):
             continue
 
         wells.append(pos)
@@ -152,7 +155,6 @@ class Network(object):
             cities, rocks, wells = generate_map(1)
         else:
             cities, rocks, wells = multiplayer.get_static_map()
-            log.debug(repr(cities))
 
         # Place wells
         if teaching:
@@ -194,6 +196,7 @@ class Network(object):
                 pipe.owned_by_me = True
                 wn.owned_by_me = True
 
+            #log.debug("%s %s " % (c, pipe.owned_by_me))
 
         self.connection_value = 1
         self.Work_Pulse(0) # used to make connection map
@@ -224,6 +227,8 @@ class Network(object):
 
     def Add_Grid_Item(self, item, inhibit_effects=False):
         gpos = item.pos
+        assert isinstance(gpos[0], int)
+        assert isinstance(gpos[1], int)
         if ( item.Is_Destroyed() ):
             if ( not inhibit_effects ):
                 New_Mail("Item is destroyed.")
