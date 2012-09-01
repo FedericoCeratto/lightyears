@@ -67,6 +67,7 @@ class Gauge(object):
         output.blit(hand, self._pos + hand_rect)
         output.blit(self.glass_img, self._pos)
 
+
 class Valve(object):
     """Big valve"""
     def __init__(self):
@@ -109,6 +110,74 @@ class Valve(object):
             handle, handle_rect = self.rotate_handle(is_open=is_open)
             output.blit(handle, self._pos + handle_rect)
 
+
+class MechanicalCounter(object):
+    """Mechanical counter"""
+    def __init__(self, game):
+        self._game = game
+        self._num_digits = 4
+        digit_size = GVector(1.2, 1.2)
+        self._height = digit_size[0]
+        self._dwidth = digit_size[1]
+        self._width = self._dwidth * self._num_digits
+        self._dvscale = GVector(1.45, 0)[0] # Digit vertical scale
+
+        # Numbers from 0 to 9, vertically
+        self._numbers_img = resource.Load_Image("counter_numbers.png",
+            scale_to=(self._dwidth, None))
+
+        self._dvscale = self._numbers_img.get_height() / 10.85
+
+        # Overlay "shadow"
+        self._overlay_img = resource.Load_Image("counter_overlay.png",
+            scale_to=(self._height, self._dwidth))
+        self._background_color = (255, 255, 255)
+
+    def _animate_counter(self):
+        """Set the counter to the given (float) value.
+        The value should be changed gradually to animate the counter.
+        """
+        t = self._game.game_time.time()
+        y_vals = []
+
+        rotator = 0
+        previous_is_9 = True
+        # Right to left
+        for decimal_pos in xrange(self._num_digits):
+            unit = (t / 10 ** decimal_pos) % 10
+            iunit = int(unit)
+            if iunit == 9 and decimal_pos == 0:
+                # The smallest digit is transitioning to 0
+                rotator = unit - iunit # 0 to 0.999...
+
+            if decimal_pos == 0: # The smallest digit always advances smoothly
+                y = unit * self._dvscale
+            elif previous_is_9: # This digit is transitioning to 0
+                y = (iunit + rotator) * self._dvscale
+            else:
+                y = iunit * self._dvscale
+
+            y_vals.insert(0, y)
+            previous_is_9 = (iunit == 9)
+
+
+        return y_vals
+
+    def draw(self, output):
+        # Apply background
+        output.fill(self._background_color, rect=(0, 0, self._width,
+            self._height))
+
+        y_vals = self._animate_counter()
+        for n, y in enumerate(y_vals):
+            # Blit the right number in
+            output.blit(self._numbers_img, (n * self._dwidth, 0),
+                (0, y, self._dwidth + n * self._dwidth, self._height))
+            # Add overlay
+            output.blit(self._overlay_img, (self._dwidth * n, 0))
+
+
+
 class User_Interface:
     def __init__(self, net, (width, height), g):
         self.net = net
@@ -143,6 +212,7 @@ class User_Interface:
             selected_pressure = Gauge(4.5, 0, 4)
         )
         self.valve = Valve()
+        self.day_counter = MechanicalCounter(g)
 
         self.vehicle_list = []
         #self.vehicle_list.extend(
@@ -324,6 +394,7 @@ class User_Interface:
         else:
             self.valve.draw(output)
 
+        self.day_counter.draw(output)
         self.control_menu.Draw(output, top=5*Get_Grid_Size())
 
     def Control_Mouse_Move(self, spos):
