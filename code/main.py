@@ -238,8 +238,10 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
         if getattr(cli_args, flag):
             # Multiplayer is supported only here
             #FIXME
+            #quit = game.Main_Loop(screen, clock,
+            #    (width,height), None, pick_cmd, multiplayer=cli_args.server)
             quit = game.Main_Loop(screen, clock,
-                (width,height), None, pick_cmd, multiplayer=cli_args.server)
+                (width,height), None, pick_cmd)
 
     mreactor = None # Multiplayer reactor
 
