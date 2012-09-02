@@ -158,8 +158,7 @@ class Difficulty:
             self.ROCK_QUANTITY = 1000
 
         else:
-            print 'Invalid level',level
-            assert False
+            raise RuntimeError("Invalid level: %s" % level)
 
 
 DIFFICULTY = Difficulty()

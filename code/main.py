@@ -38,7 +38,9 @@ def parse_args():
         help="safe mode", action="store_true")
     p.add_argument("--no-sound",
         help="disable sound", action="store_true")
-    p.add_argument("-s", "--server", help="multiplayer server")
+    p.add_argument("-m", "--multiplayer",
+        help="start multiplayer game using server:game:player names", 
+        dest='multiplayer_parameters')
     for t in ('beginner', 'intermediate', 'expert', 'peaceful'):
         p.add_argument("--play-%s" % t,
             help="start %s game" % t, action="store_true")
@@ -49,7 +51,7 @@ def parse_args():
         help="resolution (one of: %s)" % x_res)
     args = p.parse_args()
 
-    if args.server:
+    if args.multiplayer_parameters:
         # Only peaceful mode is supported in multiplayer
         args.play_peaceful = True
         args.play_beginner = False
@@ -227,8 +229,33 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
             "Game version " + config.CFG_VERSION ]
 
 
-    # --play-<gametype> starts a game immediately
+    if cli_args.multiplayer_parameters:
+        # Start Multiplayer game from CLI
+        try:
+            server_name, game_name, player_name = \
+                cli_args.multiplayer_parameters.split(':')
+        except ValueError:
+            print "Incorrect multiplayer parameter format"
+            sys.exit(1)
+
+        multiplayer_server_name_input.value = server_name
+        multiplayer_game_name_input.value = game_name
+        multiplayer_player_name_input.value = player_name
+
+        mreactor = Reactor(
+            multiplayer_server_name_input.value,
+            multiplayer_player_name_input.value,
+        )
+        mreactor.create_game(multiplayer_game_name_input.value)
+        res = mreactor.join_game(game_name)
+        quit = game.Main_Loop(screen, clock,
+             (width,height), None, MENU_PEACEFUL, mreactor=mreactor)
+        game.multiplayer = mreactor
+
+
+    # --play-<gametype> or --multiplayer starts a game immediately
     flags = (
+        #('multiplayer_parameters', MENU_MULTIPLAYER_JOIN_GAME),
         ('play_beginner', MENU_BEGINNER),
         ('play_intermediate', MENU_INTERMEDIATE),
         ('play_expert', MENU_EXPERT),
