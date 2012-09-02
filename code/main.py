@@ -231,6 +231,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
 
     if cli_args.multiplayer_parameters:
         # Start Multiplayer game from CLI
+        #TODO: refactor this
         try:
             server_name, game_name, player_name = \
                 cli_args.multiplayer_parameters.split(':')
@@ -246,7 +247,11 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
             multiplayer_server_name_input.value,
             multiplayer_player_name_input.value,
         )
-        mreactor.create_game(multiplayer_game_name_input.value)
+        games = mreactor.list_games()
+        if game_name not in games['open_games'] and \
+            game_name not in games['running_games']:
+            mreactor.create_game(multiplayer_game_name_input.value)
+
         res = mreactor.join_game(game_name)
         quit = game.Main_Loop(screen, clock,
              (width,height), None, MENU_PEACEFUL, mreactor=mreactor)
