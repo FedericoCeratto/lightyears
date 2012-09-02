@@ -512,7 +512,7 @@ class Server(object):
             del(self._games[game_name])
         else:
             # The player abandoned or lost
-            del(game['players']['player_name'])
+            del(game['players'][player_name])
             if len(game['players']) == 1:
                 # only one player left. The player wins.
                 winner = game['players'][0]
