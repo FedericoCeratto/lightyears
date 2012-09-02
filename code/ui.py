@@ -115,8 +115,9 @@ class MechanicalCounter(object):
     """Mechanical counter"""
     def __init__(self, game):
         self._game = game
+        self._pos = GVector(3.75, 4.25)
         self._num_digits = 4
-        digit_size = GVector(1.2, 1.2)
+        digit_size = GVector(.5, .5)
         self._height = digit_size[0]
         self._dwidth = digit_size[1]
         self._width = self._dwidth * self._num_digits
@@ -131,7 +132,8 @@ class MechanicalCounter(object):
         # Overlay "shadow"
         self._overlay_img = resource.Load_Image("counter_overlay.png",
             scale_to=(self._height, self._dwidth))
-        self._background_color = (255, 255, 255)
+        self._background_color = (255, 247, 225)
+        self._border_color = (144, 102, 25)
 
     def _animate_counter(self):
         """Set the counter to the given (float) value.
@@ -164,17 +166,25 @@ class MechanicalCounter(object):
         return y_vals
 
     def draw(self, output):
+
+        # Draw border
+        output.fill(self._border_color, rect=(self._pos[0] - 1, self._pos[1]
+        - 1, self._width + 2, self._height + 2))
+
         # Apply background
-        output.fill(self._background_color, rect=(0, 0, self._width,
-            self._height))
+        output.fill(self._background_color, rect=(self._pos[0], self._pos[1],
+            self._width, self._height))
 
         y_vals = self._animate_counter()
-        for n, y in enumerate(y_vals):
+        x, y = self._pos
+        for n, deltay in enumerate(y_vals):
             # Blit the right number in
-            output.blit(self._numbers_img, (n * self._dwidth, 0),
-                (0, y, self._dwidth + n * self._dwidth, self._height))
+            output.blit(self._numbers_img, (x, y),
+                (0, deltay, self._dwidth + n * self._dwidth, self._height))
             # Add overlay
-            output.blit(self._overlay_img, (self._dwidth * n, 0))
+            output.blit(self._overlay_img, (x, y))
+
+            x += self._dwidth # Move right the size of a digit
 
 
 
