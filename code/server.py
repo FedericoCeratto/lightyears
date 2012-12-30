@@ -2,17 +2,43 @@
 # Copyright (C) 2012 Federico Ceratto <federico.ceratto@gmail.com>
 # This file is licensed under GPL v2
 
-import zmq
-import logging
-import json
-import struct # for packing integers
+from argparse import ArgumentParser
 from time import time
+import json
+import logging
+import struct # for packing integers
+import zmq
 
 from network import generate_map, get_closest
 from primitives import distance
 
-import logging as log
-log.basicConfig(format='%(levelname)s %(message)s', level=log.DEBUG)
+log = logging.getLogger('server')
+
+
+def setup_logging(debug):
+    ch = logging.StreamHandler()
+    if debug:
+        log.setLevel(logging.DEBUG)
+        ch.setLevel(logging.DEBUG)
+    else:
+        log.setLevel(logging.INFO)
+        ch.setLevel(logging.INFO)
+
+    formatter = logging.Formatter('%(name)s %(levelname)s %(message)s')
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+
+def parse_args():
+    """Parse CLI options
+    :returns: args
+    """
+    p = ArgumentParser()
+    p.add_argument('-v', '--verbose', default=False,
+        help="verbose mode", action="store_true")
+    #p.add_argument('-p', '--port',
+    #    help="network port")
+    args = p.parse_args()
+    return args
 
 class UserException(Exception):
     pass
@@ -595,6 +621,8 @@ class AutoRestarter(Thread):
 
 
 def main():
+    args = parse_args()
+    setup_logging(args.verbose)
     #AutoRestarter().start()
     server = Server()
     server.run()

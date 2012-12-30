@@ -228,12 +228,13 @@ class Reactor(object):
                 log.error("Unexpected broadcast received %s" % repr(r))
                 return
 
-            log.debug('ib ' + repr(msg))
+            log.debug('rec br ' + repr(msg))
             if event == 'new_player':
                 New_Mail("%s joined the game" % msg['player_name'])
                 return
 
             elif event == 'new_owner':
+                #FIXME
                 return
 
             elif event == 'new_node':
@@ -255,6 +256,7 @@ class Reactor(object):
                 return
 
             elif event == 'new_pipe':
+                return #FIXME
                 # Add a new pipe
                 owner = msg['owner']
                 if owner == self._player_name:
