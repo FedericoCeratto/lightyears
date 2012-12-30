@@ -71,6 +71,10 @@ class Item(pygame.sprite.Sprite, object):
         """
         return draw_ellipse(surface, p, width, color, line_width, center=False)
 
+    def __repr__(self):
+        """Generate instance  __repr__"""
+        return "%s(%s)" % (self.__class__.__name__, repr(self.pos))
+
 
 class Vehicle(Item):
     """Abstract class for ground or air vehicles"""
@@ -684,14 +688,14 @@ class Node(Building):
         """
         return self.owned_by_me or not self.pipes
 
-    def Do_Work(self, broadcast_update=None):
+    def Do_Work(self, broadcast_update=None, owned_by_me=True):
         """Do build/repair work on a node"""
         status = self.complete
         super(Node, self).Do_Work()
         # Update ownership if the Node has been completed now
-        if status ^ self.complete:
+        if status ^ self.complete and owned_by_me:
             self.owned_by_me = True
-            log.debug('setting node as owned')
+            log.debug('setting node %s as owned' % repr(self))
             if broadcast_update:
                 broadcast_update(
                     item='node',
@@ -863,7 +867,7 @@ class City_Node(Node):
     def Is_Broken(self):
         return False
 
-    def Do_Work(self, broadcast_update=None):
+    def Do_Work(self, broadcast_update=None, owned_by_me=True):
         if ( self.city_upgrade > 0 ):
             self.city_upgrade -= 1
             if ( self.city_upgrade == 0 ):

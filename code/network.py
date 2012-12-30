@@ -174,7 +174,7 @@ class Network(object):
             w = Well(wgpos)
             self.Add_Grid_Item(w)
             wn = Well_Node(wgpos)
-            self.Add_Finished_Node(wn)
+            self.Add_Finished_Node(wn, owned_by_me=False)
             wn.tutor_special = True
 
             # Pipe links the two
@@ -212,15 +212,19 @@ class Network(object):
             node.locate_nearby_rocks(self.rock_list)
 
 
-    def Add_Finished_Node(self, node):
+    def Add_Finished_Node(self, node, owned_by_me=True):
         if self._multiplayer:
             self._multiplayer.set_finished_node(node.pos)
 
         node.health = node.max_health
         if self._multiplayer:
-            node.Do_Work(broadcast_update=self._multiplayer.broadcast)
+            node.Do_Work(
+                broadcast_update=self._multiplayer.broadcast,
+                owned_by_me=owned_by_me
+            )
         else:
             node.Do_Work()
+
         node.complete = True
         self.Add_Grid_Item(node)
         node.locate_nearby_rocks(self.rock_list)
