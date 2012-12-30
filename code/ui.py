@@ -489,7 +489,13 @@ class User_Interface:
 
         n = Well_Node(gpos)
 
+        # In multiplayer mode, nodes can be placed only in proximity
+        # of owned nodes
         if self._game_data.multiplayer:
+            if not self.net.is_closed_to_an_owned_node(gpos):
+                New_Mail("This location is too far from your network.")
+                return
+
             try:
                 self._game_data.multiplayer.add_well_node(gpos)
             except UserException, e:
@@ -547,7 +553,7 @@ class User_Interface:
 
             # empty (may contain pipes)
             if ( self.mode == BUILD_NODE ):
-                # create new node
+                # create new node (not a well), if possible
                 self._build_node(gpos, tutor)
 
             elif ( self.mode == DESTROY ):
@@ -604,7 +610,7 @@ class User_Interface:
             # Contains well (unimproved)
             w = self.net.ground_grid[ gpos ]
             if ( self.mode == BUILD_NODE ):
-                # A node is planned on top of the well.
+                # A node is planned on top of the well, if possible.
                 self._build_node_on_well(gpos, tutor)
 
         ## Select a rock
