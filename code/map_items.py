@@ -600,7 +600,15 @@ class Building(Item):
         (x,y) = Grid_To_Scr(self.pos)
         x -= 16
         y -= 12
-        return stats.draw_popup_bar_meter(output, self.Get_Popup_Items(), (x,y), 32, 5)
+        r = stats.draw_popup_bar_meter(
+            output,
+            self.Get_Popup_Items(),
+            (x, y),
+            32, # width
+            5, # height
+            self.popup_alpha,
+        )
+        return r
 
     def Get_Tech_Level(self):            
         return ("Tech Level %d" % self.tech_level)

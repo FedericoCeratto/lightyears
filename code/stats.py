@@ -56,9 +56,9 @@ def Draw_Bar_Meter(output, items, centre_pos, width, item_height):
 
     return r1 # bounding box
 
-def draw_popup_bar_meter(output, items, centre_pos, width, item_height):
+def draw_popup_bar_meter(output, items, centre_pos, width, item_height, alpha):
     """Draw partially transparent bar meters floating over map items"""
-    alpha = (140, )
+    alpha = (int(alpha * 190), )
     r1 = Rect(0, 0, width, ( item_height * len(items) ) + 1)
     r1.center = centre_pos
     y = r1.top + 1

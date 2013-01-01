@@ -390,7 +390,7 @@ def Main_Loop(screen, clock, (width, height),
 
             g.net.Steam_Think()
             g.net.dig_metal()
-            g.net.Expire_Popups()
+            g.net.update_popups()
             tutor.Examine_Game(g)
 
         if ( g.season_effect <= cur_time ):

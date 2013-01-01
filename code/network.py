@@ -148,7 +148,7 @@ class Network(object):
         self.dirty = False
     
         # Popup health meters may appear
-        self.popups = set([])
+        self.popups = set()
 
 
         if multiplayer is None:
@@ -361,17 +361,27 @@ class Network(object):
         return False
 
     def Popup(self, node):
-        if ( node != None ):
-            self.popups |= set([node])
-            node.popup_disappears_at = time.time() + 4.0
+        """Add a popup bar"""
+        if node is None:
+            return
 
-    def Expire_Popups(self):
+        self.popups.add(node)
+        node.popup_disappears_at = time.time() + 3.0
+        node.popup_alpha = 1.0
+
+    def update_popups(self):
+        """Update and remove popup bars"""
+        fadeout_time = .3
         t = time.time()
-        remove = set([])
-        for node in self.popups:
-            if ( node.popup_disappears_at <= t ):
-                remove |= set([node])
-        self.popups -= remove
+        expired = set()
+        for p in self.popups:
+            remaining_time = p.popup_disappears_at - t
+            if remaining_time <= 0:
+                expired.add(p)
+            elif remaining_time <= fadeout_time:
+                p.popup_alpha = remaining_time / fadeout_time
+
+        self.popups -= expired
 
     def Steam_Think(self):
         for n in self.node_list:

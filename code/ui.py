@@ -333,7 +333,7 @@ class User_Interface:
                 self.Update_Area(r)
 
                 pygame.draw.line(output, colour, sp, ep, 2)
-    
+
         for item in self.net.popups:
             r = item.Draw_Popup(output)
             self.Update_Area(r)
