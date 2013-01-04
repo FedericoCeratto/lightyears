@@ -26,7 +26,6 @@ def setup_logging(debug):
 
     formatter = logging.Formatter('%(name)s %(levelname)s %(message)s')
     ch.setFormatter(formatter)
-    log.addHandler(ch)
 
 def parse_args():
     """Parse CLI options
@@ -309,6 +308,7 @@ class Server(object):
             'unowned_cities': list(cities),
             'max_building_distance': max_building_distance,
         }
+        log.info("New game '%s' created." % game_name)
 
     def _routed_get_static_map(self, player_name, params, tstamp):
         """Get static map"""
@@ -367,6 +367,8 @@ class Server(object):
                 'player_name': player_name,
             })
 
+        log.info("Player '%s' joined game '%s'. %d players in game." % \
+            (player_name, game_name, len(players)))
         return {
             'status': 'ok',
             'city': city,
@@ -523,8 +525,9 @@ class Server(object):
     def _routed_leave_game(self, player_name, params, tstamp):
         """A player leaves the game due to victory, loss or abandon"""
         game_name = params['game_name']
-        reason = params['reason']
-        # reason: victory, steam_loss, None
+        reason = params['reason'] # reason: victory, steam_loss, None
+        log.info("Player '%s' left game '%s'. Reason: %s" % \
+            (player_name, game_name, reason))
 
         self._broadcast_update(game_name, {
             'event': 'player_leaves',
@@ -533,26 +536,27 @@ class Server(object):
         })
 
         game = self._games[game_name]
-        log.debug("%s: %s declared %s" % (game_name, player_name, reason))
         if reason == 'victory':
             del(self._games[game_name])
-        else:
-            # The player abandoned or lost
-            del(game['players'][player_name])
-            if len(game['players']) == 1:
-                # only one player left. The player wins.
-                winner = game['players'][0]
-                self._broadcast_update(game_name, {
-                    'event': 'player_leaves',
-                    'player_name': winner,
-                    'reason': 'victory',
-                })
-                del(self._games[game_name])
-            elif len(game['players']) == 0:
-                # No players left, just delete the game.
-                del(self._games[game_name])
+            log.info("Game '%s' deleted." % game_name)
+            return
 
-
+        # The player abandoned or lost
+        del(game['players'][player_name])
+        if len(game['players']) == 1:
+            # only one player left. The player wins.
+            winner = game['players'].keys()[0]
+            self._broadcast_update(game_name, {
+                'event': 'player_leaves',
+                'player_name': winner,
+                'reason': 'victory',
+            })
+            del(self._games[game_name])
+            log.info("Game '%s' deleted." % game_name)
+        elif len(game['players']) == 0:
+            # No players left, just delete the game.
+            del(self._games[game_name])
+            log.info("Game '%s' deleted." % game_name)
 
 
 
