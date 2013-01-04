@@ -535,7 +535,11 @@ class Server(object):
             'reason': reason,
         })
 
-        game = self._games[game_name]
+        try:
+            game = self._games[game_name]
+        except KeyError:
+            return # Game not found
+
         if reason == 'victory':
             del(self._games[game_name])
             log.info("Game '%s' deleted." % game_name)

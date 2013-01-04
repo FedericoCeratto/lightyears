@@ -134,6 +134,8 @@ def Main_Loop(screen, clock, (width, height),
     if g.multiplayer:
         # The Reactor can modify the Network directly
         g.multiplayer.set_net(g.net)
+        # ...and stop the game
+        g.multiplayer.game = g
 
     DIFFICULTY.Set(MENU_INTERMEDIATE)
 

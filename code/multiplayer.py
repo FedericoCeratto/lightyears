@@ -141,7 +141,7 @@ class Reactor(object):
         self._setup_broadcast_receiver()
         return ret
 
-    def leave_game(self, reason=None):
+    def leave_game(self, reason='quit'):
         """Leave the current game"""
         assert self._current_game_name, "leave_game() called while not in a game"
         ret = self._call('leave_game', {
@@ -270,6 +270,17 @@ class Reactor(object):
             elif event == 'player_leaves':
                 reason = msg['reason']
                 player_name = msg['player_name']
+
+                if player_name == self._player_name:
+                    if reason == 'victory':
+                        New_Mail("You won the game!")
+                    else:
+                        New_Mail("You lost.")
+
+                    self.game.game_running = False
+                    return
+
+                # Another player has left
                 if reason == 'victory':
                     New_Mail("%s won the game" % player_name)
                 elif reason == 'steam_loss':
@@ -277,11 +288,11 @@ class Reactor(object):
                 else:
                     New_Mail("%s left the game" % player_name)
 
-                g.game_running = False
-                if winner == self._player_name:
-                    g.win = True
-                else:
-                    g.win = False
+                #self.game.game_running = False
+                #if winner == self._player_name:
+                #    self.game.win = True
+                #else:
+                #    self.game.win = False
 
             else:
                 log.error("Unexpected broadcast received %s" % repr(r))
