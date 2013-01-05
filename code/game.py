@@ -252,12 +252,11 @@ def Main_Loop(screen, clock, (width, height),
     cur_time = g.game_time.time()
 
     # Main loop
-    while ( loop_running ):
+    while loop_running:
 
-        if ( g.game_running ):
+        if g.game_running:
             flash = not flash
         menu_inhibit = ui.Is_Menu_Open() or not g.game_running
-        
 
         # Insert delay...
         # Hmm, I'm not sure if I know what this does.
@@ -434,36 +433,16 @@ def Main_Loop(screen, clock, (width, height),
                 New_Mail("The " + g.season_fx.name + 
                                 " season has started.", (200,200,200))
 
-        just_ended = False
-        if (( g.game_ends_at != None )
-        and ( g.game_ends_at <= cur_time )
-        and ( g.game_running )):
+        if (g.game_ends_at is not None and g.game_ends_at <= cur_time
+            and g.game_running):
             # Game over - you lose
-            g.game_running = False
-            New_Mail("The City ran out of steam.", (255,0,0))
-            New_Mail("Game Over!", (255,255,0))
-            sound.FX("krankor")
-            just_ended = True
-            if g.multiplayer:
-                g.multiplayer.leave_game(reason='steam_loss')
-        elif (( g.net.hub.tech_level >= DIFFICULTY.CITY_MAX_TECH_LEVEL )
-        and ( g.game_running )):
-            # Game over - you win!
-            g.game_running = False
-            if g.multiplayer:
-                g.multiplayer.leave_game(reason='victory')
-            g.win = True
-            New_Mail("The City is now fully upgraded!", (255,255,255))
-            New_Mail("You have won the game!", (255,255,255))
-            sound.FX("applause")
-            just_ended = True
+            terminate_game(g, False, 'steam_loss')
 
-        if ( just_ended ):
-            current_menu = in_game_menu = menu.Menu([
-                (None, None, []),
-                (MENU_REVIEW, "Review Statistics", [])] +
-                exit_options)
-            in_game_menu.Select(None)
+        elif (g.net.hub.tech_level >= DIFFICULTY.CITY_MAX_TECH_LEVEL
+            and g.game_running):
+            # Game over - you win!
+            terminate_game(g, True, 'upgraded')
+
 
         # Events
         e = pygame.event.poll()
@@ -614,3 +593,33 @@ def Main_Loop(screen, clock, (width, height),
         
     return quit
 
+
+def terminate_game(g, win, reason):
+    """Terminate current game with victory or loss"""
+    g.game_running = False
+
+    if win:
+        if g.multiplayer:
+            g.multiplayer.leave_game(reason='victory')
+        g.win = True
+        New_Mail("The City is now fully upgraded!", (255,255,255))
+        New_Mail("You have won the game!", (255,255,255))
+        sound.FX("applause")
+
+    else: # lost game
+        sound.FX("krankor")
+        if reason == 'steam_loss':
+            New_Mail("The City ran out of steam.", (255,0,0))
+            if g.multiplayer:
+                g.multiplayer.leave_game(reason='steam_loss')
+
+        else: # Another player won, just quit
+            g.multiplayer.leave_game()
+
+        New_Mail("Game Over!", (255,255,0))
+
+    current_menu = in_game_menu = menu.Menu([
+        (None, None, []),
+        (MENU_REVIEW, "Review Statistics", [])] +
+        exit_options)
+    in_game_menu.Select(None)

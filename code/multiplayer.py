@@ -288,12 +288,6 @@ class Reactor(object):
                 else:
                     New_Mail("%s left the game" % player_name)
 
-                #self.game.game_running = False
-                #if winner == self._player_name:
-                #    self.game.win = True
-                #else:
-                #    self.game.win = False
-
             else:
                 log.error("Unexpected broadcast received %s" % repr(r))
 
