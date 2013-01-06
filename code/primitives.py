@@ -29,44 +29,6 @@ SEASON_ALIEN = 106
 SEASON_QUAKE = 107
 SEASON_START = 108
 
-MENU_SAVE = 201
-MENU_LOAD = 202
-MENU_HIDE = 203
-MENU_QUIT = 204
-MENU_FULLSCREEN = 205
-MENU_TUTORIAL = 206
-MENU_NEW_GAME = 207
-MENU_RES = 208
-MENU_MENU = 209
-MENU_REVIEW = 210
-MENU_BEGINNER = 211
-MENU_INTERMEDIATE = 212
-MENU_EXPERT = 213
-MENU_PREV = 214
-MENU_NEXT = 215
-MENU_UPDATES = 216
-MENU_WEBSITE = 217
-MENU_MANUAL = 218
-MENU_MUTE = 219
-MENU_PEACEFUL = 220
-MENU_MULTIPLAYER_GAME = 221
-MENU_TITLE = 222
-MENU_INPUT_FIELD = 223
-MENU_INPUT_SUBMIT = 224
-MENU_INPUT_CANCEL = 225
-MENU_MULTIPLAYER_SERVER_NAME = 226
-MENU_MULTIPLAYER_PLAYER_NAME = 227
-MENU_MULTIPLAYER_NEW_GAME_NAME = 228
-MENU_MULTIPLAYER_JOIN_GAME = 229
-MENU_TITLE = 230
-MENU_LBOX_UP = 231
-MENU_LBOX_DN = 232
-
-MENU_GAME_1 = 250
-MENU_GAME_2 = 251
-MENU_GAME_3 = 252
-MENU_GAME_4 = 253
-MENU_GAME_5 = 254
 
 # Mathematical constants
 HALF_PI = math.pi * 0.5
@@ -127,10 +89,12 @@ CGISCRIPT = "http://www.jwhitham.org/cgi-bin/LYU.cgi?"
 # things that are set by the difficulty mode:
 class Difficulty:
     def __init__(self):
-        self.Set(MENU_INTERMEDIATE)
+        import menu
+        self.Set(menu.Menu.intermediate)
     
     def Set(self, level):
-        if ( level in [ MENU_BEGINNER , MENU_TUTORIAL ] ):
+        import menu
+        if ( level in [ menu.Menu.beginner , menu.Menu.tutorial ] ):
             self.DAMAGE_FACTOR = 1.0
             self.CITY_UPGRADE_WORK_PER_LEVEL = 2
             self.GRACE_TIME = 20
@@ -139,7 +103,7 @@ class Difficulty:
             self.STEAM_PRODUCTION_PER_LEVEL = 6
             self.ROCK_QUANTITY = 3000
 
-        elif ( level in [ MENU_INTERMEDIATE, MENU_PEACEFUL ] ):
+        elif ( level in [ menu.Menu.intermediate, menu.Menu.peaceful ] ):
             self.DAMAGE_FACTOR = 1.4
             self.CITY_UPGRADE_WORK_PER_LEVEL = 3
             self.GRACE_TIME = 10
@@ -148,7 +112,7 @@ class Difficulty:
             self.STEAM_PRODUCTION_PER_LEVEL = 4
             self.ROCK_QUANTITY = 2000
 
-        elif ( level == MENU_EXPERT ):
+        elif ( level == menu.Menu.expert ):
             self.DAMAGE_FACTOR = 1.7
             self.CITY_UPGRADE_WORK_PER_LEVEL = 4
             self.GRACE_TIME = 5

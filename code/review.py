@@ -64,10 +64,10 @@ def Review(screen, (width, height), game_object, historian):
     y += height / 10
 
     lev = dict()
-    lev[ MENU_TUTORIAL ] = lev[ MENU_BEGINNER ] = "Beginner"
-    lev[ MENU_INTERMEDIATE ] = "Intermediate"
-    lev[ MENU_EXPERT ] = "Expert"
-    lev[ MENU_PEACEFUL ] = "Peaceful"
+    lev[ Menu.tutorial ] = lev[ Menu.beginner ] = "Beginner"
+    lev[ Menu.intermediate ] = "Intermediate"
+    lev[ Menu.expert ] = "Expert"
+    lev[ Menu.peaceful ] = "Peaceful"
     if ( not lev.has_key( g.challenge ) ):
         level = "??"
     else:
@@ -213,23 +213,23 @@ def Review(screen, (width, height), game_object, historian):
     
     proceed = menu.Menu( 
                 [(None, None, []),
-                (MENU_PREV, "Previous Graph", []),
-                (MENU_NEXT, "Next Graph", []),
+                (Menu.prev, "Previous Graph", []),
+                (Menu.next, "Next Graph", []),
                 (None, None, []),
-                (MENU_MENU, "Continue", [ K_ESCAPE ])])
+                (Menu.menu, "Continue", [ K_ESCAPE ])])
 
     quit = False
     while ( not quit ):
         (quit, cmd) = extra.Simple_Menu_Loop(screen, 
                     proceed, (( width * 3 ) / 4, height / 2 ))
 
-        if ( cmd == MENU_MENU ):
+        if ( cmd == Menu.menu ):
             quit = True
-        elif ( cmd == MENU_PREV ):
+        elif ( cmd == Menu.prev ):
             graph_num = (( graph_num + len(available_graphs) - 1 )
                                 % len(available_graphs))
             Regraph(available_graphs[ graph_num ])
-        elif ( cmd == MENU_NEXT ):
+        elif ( cmd == Menu.next ):
             graph_num = ( graph_num + 1 ) % len(available_graphs)
             Regraph(available_graphs[ graph_num ])
 

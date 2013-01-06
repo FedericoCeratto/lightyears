@@ -8,7 +8,7 @@ import pygame , random , sys , math , time , webbrowser , urllib , os
 from pygame.locals import *
 from getpass import getuser
 
-import game , stats , storms , extra , save_menu , resource , menu
+import game, stats, storms, extra, save_menu, resource, menu
 import config , startup , sound , alien_invasion , quakes
 from primitives import *
 from multiplayer import Reactor
@@ -174,17 +174,17 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
 
     main_menu = current_menu = menu.Menu([ 
                 (None, None, []),
-                (MENU_TUTORIAL, "Play Tutorial", []),
-                (MENU_NEW_GAME, "Play New Game", []),
-                (MENU_MULTIPLAYER_GAME, "Play Multiplayer Game", []),
-                (MENU_LOAD, "Restore Game", []),
+                (menu.Menu.tutorial, "Play Tutorial", []),
+                (menu.Menu.new_game, "Play New Game", []),
+                (menu.Menu.multiplayer_game, "Play Multiplayer Game", []),
+                (menu.Menu.load, "Restore Game", []),
                 (None, None, []),
-                (MENU_RES, "Set Graphics Resolution", []),
-                (MENU_MUTE, "Toggle Sound", []),
-                (MENU_MANUAL, "View Manual", []),
-                (MENU_UPDATES, "Check for Updates", []),
+                (menu.Menu.res, "Set Graphics Resolution", []),
+                (menu.Menu.mute, "Toggle Sound", []),
+                (menu.Menu.manual, "View Manual", []),
+                (menu.Menu.updates, "Check for Updates", []),
                 (None, None, []),
-                (MENU_QUIT, "Exit to " + extra.Get_OS(), 
+                (menu.Menu.quit, "Exit to " + extra.Get_OS(), 
                     [ K_ESCAPE , K_F10 ])],
                 title = 'Main menu',
     )
@@ -196,22 +196,22 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                 (-1, "Cancel", [])])
     difficulty_menu = menu.Menu(
                 [(None, None, []),
-                (MENU_TUTORIAL, "Tutorial", []),
+                (menu.Menu.tutorial, "Tutorial", []),
                 (None, None, []),
-                (MENU_BEGINNER, "Beginner", []),
-                (MENU_INTERMEDIATE, "Intermediate", []),
-                (MENU_EXPERT, "Expert", []),
+                (menu.Menu.beginner, "Beginner", []),
+                (menu.Menu.intermediate, "Intermediate", []),
+                (menu.Menu.expert, "Expert", []),
                 (None, None, []),
-                (MENU_PEACEFUL, "Peaceful", []),
+                (menu.Menu.peaceful, "Peaceful", []),
                 (None, None, []),
                 (-1, "Cancel", [])])
 
     new_multiplayer_menu = menu.Menu(
                 [(None, None, []),
-                (MENU_MULTIPLAYER_SERVER_NAME, "Set server", []),
-                (MENU_MULTIPLAYER_PLAYER_NAME, "Set player name", []),
-                (MENU_MULTIPLAYER_NEW_GAME_NAME, "Create new game", []),
-                (MENU_MULTIPLAYER_JOIN_GAME, "Join", []),
+                (menu.Menu.multiplayer_server_name, "Set server", []),
+                (menu.Menu.multiplayer_player_name, "Set player name", []),
+                (menu.Menu.multiplayer_new_game_name, "Create new game", []),
+                (menu.Menu.multiplayer_join_game, "Join", []),
                 (None, None, []),
                 (-1, "Cancel", [])],
                 title = 'Multiplayer',
@@ -254,17 +254,17 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
 
         res = mreactor.join_game(game_name)
         quit = game.Main_Loop(screen, clock,
-             (width,height), None, MENU_PEACEFUL, mreactor=mreactor)
+             (width,height), None, menu.Menu.peaceful, mreactor=mreactor)
         game.multiplayer = mreactor
 
 
     # --play-<gametype> or --multiplayer starts a game immediately
     flags = (
-        #('multiplayer_parameters', MENU_MULTIPLAYER_JOIN_GAME),
-        ('play_beginner', MENU_BEGINNER),
-        ('play_intermediate', MENU_INTERMEDIATE),
-        ('play_expert', MENU_EXPERT),
-        ('play_peaceful', MENU_PEACEFUL),
+        #('multiplayer_parameters', menu.Menu.multiplayer_join_game),
+        ('play_beginner', menu.Menu.beginner),
+        ('play_intermediate', menu.Menu.intermediate),
+        ('play_expert', menu.Menu.expert),
+        ('play_peaceful', menu.Menu.peaceful),
     )
     for flag, pick_cmd in flags:
         if getattr(cli_args, flag):
@@ -303,30 +303,30 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                 (( width * 3 ) / 4, 10 + ( height / 2 )))
 
         if ( current_menu == main_menu ):
-            if ( cmd == MENU_NEW_GAME ):
+            if ( cmd == menu.Menu.new_game ):
                 current_menu = difficulty_menu
 
-            if ( cmd == MENU_MULTIPLAYER_GAME ):
+            if ( cmd == menu.Menu.multiplayer_game ):
                 current_menu = new_multiplayer_menu
 
-            elif ( cmd == MENU_TUTORIAL ):
+            elif ( cmd == menu.Menu.tutorial ):
                 quit = game.Main_Loop(screen, clock, 
-                        (width,height), None, MENU_TUTORIAL)
+                        (width,height), None, menu.Menu.tutorial)
 
-            elif ( cmd == MENU_LOAD ):
+            elif ( cmd == menu.Menu.load ):
                 current_menu = save_menu.Save_Menu(False)
 
-            elif ( cmd == MENU_QUIT ):
+            elif ( cmd == menu.Menu.quit ):
                 quit = True
 
-            elif ( cmd == MENU_MUTE ):
+            elif ( cmd == menu.Menu.mute ):
                 config.cfg.mute = not config.cfg.mute
                 return False # update menu
 
-            elif ( cmd == MENU_RES ):
+            elif ( cmd == menu.Menu.res ):
                 current_menu = resolution_menu
 
-            elif ( cmd == MENU_UPDATES ):
+            elif ( cmd == menu.Menu.updates ):
                 if Update_Feature(screen, menu_image):
                     url = ( CGISCRIPT + "v=" +
                             startup.Get_Game_Version() )
@@ -337,7 +337,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                     except:
                         pass
 
-            elif ( cmd == MENU_MANUAL ):
+            elif ( cmd == menu.Menu.manual ):
                 pygame.display.iconify()
                 if os.path.isfile(DEB_MANUAL):
                     # Debian manual present
@@ -375,16 +375,16 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
 
             # Global multiplayer menu
             elif current_menu == new_multiplayer_menu:
-                if cmd == MENU_MULTIPLAYER_SERVER_NAME:
+                if cmd == menu.Menu.multiplayer_server_name:
                     current_menu = multiplayer_server_name_input
                     continue
-                elif cmd == MENU_MULTIPLAYER_PLAYER_NAME:
+                elif cmd == menu.Menu.multiplayer_player_name:
                     current_menu = multiplayer_player_name_input
                     continue
-                elif cmd == MENU_MULTIPLAYER_NEW_GAME_NAME:
+                elif cmd == menu.Menu.multiplayer_new_game_name:
                     current_menu = multiplayer_game_name_input
                     continue
-                elif cmd == MENU_MULTIPLAYER_JOIN_GAME:
+                elif cmd == menu.Menu.multiplayer_join_game:
                     # Connect to server, list games
                     if mreactor is None:
                         mreactor = Reactor(
@@ -398,28 +398,28 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
 
             # Server name input
             elif current_menu == multiplayer_server_name_input:
-                if cmd == MENU_INPUT_SUBMIT:
+                if cmd == menu.Menu.input_submit:
                     multiplayer_server_name_input.submit()
                     current_menu = new_multiplayer_menu
                     # Connect
-                elif cmd == MENU_INPUT_CANCEL:
+                elif cmd == menu.Menu.input_cancel:
                     current_menu = new_multiplayer_menu
 
                 continue
 
             # Player name input
             elif current_menu == multiplayer_player_name_input:
-                if cmd == MENU_INPUT_SUBMIT:
+                if cmd == menu.Menu.input_submit:
                     multiplayer_player_name_input.submit()
                     current_menu = new_multiplayer_menu
-                elif cmd == MENU_INPUT_CANCEL:
+                elif cmd == menu.Menu.input_cancel:
                     current_menu = new_multiplayer_menu
 
                 continue
 
             # Create-new-game name input
             elif current_menu == multiplayer_game_name_input:
-                if cmd == MENU_INPUT_SUBMIT:
+                if cmd == menu.Menu.input_submit:
                     multiplayer_game_name_input.submit()
                     # Connect to server, create game
                     if mreactor is None:
@@ -435,20 +435,20 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                     multiplayer_games_menu.update_games_list(games['open_games'])
                     current_menu = multiplayer_games_menu
 
-                elif cmd == MENU_INPUT_CANCEL:
+                elif cmd == menu.Menu.input_cancel:
                     current_menu = new_multiplayer_menu
 
                 continue
 
             # Game name input
             elif current_menu == multiplayer_games_menu:
-                if cmd == MENU_LBOX_UP:
+                if cmd == menu.Menu.lbox_up:
                     multiplayer_games_menu.scroll_up()
-                elif cmd == MENU_LBOX_DN:
+                elif cmd == menu.Menu.lbox_dn:
                     multiplayer_games_menu.scroll_down()
-                elif cmd == MENU_INPUT_CANCEL:
+                elif cmd == menu.Menu.input_cancel:
                     current_menu = new_multiplayer_menu
-                elif cmd in xrange(MENU_GAME_1, MENU_GAME_5 + 1):
+                elif cmd in xrange(menu.Menu.game_1, menu.Menu.game_5 + 1):
                     # A running game has been selected
                     game_name = multiplayer_games_menu.get_game_name(cmd)
                     game_name = str(game_name)
@@ -456,7 +456,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
 
                     res = mreactor.join_game(game_name)
                     quit = game.Main_Loop(screen, clock,
-                         (width,height), None, MENU_PEACEFUL, mreactor=mreactor)
+                         (width,height), None, menu.Menu.peaceful, mreactor=mreactor)
                     game.multiplayer = mreactor
 
 

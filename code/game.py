@@ -108,7 +108,7 @@ def Main_Loop(screen, clock, (width, height),
 
     alarm_sound = sound.Persisting_Sound("emergency")
 
-    teaching = ( challenge == MENU_TUTORIAL )
+    teaching = ( challenge == menu.Menu.tutorial )
 
     # Game data holder
     g = Game_Data()
@@ -137,7 +137,7 @@ def Main_Loop(screen, clock, (width, height),
         # ...and stop the game
         g.multiplayer.game = g
 
-    DIFFICULTY.Set(MENU_INTERMEDIATE)
+    DIFFICULTY.Set(menu.Menu.intermediate)
 
     # Establish equilibrium with initial network.
     for i in xrange(300):
@@ -155,22 +155,22 @@ def Main_Loop(screen, clock, (width, height),
         (controls_rect, ui.Control_Mouse_Down, ui.Control_Mouse_Move),
         (game_screen_rect, ui.Game_Mouse_Down, ui.Game_Mouse_Move) ]
     exit_options = [
-        (MENU_MENU, "Exit to Main Menu", []),
-        (MENU_QUIT, "Exit to " + extra.Get_OS(), [ K_F10 ])]
+        (menu.Menu.menu, "Exit to Main Menu", []),
+        (menu.Menu.quit, "Exit to " + extra.Get_OS(), [ K_F10 ])]
 
-    save_available = [(MENU_SAVE, "Save Game", []),
-        (MENU_LOAD, "Restore Game", []),
+    save_available = [(menu.Menu.save, "Save Game", []),
+        (menu.Menu.load, "Restore Game", []),
         (None, None, [])]
 
-    if ( challenge == MENU_TUTORIAL ):
+    if ( challenge == menu.Menu.tutorial ):
         save_available = []
 
     in_game_menu = menu.Menu([
         (None, None, []),
-        (MENU_MUTE, "Toggle Sound", []),
+        (menu.Menu.mute, "Toggle Sound", []),
         (None, None, [])] +
         save_available + [
-        (MENU_HIDE, "Return to Game", [ K_ESCAPE ])] + exit_options)
+        (menu.Menu.hide, "Return to Game", [ K_ESCAPE ])] + exit_options)
 
     current_menu = in_game_menu
 
@@ -210,11 +210,11 @@ def Main_Loop(screen, clock, (width, height),
 
     def Summary(g):
         lev = dict()
-        lev[ MENU_TUTORIAL ] = "a Tutorial"
-        lev[ MENU_BEGINNER ] = "a Beginner"
-        lev[ MENU_INTERMEDIATE ] = "an Intermediate"
-        lev[ MENU_EXPERT ] = "an Expert"
-        lev[ MENU_PEACEFUL ] = "a Peaceful"
+        lev[ menu.Menu.tutorial ] = "a Tutorial"
+        lev[ menu.Menu.beginner ] = "a Beginner"
+        lev[ menu.Menu.intermediate ] = "an Intermediate"
+        lev[ menu.Menu.expert ] = "an Expert"
+        lev[ menu.Menu.peaceful ] = "a Peaceful"
     
         assert g.challenge != None
         assert lev.has_key( g.challenge )
@@ -240,13 +240,13 @@ def Main_Loop(screen, clock, (width, height),
         return g
     
     if ( restore_pos != None ):
-        g.challenge = MENU_INTERMEDIATE
+        g.challenge = menu.Menu.intermediate
         g = Restore(g, restore_pos)
 
     assert g.challenge != None
     Summary(g)
 
-    if ( g.challenge == MENU_TUTORIAL ):
+    if ( g.challenge == menu.Menu.tutorial ):
         tutor.On(( menu_margin * 40 ) / 100)
 
     cur_time = g.game_time.time()
@@ -288,9 +288,9 @@ def Main_Loop(screen, clock, (width, height),
         #if ( flash ):
         #ui.Draw_Selection(picture_surf)
 
-        if ( g.challenge == MENU_TUTORIAL ):
+        if ( g.challenge == menu.Menu.tutorial ):
             until_next = []
-        elif ( g.challenge == MENU_PEACEFUL ):
+        elif ( g.challenge == menu.Menu.peaceful ):
             until_next = [ ((128,128,128), 12, "Peaceful mode") ]
         else:
             until_next = [ ((128,128,128), 12, "(%d days until next season)" %
@@ -373,7 +373,7 @@ def Main_Loop(screen, clock, (width, height),
                   (CITY_COLOUR, 18, "City - Steam Pressure"),
                   (None, None, g.net.hub.Get_Pressure_Meter())])
 
-        if ( g.challenge == MENU_TUTORIAL ):
+        if ( g.challenge == menu.Menu.tutorial ):
             tutor.Draw(screen, g)
 
         pygame.display.flip()
@@ -401,7 +401,7 @@ def Main_Loop(screen, clock, (width, height),
         
         if ((( not tutor.Permit_Season_Change() )
         and ( g.season == SEASON_QUIET ))
-        or ( g.challenge == MENU_PEACEFUL )):
+        or ( g.challenge == menu.Menu.peaceful )):
             g.season_ends = cur_time + 2
 
         if ( g.season_ends <= cur_time ):
@@ -429,7 +429,7 @@ def Main_Loop(screen, clock, (width, height),
             g.season_ends = cur_time + LENGTH_OF_SEASON
             g.season_effect = cur_time + ( g.season_fx.Get_Period() / 2 )
 
-            if ( g.challenge != MENU_PEACEFUL ):
+            if ( g.challenge != menu.Menu.peaceful ):
                 New_Mail("The " + g.season_fx.name + 
                                 " season has started.", (200,200,200))
 
@@ -503,11 +503,13 @@ def Main_Loop(screen, clock, (width, height),
         if ( menu_inhibit ):
             cmd = current_menu.Get_Command()
             current_menu.Select(None) # consume command
+            print "got cmd", cmd
+            print menu.Menu.quit, menu.Menu.menu, menu.Menu.review
 
             if ( current_menu == in_game_menu ):
 
                 # It's the normal menu.
-                if ( cmd == MENU_QUIT ):
+                if ( cmd == menu.Menu.quit ):
                     # From the in-game menu, "Exit to Linux" is selected
                     if g.multiplayer:
                         g.multiplayer.leave_game()
@@ -515,26 +517,26 @@ def Main_Loop(screen, clock, (width, height),
                     quit = True
                     ui.Reset() # makes menu disappear
 
-                elif ( cmd == MENU_MENU ):
+                elif ( cmd == menu.Menu.menu ):
                     # From the in-game menu, "Main Menu" is selected
                     if g.multiplayer:
                         g.multiplayer.leave_game()
                     loop_running = False
                     ui.Reset()
 
-                elif ( cmd == MENU_SAVE ):
+                elif ( cmd == menu.Menu.save ):
                     if ( g.game_running ):
                         # Switch to alternate menu
                         current_menu = save_menu.Save_Menu(True)
 
-                elif ( cmd == MENU_LOAD ):
+                elif ( cmd == menu.Menu.load ):
                     current_menu = save_menu.Save_Menu(False)
 
-                elif ( cmd == MENU_MUTE ):
+                elif ( cmd == menu.Menu.mute ):
                     config.cfg.mute = not config.cfg.mute
                     ui.Reset()
 
-                elif ( cmd == MENU_REVIEW ):
+                elif ( cmd == menu.Menu.review ):
                     loop_running = False
                     stats_review = True
                     ui.Reset()
@@ -620,6 +622,6 @@ def terminate_game(g, win, reason):
 
     current_menu = in_game_menu = menu.Menu([
         (None, None, []),
-        (MENU_REVIEW, "Review Statistics", [])] +
+        (menu.Menu.review, "Review Statistics", [])] +
         exit_options)
     in_game_menu.Select(None)

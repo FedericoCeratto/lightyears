@@ -8,7 +8,6 @@
 
 import pygame
 from pygame.locals import *
-from primitives import Get_Grid_Size
 from primitives import *
 
 import stats , extra , resource , render , sound
@@ -111,7 +110,7 @@ class Menu(object):
                 if ( num == self.selection ):
                     pygame.draw.rect(output, (255, 255, 255), r, 1)
                 elif num == self.hover:
-                    if self.hover == MENU_TITLE:
+                    if self.hover == Menu.title:
                         pass # titles do not hover
                     else:
                         pygame.draw.rect(output, (0, 180, 0), r, 1)
@@ -180,6 +179,15 @@ class Menu(object):
     def Enhancement_Interface(self, surf, num, rect, margin):
         pass
 
+    # Menu type enum. Each variable is an attribute, e.g. Menu.load = 1
+    save, load, hide, quit, fullscreen, tutorial, new_game, res, menu, review, \
+    beginner, intermediate, expert, prev, next, updates, website, manual, \
+    mute, peaceful, multiplayer_game, title, input_field, input_submit, \
+    input_cancel, multiplayer_server_name, multiplayer_player_name, \
+    multiplayer_new_game_name, multiplayer_join_game, title, lbox_up, lbox_dn, \
+    game_1, game_2, game_3, game_4, game_5 = range(37)
+
+
 # Menu plus pictures!
 class Enhanced_Menu(Menu):
     def __init__(self, menu_options, pictures, force_width=0):
@@ -205,10 +213,10 @@ class InputMenu(Menu):
         if current_value is None:
             current_value = '[empty]'
         menu_options = [
-            (MENU_TITLE, title, []),
-            [MENU_INPUT_FIELD, current_value, []],
-            (MENU_INPUT_SUBMIT, "Submit", []),
-            (MENU_INPUT_CANCEL, "Cancel", []),
+            (Menu.title, title, []),
+            [Menu.input_field, current_value, []],
+            (Menu.input_submit, "Submit", []),
+            (Menu.input_cancel, "Cancel", []),
         ]
         Menu.__init__(self, menu_options, 0)
 
@@ -219,7 +227,7 @@ class InputMenu(Menu):
         self.is_focused = True
 
     def Key_Press(self, k):
-        if self.hover == MENU_INPUT_FIELD:
+        if self.hover == Menu.input_field:
             if self._tmp_value in (None, '[empty]'):
                 self._tmp_value = ''
 
@@ -273,23 +281,23 @@ class GamesListMenu(Menu):
 
     def get_game_name(self, n):
         """Get a game name based on the displayed ones"""
-        n -= MENU_GAME_1
+        n -= Menu.game_1
         return dict(self._displayed_game_names)[n]
 
     def _build_menu_options(self):
-        games_list = [(n + MENU_GAME_1, gn, [])
+        games_list = [(n + Menu.game_1, gn, [])
             for n, gn in self._displayed_game_names]
 
         top = [
-            (MENU_TITLE, "Multiplayer games", []),
+            (Menu.title, "Multiplayer games", []),
             (None, None, []),
-            (MENU_LBOX_UP, u'▲', []),
+            (Menu.lbox_up, u'▲', []),
         ]
 
         bottom = [
-            (MENU_LBOX_DN, u'▼', []),
+            (Menu.lbox_dn, u'▼', []),
             (None, None, []),
-            (MENU_INPUT_CANCEL, "Cancel", []),
+            (Menu.input_cancel, "Cancel", []),
         ]
         return top + games_list + bottom
 
