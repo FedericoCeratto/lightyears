@@ -38,7 +38,7 @@ class Steam_Particle:
         self.dy *= 0.95
         self.dx += 0.02
         self.alpha -= self.dalpha
-        if ( self.bright < 40 ):
+        if self.bright < 40:
             self.bright = 40
         b = int(self.bright)
         alpha = max(0, self.alpha)

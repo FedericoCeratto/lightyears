@@ -39,22 +39,22 @@ class Quake_Season(Quiet_Season):
 
     def Per_Period(self):
         self.state += 1
-        if ( self.state >= self.RESET ):
+        if self.state >= self.RESET:
             self.state = self.START
             self.fault_lines = []
             self.unfurling = 0
 
-        if ( self.state == self.QUAKE_WARNING ):
+        if self.state == self.QUAKE_WARNING:
             sound.FX("firealrm")
-        elif ( self.state == self.QUAKE ):
+        elif self.state == self.QUAKE:
             self.__Generate_Quake()
-        elif ( self.state == self.QUAKE_DAMAGE ):
+        elif self.state == self.QUAKE_DAMAGE:
             self.__Apply_Damage()
 
-        if ( ( self.QUAKE - 1 ) <= self.state < self.QUAKE_AFTERMATH ):
+        if ( self.QUAKE - 1 ) <= self.state < self.QUAKE_AFTERMATH:
             global quake_sound
             quake_sound.Set(1.0)
-        elif ( self.state == self.QUAKE_AFTERMATH ):
+        elif self.state == self.QUAKE_AFTERMATH:
             quake_sound.Fade_Out()
 
     def __Generate_Quake(self):
@@ -78,7 +78,7 @@ class Quake_Season(Quiet_Season):
             (x1, y1) = line[ i ]
             (x2, y2) = line[ i + 1 ]
             sz = math.hypot( x1 - x2, y1 - y2 )
-            if ( sz > 10.0 ):
+            if sz > 10.0:
                 (x3, y3) = extra.Partial_Vector(
                         line[ i ], line[ i + 1 ], (0.5, 1.0))
                 line.insert(i + 1, (x3, y3))
@@ -86,7 +86,7 @@ class Quake_Season(Quiet_Season):
                 i += 1
 
         # Line may be reversed.
-        if ( random.randint(0,1) == 0 ):
+        if random.randint(0,1) == 0:
             line.reverse()
 
         self.fault_lines = line
@@ -122,33 +122,33 @@ class Quake_Season(Quiet_Season):
                 distance = min([abs(fx - nx), abs(fy - ny), distance])
 
             dmg = (( max_dist - distance ) * self.damage )
-            if ( dmg > 0 ):
-                if ( node.Take_Damage(dmg) ):
+            if dmg > 0:
+                if node.Take_Damage(dmg):
                     self.net.Destroy(node, "quakes")
 
-        if ( self.damage < 2.0 ):
+        if self.damage < 2.0:
             # Some Wells are created.
 
             num_wells = random.randint(1, 3)
-            if ( num_wells == 1 ):
+            if num_wells == 1:
                 New_Mail("A new steam well has appeared!")
-            elif ( num_wells > 1 ):
+            elif num_wells > 1:
                 New_Mail("Some new steam wells have appeared!")
             for i in xrange(num_wells):
                 self.net.Make_Well(False, True)
 
     def Draw(self, output, update_area):
-        if ( self.QUAKE <= self.state <= self.QUAKE_AFTERMATH ):
+        if self.QUAKE <= self.state <= self.QUAKE_AFTERMATH:
             # Draw fault line
             fl = [ Grid_To_Scr(x) for x in self.fault_lines[ 0: self.unfurling ] ]
-            if ( len(fl) > 1 ):
+            if len(fl) > 1:
                 pygame.draw.lines(output, (200,200,200), False, fl, 4)
                 pygame.draw.lines(output, (0,0,0), False, fl, 2)
             update_area(output.get_rect())
 
         
     def Get_Extra_Info(self):
-        if ( self.QUAKE_WARNING <= self.state < self.QUAKE ):
+        if self.QUAKE_WARNING <= self.state < self.QUAKE:
             return [ ((255,0,0), 16, "Quake warning!" )]
         return []
 
@@ -156,10 +156,10 @@ class Quake_Season(Quiet_Season):
         return ( self.state in [ self.QUAKE, self.QUAKE_DAMAGE ] )
 
     def Per_Frame(self, frame_time):
-        if ( self.QUAKE <= self.state < self.QUAKE_AFTERMATH ):
+        if self.QUAKE <= self.state < self.QUAKE_AFTERMATH:
             self.unfurling += 1
-        elif ( self.state == self.QUAKE_AFTERMATH ):
-            if ( len(self.fault_lines) > 0 ):
+        elif self.state == self.QUAKE_AFTERMATH:
+            if len(self.fault_lines) > 0:
                 self.fault_lines.pop(0) # the reverse of unfurling!
 
 

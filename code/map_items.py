@@ -543,7 +543,7 @@ class Building(Item):
     def Take_Damage(self, dmg_level=1):
         x = int(dmg_level * DIFFICULTY.DAMAGE_FACTOR)
         self.health -= x
-        if ( self.health <= 0 ):
+        if self.health <= 0:
             self.Prepare_To_Die()
             return True
         return False
@@ -559,7 +559,7 @@ class Building(Item):
         self.other_item_stack.append(other_item)
 
     def Restore(self):
-        if ( len(self.other_item_stack) != 0 ):
+        if len(self.other_item_stack) != 0:
             return self.other_item_stack.pop()
         else:
             return None
@@ -574,12 +574,12 @@ class Building(Item):
         return self.Needs_Work()
 
     def Do_Work(self):
-        if ( not self.destroyed ):
-            if ( self.health < self.max_health ):
+        if not self.destroyed:
+            if self.health < self.max_health:
                 self.health += WORK_UNIT_SIZE
-            if ( self.health >= self.max_health ):
+            if self.health >= self.max_health:
                 self.health = self.max_health
-                if ( self.was_once_complete ):
+                if self.was_once_complete:
                     # An upgrade or repair
                     sound.FX("double")
                 else:
@@ -618,14 +618,14 @@ class Building(Item):
         h = (( self.health * 100 ) / self.max_health)
         h2 = (self.max_health - self.health)
         units = ""
-        if ( h2 > 0 ):
+        if h2 > 0:
             units = str(h2) + " more unit"
-            if ( h2 != 1 ):
+            if h2 != 1:
                 units += "s"
             units += " req'd "
 
-        if ( self.complete ):
-            if ( self.health == self.max_health ):
+        if self.complete:
+            if self.health == self.max_health:
                 l += [ (self.Get_Diagram_Colour(), 15, "Operational") ]
             else:
                 l += [ (self.Get_Diagram_Colour(), 15, "Damaged, " + str(h) + "% health"),
@@ -634,7 +634,7 @@ class Building(Item):
 
             l += [ ((128,128,0), 15, self.Get_Tech_Level()) ]
         else:
-            if ( self.health > 0 ):
+            if self.health > 0:
                 l += [ (self.Get_Diagram_Colour(), 15, "Building, " + str(h) + "% done"),
                        (None, None, self.Get_Health_Meter()),
                        ((128,128,128), 10, units + "to finish building")]
@@ -649,16 +649,16 @@ class Building(Item):
     
     def Get_Diagram_Colour(self):
         (r,g,b) = self.base_colour
-        if ( self.complete ):
-            if ( self.health < self.max_health ):
+        if self.complete:
+            if self.health < self.max_health:
                 g = ( self.health * g ) / self.max_health
                 b = ( self.health * b ) / self.max_health
-                if ( r < 128 ): r = 128
+                if r < 128: r = 128
         else:
-            if ( self.health > 0 ):
+            if self.health > 0:
                 r = ( self.health * r ) / self.max_health
                 b = ( self.health * b ) / self.max_health
-                if ( r < 128 ): r = 128
+                if r < 128: r = 128
             else:
                 r = g = b = 128
         return (r,g,b)
@@ -712,10 +712,10 @@ class Node(Building):
                 )
 
     def Begin_Upgrade(self):
-        if ( self.tech_level >= NODE_MAX_TECH_LEVEL ):
+        if self.tech_level >= NODE_MAX_TECH_LEVEL:
             New_Mail("Node cannot be upgraded further.")
             sound.FX("error")
-        elif ( self.Needs_Work() ):
+        elif self.Needs_Work():
             New_Mail("Node must be operational before an upgrade can begin.")
             sound.FX("error")
         else:
@@ -733,20 +733,20 @@ class Node(Building):
         nl = []
         for p in self.Exits():
             if p.valve_open and not p.Is_Broken():
-                if ( p.n1 == self ):
-                    if ( not p.n2.Is_Broken() ):
+                if p.n1 == self:
+                    if not p.n2.Is_Broken():
                         nl.append((p.n2.steam, p.resistance))
                 else:
-                    if ( not p.n1.Is_Broken() ):
+                    if not p.n1.Is_Broken():
                         nl.append((p.n1.steam, p.resistance))
 
         nd = self.steam.Think(nl)
         for (p, current) in zip(self.Exits(), nd):
             # current > 0 means outgoing flow
-            if ( current > 0.0 ):
+            if current > 0.0:
                 p.Flowing_From(self, current)
 
-        if ( self.Is_Broken() ):
+        if self.Is_Broken():
             self.draw_obj = self.draw_obj_incomplete
         else:
             if self.steam.venting:
@@ -854,8 +854,8 @@ class City_Node(Node):
         # puts the unit out of action during the upgrade.
         # This isn't suitable for cities: you lose if your
         # city is out of action. We use a special system.
-        if ( self.city_upgrade == 0 ):
-            if ( self.tech_level < DIFFICULTY.CITY_MAX_TECH_LEVEL ):
+        if self.city_upgrade == 0:
+            if self.tech_level < DIFFICULTY.CITY_MAX_TECH_LEVEL:
                 sound.FX("mechanical_1")
 
                 self.city_upgrade = self.city_upgrade_start = (
@@ -876,9 +876,9 @@ class City_Node(Node):
         return False
 
     def Do_Work(self, broadcast_update=None, owned_by_me=True):
-        if ( self.city_upgrade > 0 ):
+        if self.city_upgrade > 0:
             self.city_upgrade -= 1
-            if ( self.city_upgrade == 0 ):
+            if self.city_upgrade == 0:
                 self.tech_level += 1
                 self.steam.Capacity_Upgrade()
 
@@ -896,7 +896,7 @@ class City_Node(Node):
     def Get_Steam_Supply(self):
         supply = 0.0
         for pipe in self.pipes:
-            if ( self == pipe.n1 ):
+            if self == pipe.n1:
                 supply -= pipe.current_n1_to_n2
             else:
                 supply += pipe.current_n1_to_n2
@@ -905,13 +905,13 @@ class City_Node(Node):
 
     def Get_Information(self):
         l = Node.Get_Information(self)
-        if ( self.city_upgrade != 0 ):
+        if self.city_upgrade != 0:
             l.append( ((255,255,50), 12, "Upgrading...") )
             l.append( (None, None, self.Get_City_Upgrade_Meter()) )
         return l
 
     def Get_City_Upgrade_Meter(self):
-        if ( self.city_upgrade == 0 ):
+        if self.city_upgrade == 0:
             return (0, (0,0,0), 1, (64,64,64))
         else:
             return (self.city_upgrade_start - self.city_upgrade, (255,255,50), 
@@ -958,7 +958,7 @@ class Well_Node(Node):
 
 
     def Steam_Think(self):
-        if ( not self.Needs_Work() ):
+        if not self.Needs_Work():
             self.production = (DIFFICULTY.BASIC_STEAM_PRODUCTION + (self.tech_level * 
                     DIFFICULTY.STEAM_PRODUCTION_PER_LEVEL))
             self.steam.Source(self.production)
@@ -1015,10 +1015,10 @@ class Pipe(Building):
                     )
 
     def Begin_Upgrade(self):
-        if ( self.tech_level >= PIPE_MAX_TECH_LEVEL ):
+        if self.tech_level >= PIPE_MAX_TECH_LEVEL:
             New_Mail("Pipe cannot be upgraded further.")
             sound.FX("error")
-        elif ( self.Needs_Work() ):
+        elif self.Needs_Work():
             New_Mail("Pipe must be operational before an upgrade can begin.")
             sound.FX("error")
         else:
@@ -1034,9 +1034,9 @@ class Pipe(Building):
         return [self.n1, self.n2]
 
     def Flowing_From(self, node, current):
-        if ( node == self.n1 ):
+        if node == self.n1:
             self.current_n1_to_n2 = current
-        elif ( node == self.n2 ):
+        elif node == self.n2:
             self.current_n1_to_n2 = - current
         else:
             assert False
@@ -1054,17 +1054,17 @@ class Pipe(Building):
         x1 -= x ; x2 -= x
         y1 -= y ; y2 -= y
 
-        if ( self.Needs_Work() ):
+        if self.Needs_Work():
             c = (255,0,0)
         else:
             c = self.Get_Diagram_Colour()
 
         pygame.draw.line(output, c, (x1,y1), (x2,y2), 2)
 
-        if ( not self.Needs_Work() ):
+        if not self.Needs_Work():
             mx = ( x1 + x2 ) / 2
             my = ( y1 + y2 ) / 2
-            if ( output.get_rect().collidepoint((mx,my)) ):
+            if output.get_rect().collidepoint((mx,my)):
                 info_text = "%1.1f U" % abs(self.current_n1_to_n2)
                 info_surf = stats.Get_Font(12).render(info_text, True, c)
                 r2 = info_surf.get_rect()
@@ -1079,7 +1079,7 @@ class Pipe(Building):
     def Draw(self,output):
         (x1,y1) = Grid_To_Scr(self.n1.pos)
         (x2,y2) = Grid_To_Scr(self.n2.pos)
-        if ( self.Needs_Work() ):
+        if self.Needs_Work():
             # Plain red line
             pygame.draw.line(output, (255,0,0), (x1,y1), (x2,y2), 3)
             self.dot_drawing_offset = 0
@@ -1094,7 +1094,7 @@ class Pipe(Building):
 
         pygame.draw.line(output, colour, (x1,y1), (x2,y2), 3)
 
-        if ( self.current_n1_to_n2 == 0.0 ):
+        if self.current_n1_to_n2 == 0.0:
             return
             
         r = Rect(0,0,1,1)
@@ -1129,7 +1129,7 @@ class Pipe(Building):
             self.dot_drawing_offset += int(self.FUTZFACTOR * 
                     frame_time * self.current_n1_to_n2)
 
-        if ( self.dot_drawing_offset < 0 ):
+        if self.dot_drawing_offset < 0:
             self.dot_drawing_offset = (
                 self.SFACTOR - (( - self.dot_drawing_offset ) % self.SFACTOR ))
         else:
@@ -1141,7 +1141,7 @@ class Pipe(Building):
     def __Draw_Original(self, output):
         (x1,y1) = Grid_To_Scr(self.n1.pos)
         (x2,y2) = Grid_To_Scr(self.n2.pos)
-        if ( self.Needs_Work() ):
+        if self.Needs_Work():
             c = (255,0,0)
         else:
             c = self.Get_Diagram_Colour()

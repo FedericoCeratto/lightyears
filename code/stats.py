@@ -21,7 +21,7 @@ def Draw_Stats_Window(output, stats_tuple_list):
     global __font_objects
 
     for (colour, size, text) in stats_tuple_list:
-        if ( size == None ):
+        if size == None:
             # Draw a bar meter instead!
             assert type(text) == tuple
             items = [ text ]
@@ -47,8 +47,8 @@ def Draw_Bar_Meter(output, items, centre_pos, width, item_height):
         r2 = Rect(r1.left + 1, y, w, h) # (total)
         pygame.draw.rect(output, total_colour, r2)
 
-        if ( var > 0 ):
-            if ( var > total ): var = total
+        if var > 0:
+            if var > total: var = total
             r3 = Rect(r1.left + 1, y, (( w * var ) / total ), h)
             pygame.draw.rect(output, var_colour, r3)
 
@@ -69,8 +69,8 @@ def draw_popup_bar_meter(output, items, centre_pos, width, item_height, alpha):
         r2 = Rect(r1.left + 1, y, w, h) # (total)
         gfxdraw.box(output, r2, total_colour + alpha)
 
-        if ( var > 0 ):
-            if ( var > total ): var = total
+        if var > 0:
+            if var > total: var = total
             if var != total:
                 alpha = (200, ) # highlight broken items
             r3 = Rect(r1.left + 1, y, (( w * var ) / total ), h)
@@ -82,10 +82,10 @@ def draw_popup_bar_meter(output, items, centre_pos, width, item_height, alpha):
 
 def Get_Font(size):
     size += __font_scale
-    if ( size < 10 ): 
+    if size < 10: 
         size = 10
 
-    if ( not __font_objects.has_key(size) ):
+    if not __font_objects.has_key(size):
         __font_objects[ size ] = resource.Load_Font(size)
     return __font_objects[ size ]
 

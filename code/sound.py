@@ -20,7 +20,7 @@ def FX(name):
 class Persisting_Sound:
     def __init__(self, name, secondary=None):
         self.sobj = resource.Load_Sound(name)
-        if ( secondary != None ):
+        if secondary != None:
             # A different, less annoying mode.
             self.sobj2 = resource.Load_Sound(secondary)
         else: 
@@ -36,7 +36,7 @@ class Persisting_Sound:
         if config.cfg.mute:
             volume = 0.0
 
-        if ( volume <= 0.0 ):
+        if volume <= 0.0:
             self.sobj.stop()
             self.sobj2.stop()
         else:

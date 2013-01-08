@@ -44,9 +44,9 @@ def Review(screen, (width, height), game_object, historian):
     def Text(str, size, (x,y), justify):
         img = stats.Get_Font(size).render(str, True, (255, 255, 255))
 
-        if ( justify == 0 ): # centre
+        if justify == 0: # centre
             x -= ( img.get_rect().width ) / 2
-        elif ( justify < 0 ): # right
+        elif justify < 0: # right
             x -= img.get_rect().width
 
         screen.blit(img, (x,y))
@@ -54,7 +54,7 @@ def Review(screen, (width, height), game_object, historian):
         return y + 5
 
 
-    if ( g.win ):
+    if g.win:
         y = Text("You have won the game!", 36, (width / 2, 10), 0)
     else:
         y = Text("You have lost the game!", 36, (width / 2, 10), 0) 
@@ -68,13 +68,13 @@ def Review(screen, (width, height), game_object, historian):
     lev[ Menu.intermediate ] = "Intermediate"
     lev[ Menu.expert ] = "Expert"
     lev[ Menu.peaceful ] = "Peaceful"
-    if ( not lev.has_key( g.challenge ) ):
+    if not lev.has_key( g.challenge ):
         level = "??"
     else:
         level = lev[ g.challenge ]
 
     score = float(g.net.hub.total_steam) / float(g.game_time.Get_Day())
-    if ( g.win ):
+    if g.win:
         score *= 8
 
     score = int(score)
@@ -128,7 +128,7 @@ def Review(screen, (width, height), game_object, historian):
         graph_subwin.height -= text_margin
         graph_subwin.top += text_margin
 
-        if ( len(historian) == 0 ):
+        if len(historian) == 0:
             print "Historian has no data - no graph available"
             return
 
@@ -142,15 +142,15 @@ def Review(screen, (width, height), game_object, historian):
                 print "Attribute",attribute,"not present"
                 return
 
-            if ( gy < 0 ):
+            if gy < 0:
                 gy = 0 # This should not happen
             gt = hr.day
 
             values.append((gt, gy))
 
-            if ( gt > max_gt ):
+            if gt > max_gt:
                 max_gt = gt
-            if ( gy > max_gy ):
+            if gy > max_gy:
                 max_gy = gy
 
         if (( max_gt <= 0 ) or ( max_gy <= 0 )):
@@ -159,7 +159,7 @@ def Review(screen, (width, height), game_object, historian):
 
         def Calc_Step_Max(maximum,number_of_steps):
             step = int((float(maximum) / float(number_of_steps)) + 1)
-            if ( step < 1 ):
+            if step < 1:
                 step = 1
 
             return (step, int( step * number_of_steps ))
@@ -223,13 +223,13 @@ def Review(screen, (width, height), game_object, historian):
         (quit, cmd) = extra.Simple_Menu_Loop(screen, 
                     proceed, (( width * 3 ) / 4, height / 2 ))
 
-        if ( cmd == Menu.menu ):
+        if cmd == Menu.menu:
             quit = True
-        elif ( cmd == Menu.prev ):
+        elif cmd == Menu.prev:
             graph_num = (( graph_num + len(available_graphs) - 1 )
                                 % len(available_graphs))
             Regraph(available_graphs[ graph_num ])
-        elif ( cmd == Menu.next ):
+        elif cmd == Menu.next:
             graph_num = ( graph_num + 1 ) % len(available_graphs)
             Regraph(available_graphs[ graph_num ])
 

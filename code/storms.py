@@ -39,7 +39,7 @@ class Storm_Season(Quiet_Season):
         self.storms.append(Storm(self.net, self.storm_difficulty))
         removal = []
         for (i, s) in enumerate(self.storms):
-            if ( s.Is_Offscreen() ):
+            if s.Is_Offscreen():
                 removal.insert(0, i)
         for i in removal:
             self.storms.pop(i)
@@ -63,7 +63,7 @@ class Storm:
         self.storm_frame = 0
 
         [a, b] = extra.Make_Quake_SF_Points(5)
-        if ( random.randint(0,1) == 0 ):
+        if random.randint(0,1) == 0:
             (a, b) = (b, a) # flip - ensures start point is not always on top or left
 
         (self.pos, dest) = (a, b)
@@ -111,14 +111,14 @@ class Storm:
 
                 global storm_sound
 
-                if ( self.net.pipe_grid.has_key( key ) ):
+                if self.net.pipe_grid.has_key( key ):
                     for pipe in self.net.pipe_grid[ key ]:
                         if (( not pipe.Is_Destroyed() )
                         and ( pipe.Take_Damage(dmg) )):
                             self.net.Destroy(pipe, "storms")
                             storm_sound.Set(1.0)
 
-                if ( self.net.ground_grid.has_key( key ) ):
+                if self.net.ground_grid.has_key( key ):
                     node = self.net.ground_grid[ key ]
 
                     if (( not node.Is_Destroyed() )

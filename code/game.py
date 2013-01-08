@@ -127,8 +127,8 @@ class Main_Loop(object):
         # Establish equilibrium with initial network.
         for i in xrange(300):
             g.net.Steam_Think()
-            if ( g.net.hub.Get_Pressure() >= PRESSURE_GOOD ):
-                if ( DEBUG ):
+            if g.net.hub.Get_Pressure() >= PRESSURE_GOOD:
+                if DEBUG:
                     print i,'steps required for equilibrium'
                 break
 
@@ -147,7 +147,7 @@ class Main_Loop(object):
             (menu.Menu.load, "Restore Game", []),
             (None, None, [])]
 
-        if ( challenge == menu.Menu.tutorial ):
+        if challenge == menu.Menu.tutorial:
             save_available = []
 
         in_game_menu = menu.Menu([
@@ -170,7 +170,7 @@ class Main_Loop(object):
         fps_time = rt_then
         autosave_timer = 0
 
-        if ( restore_pos == None ):
+        if restore_pos == None:
             DIFFICULTY.Set(challenge)
         
         
@@ -197,14 +197,14 @@ class Main_Loop(object):
         # Almost ready to start... but are we starting
         # from a savegame?
         
-        if ( restore_pos != None ):
+        if restore_pos != None:
             g.challenge = menu.Menu.intermediate
             g = self.Restore(g, restore_pos)
 
         assert g.challenge != None
         self.Summary(g)
 
-        if ( g.challenge == menu.Menu.tutorial ):
+        if g.challenge == menu.Menu.tutorial:
             tutor.On(( menu_margin * 40 ) / 100)
 
         cur_time = g.game_time.time()
@@ -224,14 +224,14 @@ class Main_Loop(object):
             rt_frame_length = rt_now - rt_then
             rt_then = rt_now
             fps_count += 1
-            if ( fps_count > 100 ):
-                if ( DEBUG ):
+            if fps_count > 100:
+                if DEBUG:
                     print '%1.2f fps' % ( float(fps_count) / ( rt_now - fps_time ) )
                 fps_time = rt_now 
                 fps_count = 0
 
-            if ( not menu_inhibit ):
-                if ( not tutor.Frozen () ):
+            if not menu_inhibit:
+                if not tutor.Frozen ():
                     g.game_time.Advance(rt_frame_length)
                 draw_obj.Next_Frame() # Flashing lights on the various items
 
@@ -243,12 +243,12 @@ class Main_Loop(object):
                 
             ui.Draw_Game(game_screen_surf, g.season_fx)
 
-            #if ( flash ):
+            #if flash:
             #ui.Draw_Selection(picture_surf)
 
-            if ( g.challenge == menu.Menu.tutorial ):
+            if g.challenge == menu.Menu.tutorial:
                 until_next = []
-            elif ( g.challenge == menu.Menu.peaceful ):
+            elif g.challenge == menu.Menu.peaceful:
                 until_next = [ ((128,128,128), 12, "Peaceful mode") ]
             else:
                 until_next = [ ((128,128,128), 12, "(%d days until next season)" %
@@ -262,19 +262,19 @@ class Main_Loop(object):
             ui.Draw_Controls(controls_surf)
 
 
-            if ( menu_inhibit ):
+            if menu_inhibit:
                 current_menu.Draw(screen)
                 alarm_sound.Set(0.0)
             
             stats_back = (0,0,0)
             supply = g.net.hub.Get_Steam_Supply()
             demand = g.net.hub.Get_Steam_Demand()
-            if ( g.net.hub.Get_Pressure() < PRESSURE_DANGER ):
+            if g.net.hub.Get_Pressure() < PRESSURE_DANGER:
                 # You'll lose the game if you stay in this zone
                 # for longer than a timeout. Also, an
                 # alarm will sound.
 
-                if ( g.game_ends_at == None ):
+                if g.game_ends_at == None:
                     sound.FX("steamcrit")
                     g.warning_given = True
 
@@ -283,31 +283,31 @@ class Main_Loop(object):
                     New_Mail("Game will end on Day %u unless supplies are increased." % (
                         int(g.game_ends_at) ), (255,0,0))
 
-                if ( flash ): 
+                if flash: 
                     demand_colour = (255, 0, 0)
-                    if ( not menu_inhibit ):
+                    if not menu_inhibit:
                         alarm_sound.Set(0.6)
                 else:         
                     demand_colour = (128, 0, 0)
                     stats_back = (100, 0, 0)
 
-            elif ( g.net.hub.Get_Pressure() < PRESSURE_WARNING ):
+            elif g.net.hub.Get_Pressure() < PRESSURE_WARNING:
 
                 g.game_ends_at = None
-                if ( flash ): 
+                if flash: 
                     demand_colour = (255, 100, 0)
-                    if ( not menu_inhibit ):
+                    if not menu_inhibit:
                         alarm_sound.Set(0.3)
                 else:         
                     demand_colour = (128, 50, 0)
                     stats_back = (50, 25, 0)
             else:
 
-                if ( g.warning_given ):
+                if g.warning_given:
                     sound.FX("steamres")
                     g.warning_given = False
 
-                if ( g.net.hub.Get_Pressure() < PRESSURE_OK ):
+                if g.net.hub.Get_Pressure() < PRESSURE_OK:
                     demand_colour = (128, 128, 0)
                 else:
                     demand_colour = (0, 128, 0)
@@ -317,7 +317,7 @@ class Main_Loop(object):
 
             avw = g.net.hub.Get_Avail_Work_Units()
             wu_unused = avw - g.work_units_used
-            if ( not menu_inhibit ):
+            if not menu_inhibit:
                 global_stats_surf.fill(stats_back)
                 stats.Draw_Stats_Window(global_stats_surf, [ 
                       (CITY_COLOUR, 18, "Work Units Available"),
@@ -331,17 +331,17 @@ class Main_Loop(object):
                       (CITY_COLOUR, 18, "City - Steam Pressure"),
                       (None, None, g.net.hub.Get_Pressure_Meter())])
 
-            if ( g.challenge == menu.Menu.tutorial ):
+            if g.challenge == menu.Menu.tutorial:
                 tutor.Draw(screen, g)
 
             pygame.display.flip()
 
-            if ( not menu_inhibit ):
+            if not menu_inhibit:
                 g.season_fx.Per_Frame(rt_frame_length)
                 ui.Frame_Advance(rt_frame_length)
 
             # Timing effects
-            if ( g.work_timer <= cur_time ):
+            if g.work_timer <= cur_time:
                 # Fixed periodic effects
                 g.work_timer = cur_time + 0.1
                 g.wu_integral += wu_unused
@@ -352,7 +352,7 @@ class Main_Loop(object):
                 g.net.update_popups()
                 tutor.Examine_Game(g)
 
-            if ( g.season_effect <= cur_time ):
+            if g.season_effect <= cur_time:
                 # Seasonal periodic effects
                 g.season_effect = cur_time + g.season_fx.Get_Period()
                 g.season_fx.Per_Period()
@@ -362,9 +362,9 @@ class Main_Loop(object):
             or ( g.challenge == menu.Menu.peaceful )):
                 g.season_ends = cur_time + 2
 
-            if ( g.season_ends <= cur_time ):
+            if g.season_ends <= cur_time:
                 # Season change
-                if ( g.season == SEASON_START ):
+                if g.season == SEASON_START:
                     g.season = SEASON_QUIET
                     g.season_fx = Quiet_Season(g.net)
                 elif (( g.season == SEASON_QUIET )
@@ -372,12 +372,12 @@ class Main_Loop(object):
                     g.season = SEASON_ALIEN
                     g.season_fx = Alien_Season(g.net, g.difficulty_level)
                     sound.FX("aliensappr")
-                elif ( g.season == SEASON_ALIEN ):
+                elif g.season == SEASON_ALIEN:
                     g.season = SEASON_QUAKE
                     g.season_fx = Quake_Season(g.net, g.difficulty_level)
-                    if ( not tutor.Active() ): # hack...
+                    if not tutor.Active(): # hack...
                         sound.FX("quakewarn")
-                elif ( g.season == SEASON_QUAKE ):
+                elif g.season == SEASON_QUAKE:
                     g.season = SEASON_STORM
                     g.season_fx = Storm_Season(g.net, g.difficulty_level)
                     g.difficulty_level *= 1.2 # 20% harder..
@@ -387,7 +387,7 @@ class Main_Loop(object):
                 g.season_ends = cur_time + LENGTH_OF_SEASON
                 g.season_effect = cur_time + ( g.season_fx.Get_Period() / 2 )
 
-                if ( g.challenge != menu.Menu.peaceful ):
+                if g.challenge != menu.Menu.peaceful:
                     New_Mail("The " + g.season_fx.name + 
                                     " season has started.", (200,200,200))
 
@@ -413,44 +413,44 @@ class Main_Loop(object):
                 or ( e.type == MOUSEMOTION )):
                     if (( e.type == MOUSEBUTTONDOWN ) 
                     and ( e.button != 1 )):
-                        if ( not menu_inhibit ):
+                        if not menu_inhibit:
                             ui.Right_Mouse_Down()
 
-                    elif ( not menu_inhibit ):
+                    elif not menu_inhibit:
                         for (rect, click, move) in inputs:
                             if ( rect.collidepoint(e.pos)):
                                 (x,y) = e.pos
                                 x -= rect.left
                                 y -= rect.top
-                                if ( e.type == MOUSEMOTION ):
+                                if e.type == MOUSEMOTION:
                                     move((x,y))
                                 else:
                                     click((x,y))
-                    elif ( menu_inhibit ):
-                        if ( e.type == MOUSEMOTION ):
+                    elif menu_inhibit:
+                        if e.type == MOUSEMOTION:
                             current_menu.Mouse_Move(e.pos)
                         else:
                             current_menu.Mouse_Down(e.pos)
 
                 elif e.type == KEYDOWN:
-                    if ( not menu_inhibit ):
+                    if not menu_inhibit:
                         from map_items import Pipe
                         if e.key == 32 and isinstance(ui.selection, Pipe):
                             ui.selection.toggle_valve()
                         else:
                             ui.Key_Press(e.key)
 
-                    elif ( menu_inhibit ):
+                    elif menu_inhibit:
                         current_menu.Key_Press(e.key)
 
-                    if ( DEBUG ):
+                    if DEBUG:
                         # Cheats.
-                        if ( e.key == K_F10 ):
+                        if e.key == K_F10:
                             New_Mail("SEASON ADVANCE CHEAT")
                             g.season_ends = 0 
-                        elif ( e.key == K_F9 ):
+                        elif e.key == K_F9:
                             screen.fill((255,255,255))
-                        elif ( e.key == K_F8 ):
+                        elif e.key == K_F8:
                             # Lose the game cheat
                             # Heh, worst cheat ever.
                             g.game_ends_at = cur_time
@@ -480,26 +480,26 @@ class Main_Loop(object):
                         loop_running = False
                         ui.Reset()
 
-                    elif ( cmd == menu.Menu.save ):
-                        if ( g.game_running ):
+                    elif cmd == menu.Menu.save:
+                        if g.game_running:
                             # Switch to alternate menu
                             current_menu = save_menu.Save_Menu(True)
 
-                    elif ( cmd == menu.Menu.load ):
+                    elif cmd == menu.Menu.load:
                         current_menu = save_menu.Save_Menu(False)
 
-                    elif ( cmd == menu.Menu.mute ):
+                    elif cmd == menu.Menu.mute:
                         config.cfg.mute = not config.cfg.mute
                         ui.Reset()
 
-                    elif ( cmd == menu.Menu.review ):
+                    elif cmd == menu.Menu.review:
                         loop_running = False
                         stats_review = True
                         ui.Reset()
 
-                    elif ( cmd != None ):
+                    elif cmd != None:
                         # Default option - back to game
-                        if ( not g.game_running ):
+                        if not g.game_running:
                             New_Mail("Sorry - the game has finished")
                         ui.Reset() 
 
@@ -507,7 +507,7 @@ class Main_Loop(object):
                     # It's another menu! That means it's the save menu.
                     if (( cmd != None )
                     and ( cmd >= 0 )):
-                        if ( not current_menu.Is_Saving() ):
+                        if not current_menu.Is_Saving():
                             g = self.Restore(g, cmd)
 
                         else:
@@ -516,12 +516,12 @@ class Main_Loop(object):
 
                             g.net.Make_Ready_For_Save()
                             result = save_game.Save(g, cmd, label)
-                            if ( result == None ):
+                            if result == None:
                                 New_Mail("Game saved.")
                             else:
                                 New_Mail(result)
 
-                    if ( cmd != None ):
+                    if cmd != None:
                         # Back to game.
                         self.Special_Refresh(screen, menu_margin, menu_width,
                             stats_rect, global_stats_rect, picture, picture_surf)
@@ -547,7 +547,7 @@ class Main_Loop(object):
         # About to exit. Blackout.
         screen.fill((0,0,0)) 
 
-        if ( stats_review ):
+        if stats_review:
             review.Review(screen, (width, height), g, g.historian)
             
         return quit
@@ -595,7 +595,7 @@ class Main_Loop(object):
     @staticmethod
     def Restore(g, cmd):
         (g2, result) = save_game.Load(g, cmd)
-        if ( result == None ):
+        if result == None:
             g = g2
             ui.net = g.net
             mail.Initialise()

@@ -27,16 +27,16 @@ class Menu(object):
 
         width_hint = height_hint = 10
 
-        if ( force_width > 0 ):
+        if force_width > 0:
             width_hint = force_width
 
         # Two attempts at drawing required.
         (discard1, discard2,
             (width_hint, height_hint)) = self._draw((width_hint, height_hint))
 
-        if ( width_hint < 150 ):
+        if width_hint < 150:
             width_hint = 150
-        if ( force_width > 0 ):
+        if force_width > 0:
             width_hint = force_width
 
         (self.surf_store, self.control_rects,
@@ -65,16 +65,16 @@ class Menu(object):
         x -= self.bbox.left
         y -= self.bbox.top
         for (num, r) in self.control_rects:
-            if ( r.collidepoint(x,y) ):
+            if r.collidepoint(x,y):
                 self.hover = num
-                if ( old_sel != self.hover ):
+                if old_sel != self.hover:
                     sound.FX("click_s")
                 return
 
     def Mouse_Down(self, spos):
 
         self.Mouse_Move(spos)
-        if ( self.hover != None ):
+        if self.hover != None:
             self.selection = self.hover
             sound.FX("click")
 
@@ -107,7 +107,7 @@ class Menu(object):
                 r = Rect(r)
                 r.top += self.bbox.top
                 r.left += self.bbox.left
-                if ( num == self.selection ):
+                if num == self.selection:
                     pygame.draw.rect(output, (255, 255, 255), r, 1)
                 elif num == self.hover:
                     if self.hover == Menu.title:
@@ -131,8 +131,8 @@ class Menu(object):
         first_item = True
 
         for (num, name, hotkeys) in self._options:
-            if ( name == None ): # a gap
-                if ( first_item ):
+            if name == None: # a gap
+                if first_item:
                     img = resource.Load_Image("header.jpg")
                     img_r = img.get_rect()
                     img_r.center = bbox.center
@@ -146,10 +146,10 @@ class Menu(object):
                 continue
 
             txt = render.Render(name, 18, (50,200,20), (200,200,0))
-            if ( th == None ):
+            if th == None:
                 th = txt.get_rect().height + ( margin * 2 )
             tw = txt.get_rect().width + ( margin * 2 )
-            if ( tw > max_width ):
+            if tw > max_width:
                 max_width = tw
 
             x = bbox.left + margin 
@@ -195,7 +195,7 @@ class Enhanced_Menu(Menu):
         Menu.__init__(self, menu_options, force_width)
 
     def Enhancement_Interface(self, surf, num, rect, margin):
-        if ( self.pictures.has_key( num ) ):
+        if self.pictures.has_key( num ):
             img = resource.Load_Image( self.pictures[ num ] )
             img_r = img.get_rect()
             img_r.center = rect.center
@@ -248,7 +248,7 @@ class InputMenu(Menu):
             (discard1, discard2,
                 (width_hint, height_hint)) = self._draw((width_hint, height_hint))
 
-            if ( width_hint < 150 ):
+            if width_hint < 150:
                 width_hint = 150
             (self.surf_store, self.control_rects,
                 (discard1, discard2)) = self._draw((width_hint, height_hint))
@@ -315,7 +315,7 @@ class GamesListMenu(Menu):
         (discard1, discard2,
             (width_hint, height_hint)) = self._draw((width_hint, height_hint))
 
-        if ( width_hint < 150 ):
+        if width_hint < 150:
             width_hint = 150
         (self.surf_store, self.control_rects,
             (discard1, discard2)) = self._draw((width_hint, height_hint))

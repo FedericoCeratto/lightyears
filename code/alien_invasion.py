@@ -76,13 +76,13 @@ class Alien_Season(Quiet_Season):
                         if not isinstance(item, City_Node) ]
 
     def Per_Period(self):
-        if ( self.alien_tech_level >= 1.7 ):
+        if self.alien_tech_level >= 1.7:
             # More sophisticated aliens.
             # They replan their strategy before each wave.
             # They also concentrate on a smaller number of good targets.
             self.__Compute_Targets(3)
 
-            if ( not self.t2_announced ):
+            if not self.t2_announced:
                 sound.FX("alient2")
                 self.t2_announced = True
 
@@ -104,7 +104,7 @@ class Alien_Season(Quiet_Season):
         alien_targets = self.target_list[ 0:num_targets ]
         alien_targets.append(dest)
 
-        if ( len(alien_targets) == 1 ):
+        if len(alien_targets) == 1:
             # No targets! Therefore, no aliens.
             return
 
@@ -118,7 +118,7 @@ class Alien_Season(Quiet_Season):
             a.alien_tech_level = self.alien_tech_level
             a.colour1 = (128, 0, 0)
             a.colour2 = (255, 100, 0)
-            if ( self.t2_announced ):
+            if self.t2_announced:
                 # Yellow aliens! Be scared!
                 a.colour1 = (128, 128, 0)
                 a.colour2 = (255, 200, 0)
@@ -141,7 +141,7 @@ class Alien_Season(Quiet_Season):
         for alien in self.alien_list:
             alien.Per_Frame(frame_time)
 
-        if ( self.new_aliens ):
+        if self.new_aliens:
             sound.FX("ring")
             self.new_aliens = False
 
@@ -152,7 +152,7 @@ class Alien_Season(Quiet_Season):
         
     def Get_Extra_Info(self):
         count = len([ x for x in self.alien_list if x.rookie ])
-        if ( count != 0 ):
+        if count != 0:
             return [ ((255,0,0), 16, "Aliens approaching!" )]
         else:
             return []
@@ -185,9 +185,9 @@ class Alien:
 
     def Per_Frame(self, frame_time):
         self.laser = None
-        if ( self.current_target == None ):
+        if self.current_target == None:
             # Retarget.
-            if ( len(self.targets) == 0 ):
+            if len(self.targets) == 0:
                 self.done = True
                 return
             self.current_target = self.targets.pop(0)
@@ -210,7 +210,7 @@ class Alien:
             ty += math.sin(aa) * self.ATTACK_DIST
             ha = self.heading
 
-            if ( self.in_zone ):
+            if self.in_zone:
                 # We're at the target zone.
                 (x,y) = self.pos = (tx,ty)
 
@@ -218,10 +218,10 @@ class Alien:
                 self.attack_angle += self.rotation
                 self.heading += self.rotation
                 self.countdown -= frame_time
-                if ( self.countdown < 0 ):
+                if self.countdown < 0:
                     # time to move on to next target
                     self.current_target = None
-                elif ( self.current_target.Take_Damage(self.alien_tech_level) ):
+                elif self.current_target.Take_Damage(self.alien_tech_level):
                     # Destroyed it!
                     self.net.Destroy(self.current_target, "aliens")
                     self.current_target = None
@@ -230,14 +230,14 @@ class Alien:
                     fire = True
             else:
                 dist = math.hypot(tx - x, ty - y)
-                if ( dist > 0.1 ):
+                if dist > 0.1:
                     # Still en-route to target zone
                     self.speed += self.ACC_PER_SECOND_PER_SECOND 
-                    if ( self.speed > self.MAX_DISTANCE_PER_SECOND ):
+                    if self.speed > self.MAX_DISTANCE_PER_SECOND:
                         self.speed = self.MAX_DISTANCE_PER_SECOND
                     s = float(self.speed) * float(frame_time)
 
-                    if ( s > dist ):
+                    if s > dist:
                         s = dist
 
                     x += math.cos(ha) * s
@@ -254,7 +254,7 @@ class Alien:
                 self.points[ i ] = (int(px), int(py))
                 self.bbox.union_ip(Rect(self.points[ i ], (1,1)))
 
-            if ( fire ):
+            if fire:
                 tgt = Grid_To_Scr(self.current_target.pos)
                 self.laser = (self.points[ 0 ], tgt)
                 self.bbox.union_ip(Rect(tgt, (1,1)))
@@ -266,7 +266,7 @@ class Alien:
     def Draw(self, output, update_area):
         pygame.draw.polygon(output, self.colour1, self.points) 
         pygame.draw.polygon(output, self.colour2, self.points, 1) 
-        if ( self.laser != None ):
+        if self.laser != None:
             (a,b) = self.laser
             pygame.draw.line(output, (255, 255, 255), a, b)
         update_area(self.bbox)

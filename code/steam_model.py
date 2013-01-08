@@ -40,7 +40,7 @@ class Voltage_Model:
             dir = 0
             # Potential difference:
             dv = self.voltage - neighbour.voltage
-            if ( dv >= self.NEGLIGIBLE ):
+            if dv >= self.NEGLIGIBLE:
                 # Current flow:
                 i = dv / resist
                 # Charge flow:
@@ -54,9 +54,9 @@ class Voltage_Model:
         return currents
         
     def __Bound(self):    
-        if ( self.charge < 0 ):
+        if self.charge < 0:
             self.charge = 0
-        elif ( self.charge > self.capacity ):
+        elif self.charge > self.capacity:
             self.charge = self.capacity # vent
             self.venting = True
         else:

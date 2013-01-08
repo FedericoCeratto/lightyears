@@ -47,7 +47,7 @@ AUDIO_TRANS_TBL = {
 
 
 def Path(name, audio=False):
-    if ( audio ):
+    if audio:
         return os.path.join(DATA_DIR,"..","audio",name)
     else:
         return os.path.join(DATA_DIR,name)
@@ -60,7 +60,7 @@ def Load_Image(name, scale_to=None):
 
     key = name
 
-    if ( __img_cache.has_key(key) ):
+    if __img_cache.has_key(key):
         return __img_cache[ key ]
     
     fname = Path(name)
@@ -113,10 +113,10 @@ def Load_Font(size):
 def Load_Sound(name):
     global __snd_cache, __snd_disabled
    
-    if ( __snd_disabled ):
+    if __snd_disabled:
         return None
 
-    if ( __snd_cache.has_key(name) ):
+    if __snd_cache.has_key(name):
         return __snd_cache[ name ]
 
     #print "Caching new sound:",name

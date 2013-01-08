@@ -12,7 +12,7 @@ NUM_SLOTS = 10
 def Make_Save_Name(num):
     name = "save" + str(num) + ".dat"
     home = extra.Get_Home()
-    if ( home == None ):
+    if home == None:
         return name
     else:
         return os.path.join(home, ".lightyears." + name)
@@ -29,14 +29,14 @@ def Load(g, num):
         print y
         return (None, y)
     
-    if ( g2.version != g.version ):
+    if g2.version != g.version:
         return (None, "Restore error: wrong version")
 
     return (g2, None)
     
 def Save(g, num, label):
     l = len(label)
-    if ( l > HEADER_SIZE ):
+    if l > HEADER_SIZE:
         label = label[ 0:HEADER_SIZE ]
     else:
         label += ( " " * ( HEADER_SIZE - l ))
@@ -63,7 +63,7 @@ def Get_Info(num):
         # File not found, probably.. who cares.
         return None
 
-    if ( len(label) == 0 ):
+    if len(label) == 0:
         return None
     return label
 

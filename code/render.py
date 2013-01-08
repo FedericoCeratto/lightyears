@@ -13,7 +13,7 @@ import stats
 def Render(text, size, colour, hcolour):
    
     i = text.find('&')
-    if ( i < 0 ):
+    if i < 0:
         # not found, do normal render
         return stats.Get_Font(size).render(text, True, colour)
 

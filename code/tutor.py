@@ -45,7 +45,7 @@ def City_Selected():
         False)
 
 def Steam_Maker_Selected(first):
-    if ( first ):
+    if first:
         Message("citysel", "steamsel",
             "The First Steam Maker",
             "You have just selected a Steam Maker. " +
@@ -130,7 +130,7 @@ def Node_Selected():
         False)
 
 def Number_Of_Pipes_Is(pipe_count):
-    if ( pipe_count >= 5 ):
+    if pipe_count >= 5:
         Message("makinglinks", "networkbasics",
             "Almost There...",
             "Excellent. Your network is now strong enough to withstand " +
@@ -227,44 +227,44 @@ def Aliens_Gone():
 
 def Notify_Select(item):
     global __tutor
-    if ( __tutor == None ):
+    if __tutor == None:
         return
 
-    if ( isinstance(item, Node) ):
+    if isinstance(item, Node):
         Any_Node_Selected()
 
 
-    if ( isinstance(item, City_Node) ):
+    if isinstance(item, City_Node):
         City_Selected()
         City_Selected_2()
-    elif ( isinstance(item, Well_Node) ):
+    elif isinstance(item, Well_Node):
         first = item.tutor_special
         Steam_Maker_Selected(first) # note change of terminology :(
-    elif ( isinstance(item, Node) ):
+    elif isinstance(item, Node):
         Node_Selected()
-    elif ( isinstance(item, Pipe) ):
+    elif isinstance(item, Pipe):
         Pipe_Selected()
         Pipe_Selected_2()
-    elif ( item == None ):
+    elif item == None:
         Nothing_Selected()
 
 def Notify_Add_Pipe():
     global __tutor
-    if ( __tutor == None ):
+    if __tutor == None:
         return
 
     Pipe_Added()
 
 def Notify_Add_Node(n):
     global __tutor
-    if ( __tutor == None ):
+    if __tutor == None:
         return
 
     #Node_Added(n)
 
 def Examine_Game(g):
     global __tutor
-    if ( __tutor == None ):
+    if __tutor == None:
         return
 
     # test 1 - are all nodes finished?
@@ -272,11 +272,11 @@ def Examine_Game(g):
     for n in g.net.node_list:
         all_finished = all_finished and ( not n.Needs_Work() )
 
-    if ( all_finished ):
+    if all_finished:
         All_Nodes_Finished()
 
     # test 2 - has the city begun an upgrade?
-    if ( g.net.hub.city_upgrade != 0 ):
+    if g.net.hub.city_upgrade != 0:
         City_Upgrade_Running()
 
     # test 3 - number of pipes.
@@ -286,7 +286,7 @@ def Examine_Game(g):
             pipe_count += 1
 
     # test 4 - season
-    if ( g.season in [ SEASON_STORM , SEASON_QUAKE ] ):
+    if g.season in [ SEASON_STORM , SEASON_QUAKE ]:
         Aliens_Gone()
         g.game_running = False
 
@@ -300,20 +300,20 @@ def Message(previous_msg_name, this_msg_name,
             title, text, sf):
     global __tutor
     t = __tutor
-    if ( t != None ):
+    if t != None:
         t.Add_Message((previous_msg_name, this_msg_name,
                 title, text, sf))
 
 def Draw(screen, g):
     global __tutor
     t = __tutor
-    if ( t != None ):
+    if t != None:
         t.Draw(screen, g)
 
 def Permit_Season_Change():
     global __tutor
     t = __tutor
-    if ( t != None ):
+    if t != None:
         return t.Permit_Season_Change()
     else:
         return True
@@ -328,7 +328,7 @@ def Active():
 def Has_Changed():
     global __tutor
     t = __tutor
-    if ( t != None ):
+    if t != None:
         x = t.update
         t.update = False
         return x
@@ -348,7 +348,7 @@ class Tutor_Memory:
     def Add_Message(self,(previous_msg_name, this_msg_name,
                 title, text, sf)):
 
-        if ( self.current_msg_name == previous_msg_name ):
+        if self.current_msg_name == previous_msg_name:
             self.current_msg_name = this_msg_name
             self.current_msg_surf = self.__Draw(title, text)
             self.current_msg_popup = True
@@ -359,7 +359,7 @@ class Tutor_Memory:
         return self.permit_season_change
 
     def Draw(self, screen, g):
-        if ( self.current_msg_popup ):
+        if self.current_msg_popup:
             r = self.current_msg_surf.get_rect()
             r.top = r.left = 30
             screen.blit(self.current_msg_surf, r)
@@ -405,7 +405,7 @@ class Tutor_Memory:
                 i = j
                 newline = True
 
-            if ( i < 0 ):
+            if i < 0:
                 i = len(text)
 
             word = text[ : i ] + " "
@@ -424,7 +424,7 @@ class Tutor_Memory:
             x = tsurf_r.right
             height = tsurf_r.bottom + margin
 
-            if ( newline ):
+            if newline:
                 x = margin
                 y = tsurf_r.bottom + newline_gap
 

@@ -20,7 +20,7 @@ def Intersect(((xa1,ya1),(xa2,ya2)),((xb1,yb1),(xb2,yb2))):
     yb = yb2 - yb1
 
     a = ( xa * yb ) - ( xb * ya )
-    if ( a == 0 ):
+    if a == 0:
         return None
 
     b = ((( xa * ya1 ) + ( xb1 * ya ) - ( xa1 * ya )) - ( xa * yb1 )) 
@@ -29,8 +29,8 @@ def Intersect(((xa1,ya1),(xa2,ya2)),((xb1,yb1),(xb2,yb2))):
     if (( tb <= 0 ) or ( tb >= 1 )):
         return None # doesn't intersect
 
-    if ( xa == 0 ):
-        if ( ya == 0 ):
+    if xa == 0:
+        if ya == 0:
             return None # you've confused a line with a point.
         ta = ( yb1 + ( yb * tb ) - ya1 ) / float(ya)
     else:
@@ -80,7 +80,7 @@ def Test():
     for i in xrange(10000):
         Rnd()
 
-if ( __name__ == "__main__" ):
+if __name__ == "__main__":
     Test() 
             
 

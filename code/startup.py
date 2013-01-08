@@ -9,7 +9,7 @@ import sys
 
 def Check_Version():
     fault = False
-    if ( sys.__dict__.has_key("version_info" ) ):
+    if sys.__dict__.has_key("version_info" ):
         (major, minor, micro, releaselevel, serial) = sys.version_info
         if (( major < 2 )
         or (( major == 2 ) and ( minor < 4 ))):
@@ -19,7 +19,7 @@ def Check_Version():
         minor = 0
         fault = True
 
-    if ( fault ):
+    if fault:
         print ""
         print "Python 2 version 2.4 or higher is required."
         print "You appear to be using version",(str(major) + "." + str(minor))

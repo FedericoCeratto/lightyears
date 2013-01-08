@@ -233,33 +233,33 @@ class Network(object):
         gpos = item.pos
         assert isinstance(gpos[0], int)
         assert isinstance(gpos[1], int)
-        if ( item.Is_Destroyed() ):
-            if ( not inhibit_effects ):
+        if item.Is_Destroyed():
+            if not inhibit_effects:
                 New_Mail("Item is destroyed.")
             return False
 
-        if ( self.pipe_grid.has_key(gpos) ):
+        if self.pipe_grid.has_key(gpos):
             # There might be a pipe in the way. Then again,
             # it may have been destroyed already.
             for pipe in self.pipe_grid[ gpos ]:
-                if ( pipe.Is_Destroyed() ):
+                if pipe.Is_Destroyed():
                     continue
 
                 if ( extra.Intersect_Grid_Square(gpos, 
                             (pipe.n1.pos, pipe.n2.pos)) ):
-                    if ( not inhibit_effects ):
+                    if not inhibit_effects:
                         New_Mail("Can't build there - pipe in the way!")
                         sound.FX("error")
                     return False
 
         if (( self.ground_grid.has_key(gpos) )
         and ( isinstance(self.ground_grid[ gpos ], Building) )):
-            if ( not inhibit_effects ):
+            if not inhibit_effects:
                 New_Mail("Can't build there - building in the way!")
                 sound.FX("error")
             return False
 
-        if ( isinstance(item, Node) ):
+        if isinstance(item, Node):
             self.node_list.append(item)
             if ( self.ground_grid.has_key( gpos )):
                 item.Save(self.ground_grid[ gpos ])
@@ -290,7 +290,7 @@ class Network(object):
         while ( len(now) != 0 ):
             next = set([])
             for node in now:
-                if ( node.connection_value < cv ):
+                if node.connection_value < cv:
                     if (( work_points > 0 ) and node.Needs_Work() ):
                         if self._multiplayer:
                             node.Do_Work(broadcast_update=self._multiplayer.broadcast)
@@ -390,7 +390,7 @@ class Network(object):
 
     def Add_Pipe(self, n1, n2):
 
-        if ( n1.Is_Destroyed() or n2.Is_Destroyed() ):
+        if n1.Is_Destroyed() or n2.Is_Destroyed():
             sound.FX("error")
             New_Mail("Nodes are destroyed.")
             return False
@@ -401,18 +401,18 @@ class Network(object):
         other_pipes = set([])
         other_items = set([])
         for gpos in path:
-            if ( self.pipe_grid.has_key(gpos) ):
+            if self.pipe_grid.has_key(gpos):
                 other_pipes |= set(self.pipe_grid[ gpos ])
-            elif ( self.ground_grid.has_key(gpos) ):
+            elif self.ground_grid.has_key(gpos):
                 other_items |= set([self.ground_grid[ gpos ]])
         other_items -= set([n1,n2])
-        if ( len(other_items) != 0 ):
+        if len(other_items) != 0:
             sound.FX("error")
             New_Mail("Pipe collides with other items.")
             return False
 
         for p in other_pipes:
-            if ( not p.Is_Destroyed () ):
+            if not p.Is_Destroyed ():
                 if ((( p.n1 == n1 ) and ( p.n2 == n2 ))
                 or (( p.n1 == n2 ) and ( p.n2 == n1 ))):
                     sound.FX("error")
@@ -453,14 +453,14 @@ class Network(object):
         self.pipe_list.append(pipe)
 
         for gpos in path:
-            if ( not self.pipe_grid.has_key(gpos) ):
+            if not self.pipe_grid.has_key(gpos):
                 self.pipe_grid[ gpos ] = [pipe]
             else:
                 self.pipe_grid[ gpos ].append(pipe)
         return True
 
     def Get_Pipe(self, gpos):
-        if ( not self.pipe_grid.has_key(gpos) ):
+        if not self.pipe_grid.has_key(gpos):
             return None
         l = self.pipe_grid[ gpos ]
 
@@ -469,12 +469,12 @@ class Network(object):
 
         # Did it change? Save it again if it did,
         # to save future recomputation.
-        if ( len(l2) != len(l) ):
+        if len(l2) != len(l):
             self.pipe_grid[ gpos ] = l = l2
 
-        if ( len(l) == 0 ):
+        if len(l) == 0:
             return None
-        elif ( len(l) == 1 ):
+        elif len(l) == 1:
             return l[ 0 ]
         else:
             # Juggle list
@@ -487,7 +487,7 @@ class Network(object):
         return True
        
     def Destroy(self, node, by=None):
-        if ( isinstance(node, Pipe) ):
+        if isinstance(node, Pipe):
             self.__Destroy_Pipe(node)
             return
 
@@ -497,21 +497,21 @@ class Network(object):
 
         sound.FX("destroy")
 
-        if ( isinstance(node, Node) ):
+        if isinstance(node, Node):
             # work on a copy, as __Destroy_Pipe will change the list.
             pipe_list = [ pipe for pipe in node.pipes ]
             for pipe in pipe_list:
                 self.__Destroy_Pipe(pipe)
 
         gpos = node.pos
-        if ( not self.ground_grid.has_key( gpos ) ):
+        if not self.ground_grid.has_key( gpos ):
             return # not on map
-        if ( self.ground_grid[ gpos ] != node ):
+        if self.ground_grid[ gpos ] != node:
             return # not on map (something else is there)
 
         self.dirty = True
 
-        if ( by != None ):
+        if by != None:
             New_Mail(node.name_type + " destroyed by " + by + ".")
         
 
@@ -519,7 +519,7 @@ class Network(object):
         self.__List_Destroy(self.node_list, node)
         rnode = node.Restore()
 
-        if ( rnode == None ):
+        if rnode == None:
             del self.ground_grid[ gpos ]
         else:
             self.ground_grid[ gpos ] = rnode
@@ -534,17 +534,17 @@ class Network(object):
 
         #path = bresenham.Line(pipe.n1.pos, pipe.n2.pos)
         #for gpos in path:
-        #    if ( self.pipe_grid.has_key(gpos) ):
+        #    if self.pipe_grid.has_key(gpos):
         #        l = self.pipe_grid[ gpos ]
         #        self.__List_Destroy(l, pipe)
-        #        if ( len(l) == 0 ):
+        #        if len(l) == 0:
         #            del self.pipe_grid[ gpos ]
 
    
     def __List_Destroy(self, lst, itm):
         l = len(lst)
         for i in reversed(xrange(l)):
-            if ( lst[ i ] == itm ):
+            if lst[ i ] == itm:
                 assert itm == lst.pop(i)
 
     def Make_Well(self, teaching=False, inhibit_effects=False):
@@ -554,8 +554,8 @@ class Network(object):
         while True:
             x = random.randint(0, mx - 1)
             y = random.randint(0, my - 1)
-            if ( teaching ):
-                if ( x < cx ):
+            if teaching:
+                if x < cx:
                     x += cx
             # occupied
             if self.ground_grid.has_key((x,y)):

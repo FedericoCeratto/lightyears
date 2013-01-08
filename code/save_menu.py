@@ -14,10 +14,10 @@ class Save_Menu(menu.Menu):
         for i in xrange(save_game.NUM_SLOTS):
             label = save_game.Get_Info(i)
             j = i
-            if ( label == None ):
+            if label == None:
                 x = " " * 10
                 label = x + " -- Unused slot -- " + x
-                if ( not saving ):
+                if not saving:
                     j = - ( i + 100 ) # can't load this one! assign silly value
 
             label = ( "%2d. " % ( i + 1 )) + label

@@ -40,7 +40,7 @@ def Intersect_Grid_Square(gpos, (a,b)):
     x -= 0.5
     y -= 0.5
     for (c,d) in [ ((x,y), (x+1,y+1)), ((x+1,y),(x,y+1)) ]:
-        if ( intersect.Intersect((a,b), (c,d)) != None ):
+        if intersect.Intersect((a,b), (c,d)) != None:
             return True
 
     return False
@@ -67,7 +67,7 @@ def Edge_Effect(output, rect):
 def Line_Edging(screen, r, deflate):
     for c in [ (75, 63, 31), (125, 99, 30), (160, 120, 40), (75, 63, 31), (0, 0, 0) ]:
         pygame.draw.rect(screen, c, r, 1)
-        if ( deflate ):
+        if deflate:
             r = r.inflate(-2,-2)
         else:
             r = r.inflate(2,2)
@@ -86,7 +86,7 @@ def Make_Quake_SF_Points(off):
     (w,h) = GRID_SIZE
 
     while ( crosses_centre ):
-        if ( random.randint(0,1) == 0 ):
+        if random.randint(0,1) == 0:
             start = (random.randint(0,w - 1), -off)
             finish = (random.randint(0,w - 1), h + off)
         else:
@@ -113,9 +113,9 @@ def Simple_Menu_Loop(screen, current_menu, (x,y)):
         while ( e.type != NOEVENT ):
             if e.type == QUIT:
                 quit = True
-            elif ( e.type == MOUSEBUTTONDOWN ):
+            elif e.type == MOUSEBUTTONDOWN:
                 current_menu.Mouse_Down(e.pos)
-            elif ( e.type == MOUSEMOTION ):
+            elif e.type == MOUSEMOTION:
                 current_menu.Mouse_Move(e.pos)
             elif e.type == KEYDOWN:
                 current_menu.Key_Press(e.key)
@@ -133,11 +133,11 @@ def Get_OS():
     # On my machine, sys.platform reports 'linux2'. Remove digits.
     pf = sys.platform.title()
     for i in xrange(len(pf)):
-        if ( not pf[ i ].isalpha() ):
+        if not pf[ i ].isalpha():
             pf = pf[0:i]
             break
 
-    if ( pf == 'Win' ):
+    if pf == 'Win':
         pf = 'Windows'
     return pf
 
@@ -152,7 +152,7 @@ def Get_System_Info():
 def Get_Home():
     for i in [ "HOME", "APPDATA" ]:
         home = os.getenv(i)
-        if ( home != None ):
+        if home != None:
             return home
     return None
 

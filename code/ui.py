@@ -233,16 +233,16 @@ class User_Interface:
         #)
 
     def Update_Area(self, area):
-        if ( area != None ):
+        if area != None:
             self.partial_update = True
 
             # pygame.Rect is rather good.
 
-            if ( len(self.update_area_list) == 0 ):
+            if len(self.update_area_list) == 0:
                 self.update_area_list = [area]
             else:
                 ci = area.collidelist(self.update_area_list)
-                if ( ci < 0 ):
+                if ci < 0:
                     # New area!
                     self.update_area_list.append(area)
                 else:
@@ -252,7 +252,7 @@ class User_Interface:
     def Draw_Game(self, output, season_fx):
         blink = self.blink
 
-        if ( season_fx.Is_Shaking() and not self.Is_Menu_Open() ):
+        if season_fx.Is_Shaking() and not self.Is_Menu_Open():
             # Earthquake effect
             m = 6
             r = output.get_rect()
@@ -261,7 +261,7 @@ class User_Interface:
             r = output.get_rect().clip(r)
             output = output.subsurface(r)
 
-        if ( self.net.dirty ):
+        if self.net.dirty:
             self.net.dirty = False
 
         output.blit(self.background,(0,0))
@@ -272,7 +272,7 @@ class User_Interface:
             w.Draw(output)
             self.Add_Steam_Effect(output, w.pos)
 
-        if ( self.selection != None ):
+        if self.selection != None:
             # highlight selection
             r = self.selection.Draw_Selected(output, (blink, blink, 0))
             self.Update_Area(r)
@@ -282,7 +282,7 @@ class User_Interface:
 
         for n in self.net.node_list:
             n.Draw(output)
-            if ( n.emits_steam ):
+            if n.emits_steam:
                 self.Add_Steam_Effect(output, n.pos)
 
         for r in self.net.rock_list:
@@ -295,8 +295,8 @@ class User_Interface:
 
 
         gpos = self.mouse_pos
-        if ( gpos != None ):
-            if ( self.mode == BUILD_NODE ):
+        if gpos != None:
+            if self.mode == BUILD_NODE:
                 # could put a node here.
                 r = Grid_To_Scr_Rect(gpos)
                 self.Update_Area(r)
@@ -326,7 +326,7 @@ class User_Interface:
                 ep = Grid_To_Scr(gpos)
                 colour = (80,80,50)
 
-                if ( not self.net.Pipe_Possible(self.selection.pos, gpos) ):
+                if not self.net.Pipe_Possible(self.selection.pos, gpos):
                     colour = (100,0,0)
 
                 r = Rect(sp,(2,2)).union(Rect(ep,(2,2)))
@@ -340,17 +340,17 @@ class User_Interface:
 
         mail.Draw_Mail(output)
 
-        if ( not self.Is_Menu_Open () ):
+        if not self.Is_Menu_Open ():
             self.blink = 0x80 | ( 0xff & ( self.blink + 0x10 ))
             self.steam_effect_frame = ( 
                 self.steam_effect_frame + 1 ) % len(self.steam_effect)
 
-        if ( DEBUG_GRID ):
+        if DEBUG_GRID:
             self.Debug_Grid(output)
 
     def Draw_Selection(self, output):
         output.fill((20,0,0))
-        if ( self.selection != None ):
+        if self.selection != None:
             r = output.get_rect()
             r.center = Grid_To_Scr(self.selection.pos)
 
@@ -361,15 +361,15 @@ class User_Interface:
                 n.Draw_Mini(output, r.topleft)
 
     def Draw_Stats(self, output, default_stats):
-        if ( self.selection == None ):
+        if self.selection == None:
             l = default_stats
         else:
             l = self.selection.Get_Information()
-            if ( not self.net.Is_Connected(self.selection) ):
+            if not self.net.Is_Connected(self.selection):
                 l += [ ((255,0,0), 15, "Not connected to network") ]
 
         h = hash(str(l))
-        if ( h != self.stats_hash ):
+        if h != self.stats_hash:
             # Stats have changed.
             output.fill((0,0,0))
             stats.Draw_Stats_Window(output, l)
@@ -377,7 +377,7 @@ class User_Interface:
 
         
     def Draw_Controls(self, output):
-        if ( self.control_menu == None ):
+        if self.control_menu == None:
             self.__Make_Control_Menu(output.get_rect().width)
 
         # draw city pressure gauge
@@ -408,26 +408,26 @@ class User_Interface:
         self.control_menu.Draw(output, top=5*Get_Grid_Size())
 
     def Control_Mouse_Move(self, spos):
-        if ( self.control_menu != None ):
+        if self.control_menu != None:
             self.control_menu.Mouse_Move(spos)
 
     def Control_Mouse_Down(self, spos):
-        if ( self.control_menu != None ):
+        if self.control_menu != None:
             self.control_menu.Mouse_Down(spos)
             self.mode = self.control_menu.Get_Command()
 
-            if ( self.selection != None ):
-                if ( self.mode == DESTROY ):
+            if self.selection != None:
+                if self.mode == DESTROY:
                     self.net.Destroy(self.selection)
                     self.__Clear_Control_Selection()
                     self.selection = None
 
-                elif ( self.mode == UPGRADE ):
+                elif self.mode == UPGRADE:
                     self.selection.Begin_Upgrade()
                     self.__Clear_Control_Selection()
 
     def Key_Press(self, k):
-        if ( self.control_menu != None ):
+        if self.control_menu != None:
             self.control_menu.Key_Press(k)
             self.mode = self.control_menu.Get_Command()
 
@@ -438,7 +438,7 @@ class User_Interface:
 
     def __Clear_Control_Selection(self):
         self.mode = NEUTRAL
-        if ( self.control_menu != None ):
+        if self.control_menu != None:
             self.control_menu.Select(NEUTRAL)
 
     def Reset(self):
@@ -537,48 +537,48 @@ class User_Interface:
         and ( self.selection.Is_Destroyed() )):
             self.selection = None
 
-        if ( DEBUG ):
+        if DEBUG:
             print 'Selection:',self.selection
             for (i,n) in enumerate(self.net.node_list):
-                if ( n == self.selection ):
+                if n == self.selection:
                     print 'Found: node',i
             for (i,p) in enumerate(self.net.pipe_list):
-                if ( p == self.selection ):
+                if p == self.selection:
                     print 'Found: pipe',i
             print 'End'
 
 
-        if ( not self.net.ground_grid.has_key(gpos) ):
+        if not self.net.ground_grid.has_key(gpos):
             self.selection = self.net.Get_Pipe(gpos)
 
             # empty (may contain pipes)
-            if ( self.mode == BUILD_NODE ):
+            if self.mode == BUILD_NODE:
                 # create new node (not a well), if possible
                 self._build_node(gpos, tutor)
 
-            elif ( self.mode == DESTROY ):
+            elif self.mode == DESTROY:
                 # I presume you are referring to a pipe?
                 pipe = self.selection
-                if ( pipe != None ):
+                if pipe != None:
                     self.net.Destroy(pipe)
                     self.__Clear_Control_Selection()
                 self.selection = None
 
-            elif ( self.mode == UPGRADE ):
-                if ( self.selection != None ):
+            elif self.mode == UPGRADE:
+                if self.selection != None:
 
                     if self.net.use_metal('up_node'):
                         self.selection.Begin_Upgrade()
                         self.__Clear_Control_Selection()
 
-            elif ( self.selection != None ):
+            elif self.selection != None:
                 self.selection.Sound_Effect()
                 
         elif ( isinstance(self.net.ground_grid[ gpos ], Node)):
             # Contains node
 
             n = self.net.ground_grid[ gpos ]
-            if ( self.mode == BUILD_PIPE ):
+            if self.mode == BUILD_PIPE:
                 if (( self.selection == None )
                 or ( isinstance(self.selection, Pipe))):
                     # start a new pipe here
@@ -591,12 +591,12 @@ class User_Interface:
                     # end pipe here
                     self._build_pipe(self.selection, n, tutor)
 
-            elif ( self.mode == DESTROY ):
+            elif self.mode == DESTROY:
                 self.net.Destroy(n)
                 self.selection = None
                 self.__Clear_Control_Selection()
 
-            elif ( self.mode == UPGRADE ):
+            elif self.mode == UPGRADE:
                 if self.net.use_metal('up_node'):
                     n.Begin_Upgrade()
                 self.selection = n
@@ -609,7 +609,7 @@ class User_Interface:
         elif ( isinstance(self.net.ground_grid[ gpos ], Well)):
             # Contains well (unimproved)
             w = self.net.ground_grid[ gpos ]
-            if ( self.mode == BUILD_NODE ):
+            if self.mode == BUILD_NODE:
                 # A node is planned on top of the well, if possible.
                 self._build_node_on_well(gpos, tutor)
 
@@ -625,14 +625,14 @@ class User_Interface:
 
     def Game_Mouse_Move(self, spos):
         self.mouse_pos = Scr_To_Grid(spos)
-        if ( self.control_menu != None ):
+        if self.control_menu != None:
             self.control_menu.Mouse_Move(None)
 
     def Debug_Grid(self, output):
         (mx, my) = GRID_SIZE
         for y in xrange(my):
             for x in xrange(mx):
-                if ( self.net.pipe_grid.has_key( (x,y) ) ):
+                if self.net.pipe_grid.has_key( (x,y) ):
                     r = Grid_To_Scr_Rect((x,y))
                     pygame.draw.rect(output, (55,55,55), r, 1)
                     r.width = len(self.net.pipe_grid[ (x,y) ]) + 1

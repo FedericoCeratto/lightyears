@@ -94,7 +94,7 @@ class Difficulty:
     
     def Set(self, level):
         import menu
-        if ( level in [ menu.Menu.beginner , menu.Menu.tutorial ] ):
+        if level in [ menu.Menu.beginner , menu.Menu.tutorial ]:
             self.DAMAGE_FACTOR = 1.0
             self.CITY_UPGRADE_WORK_PER_LEVEL = 2
             self.GRACE_TIME = 20
@@ -103,7 +103,7 @@ class Difficulty:
             self.STEAM_PRODUCTION_PER_LEVEL = 6
             self.ROCK_QUANTITY = 3000
 
-        elif ( level in [ menu.Menu.intermediate, menu.Menu.peaceful ] ):
+        elif level in [ menu.Menu.intermediate, menu.Menu.peaceful ]:
             self.DAMAGE_FACTOR = 1.4
             self.CITY_UPGRADE_WORK_PER_LEVEL = 3
             self.GRACE_TIME = 10
@@ -112,7 +112,7 @@ class Difficulty:
             self.STEAM_PRODUCTION_PER_LEVEL = 4
             self.ROCK_QUANTITY = 2000
 
-        elif ( level == menu.Menu.expert ):
+        elif level == menu.Menu.expert:
             self.DAMAGE_FACTOR = 1.7
             self.CITY_UPGRADE_WORK_PER_LEVEL = 4
             self.GRACE_TIME = 5

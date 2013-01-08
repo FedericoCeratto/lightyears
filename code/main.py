@@ -167,7 +167,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
     # Further initialisation
     menu_image = resource.Load_Image("mainmenu.jpg")
 
-    if ( menu_image.get_rect().width != width ):
+    if menu_image.get_rect().width != width:
         menu_image = pygame.transform.scale(menu_image, (width, height))
 
     stats.Set_Font_Scale(config.cfg.font_scale)
@@ -288,7 +288,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
         y = 5
         sz = 11
         for text in copyright:
-            if ( text == None ):
+            if text == None:
                 sz = 7
                 continue
             img = stats.Get_Font(sz).render(text, True, (200, 200, 128))
@@ -302,31 +302,31 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
         (quit, cmd) = extra.Simple_Menu_Loop(screen, current_menu,
                 (( width * 3 ) / 4, 10 + ( height / 2 )))
 
-        if ( current_menu == main_menu ):
-            if ( cmd == menu.Menu.new_game ):
+        if current_menu == main_menu:
+            if cmd == menu.Menu.new_game:
                 current_menu = difficulty_menu
 
-            if ( cmd == menu.Menu.multiplayer_game ):
+            if cmd == menu.Menu.multiplayer_game:
                 current_menu = new_multiplayer_menu
 
-            elif ( cmd == menu.Menu.tutorial ):
+            elif cmd == menu.Menu.tutorial:
                 quit = game.Main_Loop().run(screen, clock, 
                         (width,height), None, menu.Menu.tutorial)
 
-            elif ( cmd == menu.Menu.load ):
+            elif cmd == menu.Menu.load:
                 current_menu = save_menu.Save_Menu(False)
 
-            elif ( cmd == menu.Menu.quit ):
+            elif cmd == menu.Menu.quit:
                 quit = True
 
-            elif ( cmd == menu.Menu.mute ):
+            elif cmd == menu.Menu.mute:
                 config.cfg.mute = not config.cfg.mute
                 return False # update menu
 
-            elif ( cmd == menu.Menu.res ):
+            elif cmd == menu.Menu.res:
                 current_menu = resolution_menu
 
-            elif ( cmd == menu.Menu.updates ):
+            elif cmd == menu.Menu.updates:
                 if Update_Feature(screen, menu_image):
                     url = ( CGISCRIPT + "v=" +
                             startup.Get_Game_Version() )
@@ -337,7 +337,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                     except:
                         pass
 
-            elif ( cmd == menu.Menu.manual ):
+            elif cmd == menu.Menu.manual:
                 pygame.display.iconify()
                 if os.path.isfile(DEB_MANUAL):
                     # Debian manual present
@@ -358,18 +358,18 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                     pass
                 
                 
-        elif ( cmd != None ):
-            if ( current_menu == resolution_menu ):
+        elif cmd != None:
+            if current_menu == resolution_menu:
                 for (w, h, fs) in RESOLUTIONS:
-                    if ( w == cmd ):
+                    if w == cmd:
                         config.cfg.resolution = (w, h)
                         resolution = config.cfg.resolution
                         config.cfg.font_scale = fs
                         # change res - don't quit
                         return False
 
-            elif ( current_menu == difficulty_menu ):
-                if ( cmd >= 0 ):
+            elif current_menu == difficulty_menu:
+                if cmd >= 0:
                     quit = game.Main_Loop().run(screen, clock, 
                             (width,height), None, cmd)
 
@@ -462,7 +462,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
 
 
             else: # Load menu
-                if ( cmd >= 0 ):
+                if cmd >= 0:
                     # Start game from saved position
                     quit = game.Main_Loop().run(screen, clock, 
                             (width,height), cmd, None)
@@ -488,7 +488,7 @@ def Update_Feature(screen, menu_image):
         pygame.display.flip()
 
     def Finish(cerror=None):
-        if ( cerror != None ):
+        if cerror != None:
             Message(["Connection error:", cerror])
 
         ok = True
@@ -538,7 +538,7 @@ def Update_Feature(screen, menu_image):
             Finish("Version data is incorrect.")
             return False
 
-    if ( new_version == startup.Get_Game_Version() ):
+    if new_version == startup.Get_Game_Version():
         Message(["Your software is up to date!",
             "Thankyou for using the update feature."])
         Finish(None)
