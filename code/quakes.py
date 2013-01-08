@@ -103,7 +103,7 @@ class Quake_Season(Quiet_Season):
             # Any pipes that intersect gpos1 and gpos2 are destroyed.
             for pipe in self.net.pipe_list:
                 if ( intersect.Intersect((pipe.n1.pos,pipe.n2.pos),
-                        (gpos1, gpos2)) != None ):
+                        (gpos1, gpos2)) is not None ):
                     destroy_pipes |= set([ pipe ])
 
         for pipe in destroy_pipes:

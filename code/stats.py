@@ -21,7 +21,7 @@ def Draw_Stats_Window(output, stats_tuple_list):
     global __font_objects
 
     for (colour, size, text) in stats_tuple_list:
-        if size == None:
+        if size is None:
             # Draw a bar meter instead!
             assert type(text) == tuple
             items = [ text ]

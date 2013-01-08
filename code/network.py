@@ -419,7 +419,7 @@ class Network(object):
                     New_Mail("There is already a pipe there.")
                     return False
                 if ( intersect.Intersect((p.n1.pos,p.n2.pos),
-                            (n1.pos,n2.pos)) != None ):
+                            (n1.pos,n2.pos)) is not None ):
                     sound.FX("error")
                     New_Mail("That crosses an existing pipe.")
                     return False
@@ -511,7 +511,7 @@ class Network(object):
 
         self.dirty = True
 
-        if by != None:
+        if by is not None:
             New_Mail(node.name_type + " destroyed by " + by + ".")
         
 
@@ -519,7 +519,7 @@ class Network(object):
         self.__List_Destroy(self.node_list, node)
         rnode = node.Restore()
 
-        if rnode == None:
+        if rnode is None:
             del self.ground_grid[ gpos ]
         else:
             self.ground_grid[ gpos ] = rnode

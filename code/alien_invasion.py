@@ -185,7 +185,7 @@ class Alien:
 
     def Per_Frame(self, frame_time):
         self.laser = None
-        if self.current_target == None:
+        if self.current_target is None:
             # Retarget.
             if len(self.targets) == 0:
                 self.done = True
@@ -266,7 +266,7 @@ class Alien:
     def Draw(self, output, update_area):
         pygame.draw.polygon(output, self.colour1, self.points) 
         pygame.draw.polygon(output, self.colour2, self.points, 1) 
-        if self.laser != None:
+        if self.laser is not None:
             (a,b) = self.laser
             pygame.draw.line(output, (255, 255, 255), a, b)
         update_area(self.bbox)

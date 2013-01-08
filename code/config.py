@@ -26,7 +26,7 @@ def Initialise(delete_file):
     global cfg, FILENAME
 
     home = extra.Get_Home()
-    if home == None:
+    if home is None:
         FILENAME = "config.dat"
     else:
         FILENAME = os.path.join(home, ".lightyears.cfg")

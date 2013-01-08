@@ -40,7 +40,7 @@ def Intersect_Grid_Square(gpos, (a,b)):
     x -= 0.5
     y -= 0.5
     for (c,d) in [ ((x,y), (x+1,y+1)), ((x+1,y),(x,y+1)) ]:
-        if intersect.Intersect((a,b), (c,d)) != None:
+        if intersect.Intersect((a,b), (c,d)) is not None:
             return True
 
     return False
@@ -105,7 +105,7 @@ def Simple_Menu_Loop(screen, current_menu, (x,y)):
     cmd = None
     quit = False
 
-    while (( cmd == None ) and not quit ):
+    while (( cmd is None ) and not quit ):
         current_menu.Draw(screen, (x,y))
         pygame.display.flip()
 
@@ -152,7 +152,7 @@ def Get_System_Info():
 def Get_Home():
     for i in [ "HOME", "APPDATA" ]:
         home = os.getenv(i)
-        if home != None:
+        if home is not None:
             return home
     return None
 

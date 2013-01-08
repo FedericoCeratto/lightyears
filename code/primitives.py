@@ -274,7 +274,7 @@ class Point(object):
         return "Vector {%.3f, %.3f}" % (self.x, self.y)
 
     def set_polar(self, angle=None, modulo=None):
-        if modulo == None:
+        if modulo is None:
             modulo = self.modulo
         x = math.sin(angle) * modulo
         y = math.cos(angle) * modulo

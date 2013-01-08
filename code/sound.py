@@ -13,14 +13,14 @@ import resource, config
 
 def FX(name):
     s = resource.Load_Sound(name) # (comes from a cache)
-    if ( s != None ) and not config.cfg.mute:
+    if ( s is not None ) and not config.cfg.mute:
         s.play()
 
 
 class Persisting_Sound:
     def __init__(self, name, secondary=None):
         self.sobj = resource.Load_Sound(name)
-        if secondary != None:
+        if secondary is not None:
             # A different, less annoying mode.
             self.sobj2 = resource.Load_Sound(secondary)
         else: 
@@ -29,8 +29,8 @@ class Persisting_Sound:
         self.schan = None
 
     def Set(self, volume):
-        if (( self.sobj == None )
-        or ( self.sobj2 == None )):
+        if (( self.sobj is None )
+        or ( self.sobj2 is None )):
             return
 
         if config.cfg.mute:
@@ -42,7 +42,7 @@ class Persisting_Sound:
         else:
             self.sobj.set_volume(volume)
             self.sobj2.set_volume(volume)
-            if (( self.schan == None )
+            if (( self.schan is None )
             or ( not ( self.schan.get_sound() 
                             in [ self.sobj , self.sobj2 ] ))):
                 self.schan = self.sobj.play()
@@ -50,9 +50,9 @@ class Persisting_Sound:
                 self.schan.queue(self.sobj2)
 
     def Fade_Out(self):
-        if (( self.sobj == None )
-        or ( self.sobj2 == None )
-        or ( self.schan == None )):
+        if (( self.sobj is None )
+        or ( self.sobj2 is None )
+        or ( self.schan is None )):
             return
 
         self.schan.queue(self.sobj2)

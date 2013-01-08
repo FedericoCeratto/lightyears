@@ -233,7 +233,7 @@ class User_Interface:
         #)
 
     def Update_Area(self, area):
-        if area != None:
+        if area is not None:
             self.partial_update = True
 
             # pygame.Rect is rather good.
@@ -272,7 +272,7 @@ class User_Interface:
             w.Draw(output)
             self.Add_Steam_Effect(output, w.pos)
 
-        if self.selection != None:
+        if self.selection is not None:
             # highlight selection
             r = self.selection.Draw_Selected(output, (blink, blink, 0))
             self.Update_Area(r)
@@ -295,7 +295,7 @@ class User_Interface:
 
 
         gpos = self.mouse_pos
-        if gpos != None:
+        if gpos is not None:
             if self.mode == BUILD_NODE:
                 # could put a node here.
                 r = Grid_To_Scr_Rect(gpos)
@@ -318,7 +318,7 @@ class User_Interface:
                     INITIAL_NODE_EXCAVATION_DISTANCE , (0, 0, 0, 30), 1)
 
             elif (( self.mode == BUILD_PIPE )
-            and ( self.selection != None )
+            and ( self.selection is not None )
             and ( isinstance(self.selection, Node) )):
                 # pipe route illustrated
 
@@ -350,7 +350,7 @@ class User_Interface:
 
     def Draw_Selection(self, output):
         output.fill((20,0,0))
-        if self.selection != None:
+        if self.selection is not None:
             r = output.get_rect()
             r.center = Grid_To_Scr(self.selection.pos)
 
@@ -361,7 +361,7 @@ class User_Interface:
                 n.Draw_Mini(output, r.topleft)
 
     def Draw_Stats(self, output, default_stats):
-        if self.selection == None:
+        if self.selection is None:
             l = default_stats
         else:
             l = self.selection.Get_Information()
@@ -377,7 +377,7 @@ class User_Interface:
 
         
     def Draw_Controls(self, output):
-        if self.control_menu == None:
+        if self.control_menu is None:
             self.__Make_Control_Menu(output.get_rect().width)
 
         # draw city pressure gauge
@@ -408,15 +408,15 @@ class User_Interface:
         self.control_menu.Draw(output, top=5*Get_Grid_Size())
 
     def Control_Mouse_Move(self, spos):
-        if self.control_menu != None:
+        if self.control_menu is not None:
             self.control_menu.Mouse_Move(spos)
 
     def Control_Mouse_Down(self, spos):
-        if self.control_menu != None:
+        if self.control_menu is not None:
             self.control_menu.Mouse_Down(spos)
             self.mode = self.control_menu.Get_Command()
 
-            if self.selection != None:
+            if self.selection is not None:
                 if self.mode == DESTROY:
                     self.net.Destroy(self.selection)
                     self.__Clear_Control_Selection()
@@ -427,7 +427,7 @@ class User_Interface:
                     self.__Clear_Control_Selection()
 
     def Key_Press(self, k):
-        if self.control_menu != None:
+        if self.control_menu is not None:
             self.control_menu.Key_Press(k)
             self.mode = self.control_menu.Get_Command()
 
@@ -438,7 +438,7 @@ class User_Interface:
 
     def __Clear_Control_Selection(self):
         self.mode = NEUTRAL
-        if self.control_menu != None:
+        if self.control_menu is not None:
             self.control_menu.Select(NEUTRAL)
 
     def Reset(self):
@@ -533,7 +533,7 @@ class User_Interface:
     def Game_Mouse_Down(self, spos):
         gpos = Scr_To_Grid(spos)
 
-        if (( self.selection != None )
+        if (( self.selection is not None )
         and ( self.selection.Is_Destroyed() )):
             self.selection = None
 
@@ -559,19 +559,19 @@ class User_Interface:
             elif self.mode == DESTROY:
                 # I presume you are referring to a pipe?
                 pipe = self.selection
-                if pipe != None:
+                if pipe is not None:
                     self.net.Destroy(pipe)
                     self.__Clear_Control_Selection()
                 self.selection = None
 
             elif self.mode == UPGRADE:
-                if self.selection != None:
+                if self.selection is not None:
 
                     if self.net.use_metal('up_node'):
                         self.selection.Begin_Upgrade()
                         self.__Clear_Control_Selection()
 
-            elif self.selection != None:
+            elif self.selection is not None:
                 self.selection.Sound_Effect()
                 
         elif ( isinstance(self.net.ground_grid[ gpos ], Node)):
@@ -579,7 +579,7 @@ class User_Interface:
 
             n = self.net.ground_grid[ gpos ]
             if self.mode == BUILD_PIPE:
-                if (( self.selection == None )
+                if (( self.selection is None )
                 or ( isinstance(self.selection, Pipe))):
                     # start a new pipe here
                     self.selection = n
@@ -625,7 +625,7 @@ class User_Interface:
 
     def Game_Mouse_Move(self, spos):
         self.mouse_pos = Scr_To_Grid(spos)
-        if self.control_menu != None:
+        if self.control_menu is not None:
             self.control_menu.Mouse_Move(None)
 
     def Debug_Grid(self, output):

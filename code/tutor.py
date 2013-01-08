@@ -227,7 +227,7 @@ def Aliens_Gone():
 
 def Notify_Select(item):
     global __tutor
-    if __tutor == None:
+    if __tutor is None:
         return
 
     if isinstance(item, Node):
@@ -245,26 +245,26 @@ def Notify_Select(item):
     elif isinstance(item, Pipe):
         Pipe_Selected()
         Pipe_Selected_2()
-    elif item == None:
+    elif item is None:
         Nothing_Selected()
 
 def Notify_Add_Pipe():
     global __tutor
-    if __tutor == None:
+    if __tutor is None:
         return
 
     Pipe_Added()
 
 def Notify_Add_Node(n):
     global __tutor
-    if __tutor == None:
+    if __tutor is None:
         return
 
     #Node_Added(n)
 
 def Examine_Game(g):
     global __tutor
-    if __tutor == None:
+    if __tutor is None:
         return
 
     # test 1 - are all nodes finished?
@@ -300,20 +300,20 @@ def Message(previous_msg_name, this_msg_name,
             title, text, sf):
     global __tutor
     t = __tutor
-    if t != None:
+    if t is not None:
         t.Add_Message((previous_msg_name, this_msg_name,
                 title, text, sf))
 
 def Draw(screen, g):
     global __tutor
     t = __tutor
-    if t != None:
+    if t is not None:
         t.Draw(screen, g)
 
 def Permit_Season_Change():
     global __tutor
     t = __tutor
-    if t != None:
+    if t is not None:
         return t.Permit_Season_Change()
     else:
         return True
@@ -323,12 +323,12 @@ def Frozen():
 
 def Active():
     global __tutor
-    return ( __tutor != None )
+    return ( __tutor is not None )
 
 def Has_Changed():
     global __tutor
     t = __tutor
-    if t != None:
+    if t is not None:
         x = t.update
         t.update = False
         return x

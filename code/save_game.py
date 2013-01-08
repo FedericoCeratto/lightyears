@@ -12,7 +12,7 @@ NUM_SLOTS = 10
 def Make_Save_Name(num):
     name = "save" + str(num) + ".dat"
     home = extra.Get_Home()
-    if home == None:
+    if home is None:
         return name
     else:
         return os.path.join(home, ".lightyears." + name)

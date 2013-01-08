@@ -170,7 +170,7 @@ class Main_Loop(object):
         fps_time = rt_then
         autosave_timer = 0
 
-        if restore_pos == None:
+        if restore_pos is None:
             DIFFICULTY.Set(challenge)
         
         
@@ -197,11 +197,11 @@ class Main_Loop(object):
         # Almost ready to start... but are we starting
         # from a savegame?
         
-        if restore_pos != None:
+        if restore_pos is not None:
             g.challenge = menu.Menu.intermediate
             g = self.Restore(g, restore_pos)
 
-        assert g.challenge != None
+        assert g.challenge is not None
         self.Summary(g)
 
         if g.challenge == menu.Menu.tutorial:
@@ -274,7 +274,7 @@ class Main_Loop(object):
                 # for longer than a timeout. Also, an
                 # alarm will sound.
 
-                if g.game_ends_at == None:
+                if g.game_ends_at is None:
                     sound.FX("steamcrit")
                     g.warning_given = True
 
@@ -497,7 +497,7 @@ class Main_Loop(object):
                         stats_review = True
                         ui.Reset()
 
-                    elif cmd != None:
+                    elif cmd is not None:
                         # Default option - back to game
                         if not g.game_running:
                             New_Mail("Sorry - the game has finished")
@@ -505,7 +505,7 @@ class Main_Loop(object):
 
                 else:
                     # It's another menu! That means it's the save menu.
-                    if (( cmd != None )
+                    if (( cmd is not None )
                     and ( cmd >= 0 )):
                         if not current_menu.Is_Saving():
                             g = self.Restore(g, cmd)
@@ -516,12 +516,12 @@ class Main_Loop(object):
 
                             g.net.Make_Ready_For_Save()
                             result = save_game.Save(g, cmd, label)
-                            if result == None:
+                            if result is None:
                                 New_Mail("Game saved.")
                             else:
                                 New_Mail(result)
 
-                    if cmd != None:
+                    if cmd is not None:
                         # Back to game.
                         self.Special_Refresh(screen, menu_margin, menu_width,
                             stats_rect, global_stats_rect, picture, picture_surf)
@@ -586,7 +586,7 @@ class Main_Loop(object):
         lev[ menu.Menu.expert ] = "an Expert"
         lev[ menu.Menu.peaceful ] = "a Peaceful"
     
-        assert g.challenge != None
+        assert g.challenge is not None
         assert lev.has_key( g.challenge )
         New_Mail("You are playing " + lev[ g.challenge ] + " game.")
         New_Mail("Win the game by upgrading your city to tech level %u."
@@ -595,12 +595,12 @@ class Main_Loop(object):
     @staticmethod
     def Restore(g, cmd):
         (g2, result) = save_game.Load(g, cmd)
-        if result == None:
+        if result is None:
             g = g2
             ui.net = g.net
             mail.Initialise()
             mail.Set_Day(g.game_time.Get_Day())
-            assert g.challenge != None
+            assert g.challenge is not None
             DIFFICULTY.Set(g.challenge)
             New_Mail("Game restored. It is the " + 
                 g.season_fx.name + " season.")

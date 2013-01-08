@@ -30,7 +30,7 @@ class Storm_Season(Quiet_Season):
         self.storm_difficulty = storm_difficulty
 
         global storm_graphics
-        assert ( storm_graphics != None )
+        assert ( storm_graphics is not None )
 
     def Get_Period(self):
         return 20

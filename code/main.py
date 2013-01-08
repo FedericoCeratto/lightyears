@@ -288,7 +288,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
         y = 5
         sz = 11
         for text in copyright:
-            if text == None:
+            if text is None:
                 sz = 7
                 continue
             img = stats.Get_Font(sz).render(text, True, (200, 200, 128))
@@ -358,7 +358,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                     pass
                 
                 
-        elif cmd != None:
+        elif cmd is not None:
             if current_menu == resolution_menu:
                 for (w, h, fs) in RESOLUTIONS:
                     if w == cmd:
@@ -488,7 +488,7 @@ def Update_Feature(screen, menu_image):
         pygame.display.flip()
 
     def Finish(cerror=None):
-        if cerror != None:
+        if cerror is not None:
             Message(["Connection error:", cerror])
 
         ok = True
@@ -516,7 +516,7 @@ def Update_Feature(screen, menu_image):
         Finish(str(x))
         return False
 
-    if (( new_version == None )
+    if (( new_version is None )
     or ( type(new_version) != str )
     or ( len(new_version) < 2 )
     or ( len(new_version) > 10 )

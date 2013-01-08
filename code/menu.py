@@ -52,7 +52,7 @@ class Menu(object):
         self.selection = snum
 
     def Mouse_Move(self, spos):
-        if (( spos == None )
+        if (( spos is None )
         or ( not self.bbox.collidepoint(spos) )):
             self.hover = None
             return
@@ -74,13 +74,13 @@ class Menu(object):
     def Mouse_Down(self, spos):
 
         self.Mouse_Move(spos)
-        if self.hover != None:
+        if self.hover is not None:
             self.selection = self.hover
             sound.FX("click")
 
     def Key_Press(self, k):
         for (num, name, hotkeys) in self._options:
-            if (( hotkeys != None ) and ( k in hotkeys )):
+            if (( hotkeys is not None ) and ( k in hotkeys )):
                 self.selection = num
                 self.update_required = True
                 sound.FX("click")
@@ -131,7 +131,7 @@ class Menu(object):
         first_item = True
 
         for (num, name, hotkeys) in self._options:
-            if name == None: # a gap
+            if name is None: # a gap
                 if first_item:
                     img = resource.Load_Image("header.jpg")
                     img_r = img.get_rect()
@@ -146,7 +146,7 @@ class Menu(object):
                 continue
 
             txt = render.Render(name, 18, (50,200,20), (200,200,0))
-            if th == None:
+            if th is None:
                 th = txt.get_rect().height + ( margin * 2 )
             tw = txt.get_rect().width + ( margin * 2 )
             if tw > max_width:
