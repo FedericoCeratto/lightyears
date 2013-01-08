@@ -253,7 +253,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
             mreactor.create_game(multiplayer_game_name_input.value)
 
         res = mreactor.join_game(game_name)
-        quit = game.Main_Loop(screen, clock,
+        quit = game.Main_Loop().run(screen, clock,
              (width,height), None, menu.Menu.peaceful, mreactor=mreactor)
         game.multiplayer = mreactor
 
@@ -270,9 +270,9 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
         if getattr(cli_args, flag):
             # Multiplayer is supported only here
             #FIXME
-            #quit = game.Main_Loop(screen, clock,
+            #quit = game.Main_Loop().run(screen, clock,
             #    (width,height), None, pick_cmd, multiplayer=cli_args.server)
-            quit = game.Main_Loop(screen, clock,
+            quit = game.Main_Loop().run(screen, clock,
                 (width,height), None, pick_cmd)
 
     mreactor = None # Multiplayer reactor
@@ -310,7 +310,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                 current_menu = new_multiplayer_menu
 
             elif ( cmd == menu.Menu.tutorial ):
-                quit = game.Main_Loop(screen, clock, 
+                quit = game.Main_Loop().run(screen, clock, 
                         (width,height), None, menu.Menu.tutorial)
 
             elif ( cmd == menu.Menu.load ):
@@ -370,7 +370,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
 
             elif ( current_menu == difficulty_menu ):
                 if ( cmd >= 0 ):
-                    quit = game.Main_Loop(screen, clock, 
+                    quit = game.Main_Loop().run(screen, clock, 
                             (width,height), None, cmd)
 
             # Global multiplayer menu
@@ -455,7 +455,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                     log.info("Game %s selected" % game_name)
 
                     res = mreactor.join_game(game_name)
-                    quit = game.Main_Loop(screen, clock,
+                    quit = game.Main_Loop().run(screen, clock,
                          (width,height), None, menu.Menu.peaceful, mreactor=mreactor)
                     game.multiplayer = mreactor
 
@@ -464,7 +464,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
             else: # Load menu
                 if ( cmd >= 0 ):
                     # Start game from saved position
-                    quit = game.Main_Loop(screen, clock, 
+                    quit = game.Main_Loop().run(screen, clock, 
                             (width,height), cmd, None)
 
             current_menu = main_menu
