@@ -139,7 +139,7 @@ class Main_Loop(object):
         inputs = [
             (controls_rect, ui.Control_Mouse_Down, ui.Control_Mouse_Move),
             (game_screen_rect, ui.Game_Mouse_Down, ui.Game_Mouse_Move) ]
-        exit_options = [
+        self._exit_options = [
             (menu.Menu.menu, "Exit to Main Menu", []),
             (menu.Menu.quit, "Exit to " + extra.Get_OS(), [ K_F10 ])]
 
@@ -150,12 +150,14 @@ class Main_Loop(object):
         if challenge == menu.Menu.tutorial:
             save_available = []
 
-        in_game_menu = menu.Menu([
-            (None, None, []),
-            (menu.Menu.mute, "Toggle Sound", []),
-            (None, None, [])] +
-            save_available + [
-            (menu.Menu.hide, "Return to Game", [ K_ESCAPE ])] + exit_options)
+        in_game_menu = menu.Menu(
+            [   (None, None, []),
+                (menu.Menu.mute, "Toggle Sound", []),
+                (None, None, [])] +
+            save_available +
+            [(menu.Menu.hide, "Return to Game", [K_ESCAPE])] +
+            self._exit_options
+        )
 
         current_menu = in_game_menu
 
@@ -636,5 +638,6 @@ class Main_Loop(object):
         current_menu = in_game_menu = menu.Menu([
             (None, None, []),
             (menu.Menu.review, "Review Statistics", [])] +
-            exit_options)
+            self._exit_options)
         in_game_menu.Select(None)
+
