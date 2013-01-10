@@ -23,8 +23,10 @@ class Gauge(object):
     """Round steampunk gauge"""
     def __init__(self, x, y, d):
         d = d * Get_Grid_Size() # diameter
+        self._diameter = d
         self.back_img = resource.Load_Image("gauge.png", scale_to=(d, d))
-        self.hand_img = resource.Load_Image("gauge_hand.png", scale_to=(d, d))
+        self.hand_img = resource.Load_Image("gauge_hand.png")
+        self.red_hand_img = resource.Load_Image("gauge_hand_red.png", scale_to=(d, d))
         self.glass_img = resource.Load_Image("gauge_glass.png", scale_to=(d, d))
         self._pos = GVector(x, y).in_pixels
         self._animated_pressure = 0
@@ -36,13 +38,28 @@ class Gauge(object):
         if bar is None:
             bar = 0
         angle = 199 - bar / 27.0 * 170
-        center = self.hand_img.get_rect().center
-        hand = pygame.transform.rotate(self.hand_img, angle)
-        newrect = hand.get_rect()
-        newrect.center = center
-        return hand, newrect
+        w = h = int(self._diameter)
+        img = pygame.transform.rotate(self.hand_img, angle)
+        img = pygame.transform.smoothscale(img, (w, h))
 
-    def draw(self, output, bar=None):
+        newrect = img.get_rect()
+        newrect.center = (w/2, h/2)
+        return img, newrect
+
+    def rotate_red_hand(self, bar=None):
+        """Rotate red hand"""
+        if bar is None:
+            bar = 0
+        angle = 199 - bar / 27.0 * 170
+        w = h = int(self._diameter)
+        img = pygame.transform.rotate(self.red_hand_img, angle)
+        img = pygame.transform.smoothscale(img, (w, h))
+
+        newrect = img.get_rect()
+        newrect.center = (w/2, h/2)
+        return img, newrect
+
+    def draw(self, output, bar=None, red=None):
         """Draw gauge and hand"""
         # the pressure displayed by the gauge will reach "bar" eventually
         delta = (bar - self._animated_pressure) * self._speed
@@ -65,7 +82,13 @@ class Gauge(object):
 
         output.blit(self.back_img, self._pos)
         output.blit(hand, self._pos + hand_rect)
+
+        if red:
+            hand, hand_rect = self.rotate_red_hand(bar=red)
+            output.blit(hand, self._pos + hand_rect)
+
         output.blit(self.glass_img, self._pos)
+
 
 
 class Valve(object):
@@ -384,6 +407,7 @@ class User_Interface:
         self.gauges['city_pressure'].draw(
             output,
             bar=self.net.hub.Get_Pressure() * .4,
+            red=self.net.hub.Get_Steam_Demand(),
         )
 
         # draw selected item gauge
