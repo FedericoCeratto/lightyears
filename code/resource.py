@@ -67,16 +67,15 @@ def Load_Image(name, scale_to=None):
     try:
         img = pygame.image.load(fname)
     except Exception, r:
-        s = "WARNING: Unable to load image '" + fname + "': " + str(r)
-        print ""
-        print s
-        print ""
+        s = "WARNING: Unable to load image '%s': %s" % (fname, r)
+        print "\n%s\n" % s
         New_Mail(s)
         img = pygame.Surface((10,10))
         img.fill((255,0,0))
 
     img = img.convert_alpha()
-    if scale_to is not None:
+
+    if scale_to:
         w, h = scale_to
 
         if h is None:
