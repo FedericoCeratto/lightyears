@@ -168,7 +168,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
     menu_image = resource.Load_Image("mainmenu.jpg")
 
     if menu_image.get_rect().width != width:
-        menu_image = pygame.transform.scale(menu_image, (width, height))
+        menu_image = pygame.transform.smoothscale(menu_image, (width, height))
 
     stats.Set_Font_Scale(config.cfg.font_scale)
 
