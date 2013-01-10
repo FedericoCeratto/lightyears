@@ -25,13 +25,13 @@ from primitives import *
 cache = dict()
 frame = 0
 
-class Draw_Obj:
+class Draw_Obj(object):
     def __init__(self, img_name, grid_size):
-        self.key = (img_name, grid_size)
+        self.key = (img_name, "%.3f" % grid_size)
         Make_Cache_Item(self.key)
 
     def Draw(self, output, gpos, (sx, sy)):
-        cache[ self.key ].Draw(output, gpos, (sx, sy))
+        cache[self.key].Draw(output, gpos, (sx, sy))
 
 def Flush_Draw_Obj_Cache():
     global cache
@@ -42,19 +42,21 @@ def Next_Frame():
     frame += 1
 
 def Make_Cache_Item(key):
-    if cache.has_key(key):
+    if key in cache:
         return  # Done already.
 
     class Real_Draw_Obj:
         def __init__(self, key):
-            (img_name, grid_size) = key
+            img_name, grid_size = key
+            grid_size = float(grid_size)
 
             img = resource.Load_Image(img_name)
-            (w, h) = img.get_rect().bottomright
+            w, h = img.get_rect().bottomright
             new_width = Get_Grid_Size() * grid_size
-            new_height = ( new_width * h ) / w
+            new_height = int(new_width * h / w)
+            new_width = int(new_width)
 
-            img = pygame.transform.scale(img, (new_width, new_height))
+            img = pygame.transform.smoothscale(img, (new_width, new_height))
 
             r = img.get_rect()
             r.center = (0,0)
@@ -83,5 +85,5 @@ def Make_Cache_Item(key):
                         out.set_at((x,y), (sub, 0, 0, a))
             return out
 
-    cache[ key ] = Real_Draw_Obj(key)
+    cache[key] = Real_Draw_Obj(key)
 
