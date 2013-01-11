@@ -9,13 +9,13 @@ from time import time
 from pygame.transform import smoothscale, rotate
 from resource import Path as path
 import pygame
-from primitives import Get_Grid_Size
+from primitives import Get_Grid_Size, GVector, PVector
 
 class Sprite(object):
     def __init__(self, filename, scale=1.0):
         """Load image from disk"""
         assert filename.endswith('.png')
-        # Enqueue transformations like scaling and rotations
+        self.gcenter = GVector(0, 0)
         self._rotation = 0
         self._zoom = 1
         self.scale(scale)
@@ -70,11 +70,22 @@ class Sprite(object):
     def draw(self, output, *args):
         """Draw current frame on a surface"""
         self.update_current_img()
-        x = args[0][0] * Get_Grid_Size()
-        y = args[0][1] * Get_Grid_Size()
-        output.blit(self._img, (x, y, x, 0))
+
+        if len(args):
+            pcenter = GVector(args[0]).pvector
+        else:
+            pcenter = self.gcenter.pvector
+
+        phalfsize = PVector(self._img.get_size()) / 2
+        pos = pcenter - phalfsize
+
+        output.blit(self._img, (pos.x, pos.y, 0, 0))
 
     Draw = draw
+
+    def set_gcenter(self, x, y):
+        """Set sprite center in game units."""
+        self.gcenter = GVector(x, y)
 
 
 class AnimatedSprite(Sprite):
