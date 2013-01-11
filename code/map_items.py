@@ -17,6 +17,7 @@ import random
 from steam_model import Steam_Model
 import time
 from mail import New_Mail
+import sprites
 
 import logging
 log = logging.getLogger(__name__)
@@ -671,10 +672,12 @@ class Node(Building):
         self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT
         self.base_colour = (255,192,0)
         self.steam = Steam_Model()
-        self.draw_obj_finished = draw_obj.Draw_Obj("node.png", 1)
-        self.draw_obj_venting = draw_obj.Draw_Obj("node_venting.png", 1)
-        self.draw_obj_incomplete = draw_obj.Draw_Obj("node_u.png", 1)
-        self.draw_obj = self.draw_obj_incomplete
+        self._sp_finished = sprites.AnimatedSprite('node.anim')
+        self._sp_venting = sprites.AnimatedSprite('node_venting.anim')
+        self._sp_under_construction = sprites.AnimatedSprite(
+            'node_under_construction.anim')
+        self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
+        self.draw_obj = self._sp_incomplete
         self._hissing_started = 0
         self.conveyor_offset = 0
         self.metal_yield = 0
@@ -746,18 +749,24 @@ class Node(Building):
             if current > 0.0:
                 p.Flowing_From(self, current)
 
-        if self.Is_Broken():
-            self.draw_obj = self.draw_obj_incomplete
+        if self.health == 0:
+            # The node has never been built
+            self.draw_obj = self._sp_incomplete
+        elif self.Needs_Work():
+            # It's being built or repaired
+            self.draw_obj = self._sp_under_construction
         else:
             if self.steam.venting:
-                self.draw_obj = self.draw_obj_venting
+                # It's venting steam
+                self.draw_obj = self._sp_venting
                 # start hissing every 30 seconds
                 now = time.time()
                 if now - self._hissing_started > 30:
                     self._hissing_started = now
                     sound.FX("hissing_leak")
             else:
-                self.draw_obj = self.draw_obj_finished
+                # It's working normally
+                self.draw_obj = self._sp_finished
 
 
     def Exits(self):
@@ -840,7 +849,7 @@ class City_Node(Node):
         self.city_upgrade = 0
         self.city_upgrade_start = 1
         self.draw_obj = draw_obj.Draw_Obj("city1.png", 3)
-        self.draw_obj_finished = self.draw_obj_incomplete = self.draw_obj
+        self._sp_finished = self._sp_incomplete = self.draw_obj
         self.total_steam = 0
         self.metal_quantity = 50000 #FIXME
         self.metal_production = 0
@@ -950,9 +959,9 @@ class Well_Node(Node):
     def __init__(self,(x,y),name="Steam Maker", rocks=[]):
         Node.__init__(self,(x,y),name)
         self.base_colour = (255,0,192)
-        self.draw_obj_finished = draw_obj.Draw_Obj("maker.png", 1)
-        self.draw_obj_incomplete = draw_obj.Draw_Obj("maker_u.png", 1)
-        self.draw_obj = self.draw_obj_incomplete
+        self._sp_finished = draw_obj.Draw_Obj("maker.png", 1.11)
+        self._sp_incomplete = draw_obj.Draw_Obj("maker_u.png", 1)
+        self.draw_obj = self._sp_incomplete
         self.emits_steam = True
         self.production = 0
 

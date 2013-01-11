@@ -224,8 +224,9 @@ class User_Interface:
         # cropped on startup to create different backdrops.
         # (Note: These don't get saved, as they're part of the UI. That's bad.)
 
-        img = resource.Load_Image("moon_surface.jpg")
+        img = resource.Load_Image("moon_surface.orig.jpg")
         zoom = 1 + random.random() # zoom in between 1 and 2
+        zoom = 1
         scaled = pygame.transform.smoothscale(img,
             (int(width * zoom), int(height * zoom))
         )
