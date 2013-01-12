@@ -3,13 +3,22 @@
 # This game is licensed under GPL v2, and copyright (C) Jack Whitham 2006-07.
 # 
 
-import pickle, startup, os, extra, primitives
+import startup, os, extra, primitives
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
+from logging import getLogger
+log = getLogger(__name__)
 
-CFG_VERSION = "1.4"
+CFG_VERSION = "1.5"
 
-class Config:
-    def __init__(self):
+cfg = None
+
+class Config(object):
+    def __init__(self, delete_file=False):
+        """Read/initialize config"""
         self.version = CFG_VERSION
         (w, h, fs) = primitives.RESOLUTIONS[ 0 ]
         self.resolution = (w, h)
@@ -17,42 +26,50 @@ class Config:
         self.mute = True
         self.font_scale = fs
         self.seen_before = False
+        self.keys = {
+            'n': 'build node',
+            's': 'build super node',
+            'p': 'build pipe',
+            'd': 'destroy item',
+            'u': 'upgrade item',
+            'q': 'quit to menu',
+        }
 
-cfg = Config()
 
-FILENAME = None
+        home = extra.Get_Home()
+        if home is None:
+            self._filename = "config.dat"
+        else:
+            self._filename = os.path.join(home, ".lightyears.cfg")
 
-def Initialise(delete_file):
-    global cfg, FILENAME
+        if delete_file:
+            # Don't load old configuration
+            self.save()
+            return
 
-    home = extra.Get_Home()
-    if home is None:
-        FILENAME = "config.dat"
-    else:
-        FILENAME = os.path.join(home, ".lightyears.cfg")
+        try:
+            with open(self._filename) as f:
+                d = json.load(f)
 
-    if delete_file:
-        # Don't load old configuration
-        Save()
-        return
+            # Ignore unsupported versions
+            assert d['version'] == CFG_VERSION, "Unsupported config version"
 
-    try:
-        f = file(FILENAME, "rb")
-        cfg2 = pickle.load(f)
-        f.close()
-        if cfg2.version == CFG_VERSION:
-            # Configuration is valid, we can use it.
-            cfg = cfg2
-    except Exception, x:
-        pass
+            for k, v in d.iteritems():
+                self.__dict__[k] = v
 
-def Save():
-    global cfg, FILENAME
+        except Exception, e:
+            log.error("Unable to read config file: %s" % e)
+            self.save()
 
-    try:
-        f = file(FILENAME, "wb")
-        pickle.dump(cfg, f)
-        f.close()
-    except Exception, x:
-        pass
+
+    def save(self):
+        """Save config to disk."""
+        # Save instance's public attributes
+        d = dict((k,v) for k,v in self.__dict__.items() if not k.startswith('_'))
+        try:
+            with open(self._filename, 'w') as f:
+                json.dump(d, f, sort_keys=True, indent=2)
+        except Exception, e:
+            log.error("Unable to write config file: %s" % e)
+
 

@@ -841,6 +841,10 @@ class Node(Building):
     def Sound_Effect(self):
         sound.FX("node_rap")
 
+#TODO: implement capacity
+#TODO: display max health on dashboard
+#TODO: display selected item image on dashboard
+
 class SuperNode(Building):
     """Node with increased storage capacity and health"""
     def __init__(self, *args, **kwargs):

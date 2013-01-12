@@ -8,6 +8,7 @@
 import pygame , random
 from pygame.locals import *
 
+import config
 import stats , menu , draw_obj , mail , particle , tutor
 import resource
 from map_items import *
@@ -690,13 +691,13 @@ class ControlMenu(object):
     """Game Control Menu"""
     def __init__(self):
         self._buttons = {
-            'node': ControlMenuButton('btn_pipe.png', BUILD_NODE, K_n),
-            'pipe': ControlMenuButton('node_00.png', BUILD_PIPE, K_p),
-            'upgrade': ControlMenuButton('node_under_construction_00.png', UPGRADE, K_u),
-            'hydro': ControlMenuButton('hydro.png', BUILD_NODE, K_n),
-            'node_super': ControlMenuButton('node_super_00.png', BUILD_PIPE, K_p, enabled=False),
-            'upgrade2': ControlMenuButton('node_under_construction_00.png', UPGRADE, K_u),
-            'destroy': ControlMenuButton('destroy.png', BUILD_PIPE, K_p),
+            'build node': ControlMenuButton('btn_pipe.png', BUILD_NODE),
+            'build pipe': ControlMenuButton('node_00.png', BUILD_PIPE),
+            'upgrade item': ControlMenuButton('node_under_construction_00.png', UPGRADE),
+            'hydro': ControlMenuButton('hydro.png', BUILD_NODE),
+            'build super node': ControlMenuButton('node_super_00.png', BUILD_PIPE, enabled=False),
+            'upgrade2': ControlMenuButton('node_under_construction_00.png', UPGRADE),
+            'destroy item': ControlMenuButton('destroy.png', BUILD_PIPE),
         }
         self._ptopleft = None
 
@@ -708,6 +709,7 @@ class ControlMenu(object):
             n += 1
             b.pcenter = corner + PVector(col * 44, row * 44)
 
+        #TODO: remove this
         #self.control_menu = menu.Enhanced_Menu([
         #        (BUILD_NODE, "Build &Node", [ K_n ]),
         #        (BUILD_PIPE, "Build &Pipe", [ K_p ]),
@@ -716,6 +718,13 @@ class ControlMenu(object):
         #        (None, None, None),
         #        (OPEN_MENU, "Menu", [ K_ESCAPE ])], 
         #        pictures, width)
+
+        # Bind keys and actions to buttons
+        for name, btn in self._buttons.iteritems():
+            btn.action = name
+            for key, action in config.cfg.keys.iteritems():
+                if name == action:
+                    btn.key = key
 
     def Draw(self, output, top):
         """ """
@@ -736,23 +745,34 @@ class ControlMenu(object):
             b._hovered = False
             b.check_hover(prel_mousepos)
 
-    def Key_Press(self, *args, **kwargs):
-        pass
+    def Key_Press(self, k):
+        """Handle key press"""
+        try:
+            c = chr(k)
+        except:
+            return # Ignore non-ascii keys
+
+        for btn in self._buttons.itervalues():
+            if c == btn.key:
+                btn.select()
+
 
     def Get_Command(self, *args, **kwargs):
+        #FIXME
         pass
 
     def Mouse_Down(self, *args, **kwargs):
+        #FIXME
         pass
 
 class ControlMenuButton(object):
     """A button that supports hover and selection"""
-    def __init__(self, fname, cmd, key, enabled=True):
+    def __init__(self, fname, cmd, enabled=True):
         self._init(fname, enabled)
         self._cmd = cmd
-        self._key = key
         self._selected = False
         self._hovered = False
+        self.key = None
 
     def _init(self, fname, enabled=True):
         from sprites import StaticSprite

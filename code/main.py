@@ -9,7 +9,7 @@ from pygame.locals import *
 from getpass import getuser
 
 import game, stats, storms, extra, save_menu, resource, menu
-import config , startup , sound , alien_invasion , quakes
+import config, startup, sound, alien_invasion, quakes
 from primitives import *
 from multiplayer import Reactor
 
@@ -83,7 +83,7 @@ def Main(data_dir):
 
     resource.DATA_DIR = data_dir
 
-    config.Initialise(cli_args.safe)
+    config.cfg = config.Config(delete_file=cli_args.safe)
 
     # Pygame things
     flags = 0
@@ -156,7 +156,7 @@ def Main(data_dir):
 
         quit = Main_Menu_Loop(n, clock, screen, (width, height), cli_args)
 
-    config.Save()
+    config.cfg.save()
 
     # Bye bye Pygame.
     pygame.mixer.quit()
@@ -356,8 +356,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                     webbrowser.open(url, True, True)
                 except:
                     pass
-                
-                
+
         elif cmd is not None:
             if current_menu == resolution_menu:
                 for (w, h, fs) in RESOLUTIONS:
