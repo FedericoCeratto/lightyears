@@ -841,6 +841,15 @@ class Node(Building):
     def Sound_Effect(self):
         sound.FX("node_rap")
 
+class SuperNode(Building):
+    """Node with increased storage capacity and health"""
+    def __init__(self, *args, **kwargs):
+        super(SuperNode, self).__init__(*args, **kwargs)
+        self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT * 2
+        self._sp_finished = sprites.AnimatedSprite('node_super.anim')
+        self._sp_venting = sprites.AnimatedSprite('node_super_venting.anim')
+
+
 class City_Node(Node):
     def __init__(self,(x,y),name="City"):
         Node.__init__(self,(x,y),name)

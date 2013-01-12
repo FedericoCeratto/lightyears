@@ -678,17 +678,119 @@ class User_Interface:
         pictures[ UPGRADE ] = "upgrade.png"
         pictures[ OPEN_MENU ] = "menuicon.png"
 
-        self.control_menu = menu.Enhanced_Menu([
-                (BUILD_NODE, "Build &Node", [ K_n ]),
-                (BUILD_PIPE, "Build &Pipe", [ K_p ]),
-                (DESTROY, "&Destroy", [ K_d , K_BACKSPACE ]),
-                (UPGRADE, "&Upgrade", [ K_u ]),
-                (None, None, None),
-                (OPEN_MENU, "Menu", [ K_ESCAPE ])], 
-                pictures, width)
+        self.control_menu = ControlMenu()
+
 
     def Frame_Advance(self, frame_time):
         for p in self.net.pipe_list:
             p.Frame_Advance(frame_time)
+
+
+class ControlMenu(object):
+    """Game Control Menu"""
+    def __init__(self):
+        self._buttons = {
+            'node': ControlMenuButton('btn_pipe.png', BUILD_NODE, K_n),
+            'pipe': ControlMenuButton('node_00.png', BUILD_PIPE, K_p),
+            'upgrade': ControlMenuButton('node_under_construction_00.png', UPGRADE, K_u),
+            'hydro': ControlMenuButton('hydro.png', BUILD_NODE, K_n),
+            'node_super': ControlMenuButton('node_super_00.png', BUILD_PIPE, K_p, enabled=False),
+            'upgrade2': ControlMenuButton('node_under_construction_00.png', UPGRADE, K_u),
+            'destroy': ControlMenuButton('destroy.png', BUILD_PIPE, K_p),
+        }
+        self._ptopleft = None
+
+        corner = PVector(20, 20)
+        n = 0
+        for b in sorted(self._buttons.values()):
+            row = n / 3
+            col = n % 3
+            n += 1
+            b.pcenter = corner + PVector(col * 44, row * 44)
+
+        #self.control_menu = menu.Enhanced_Menu([
+        #        (BUILD_NODE, "Build &Node", [ K_n ]),
+        #        (BUILD_PIPE, "Build &Pipe", [ K_p ]),
+        #        (DESTROY, "&Destroy", [ K_d , K_BACKSPACE ]),
+        #        (UPGRADE, "&Upgrade", [ K_u ]),
+        #        (None, None, None),
+        #        (OPEN_MENU, "Menu", [ K_ESCAPE ])], 
+        #        pictures, width)
+
+    def Draw(self, output, top):
+        """ """
+        if not self._ptopleft:
+            self._ptopleft = PVector(10, 10 + top)
+
+        for b in self._buttons.itervalues():
+            pos = self._ptopleft + b.pcenter
+            b.draw(output, pos)
+
+    def Mouse_Move(self, pmousepos):
+        if pmousepos is None:
+            return
+
+        prel_mousepos = PVector(pmousepos) - self._ptopleft
+
+        for b in self._buttons.itervalues():
+            b._hovered = False
+            b.check_hover(prel_mousepos)
+
+    def Key_Press(self, *args, **kwargs):
+        pass
+
+    def Get_Command(self, *args, **kwargs):
+        pass
+
+    def Mouse_Down(self, *args, **kwargs):
+        pass
+
+class ControlMenuButton(object):
+    """A button that supports hover and selection"""
+    def __init__(self, fname, cmd, key, enabled=True):
+        self._init(fname, enabled)
+        self._cmd = cmd
+        self._key = key
+        self._selected = False
+        self._hovered = False
+
+    def _init(self, fname, enabled=True):
+        from sprites import StaticSprite
+        self.enabled = enabled
+        self._picture = StaticSprite(fname, 24)
+        self._background = StaticSprite('btn_background.png')
+        self.phalfsize = self._background.phalfsize
+
+    def click(self):
+        """Receive mouse click"""
+        raise NotImplementedError
+
+    def reset(self):
+        """Reset selected/hovered status"""
+        self._hovered = self._selected = False
+
+    def hover(self):
+        """Mouse hover"""
+        self._hovered = True
+
+    def check_hover(self, pmousepos):
+        delta = pmousepos - self.pcenter
+        if abs(delta.x) <  self.phalfsize.x and abs(delta.y) < self.phalfsize.y:
+            self.hover()
+
+    def select(self):
+        """Select button"""
+        self._selected = True
+
+    def draw(self, output, position):
+        """Draw button"""
+        g = not self.enabled # Grayed out button
+        h = self._hovered and self.enabled # Hover on an enabled button
+        self._background.draw(output, position, grayed_out=g, highlighted=h)
+        self._picture.draw(output, position, grayed_out=g, highlighted=h)
+
+        if self._selected:
+            pass
+
 
 

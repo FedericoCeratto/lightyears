@@ -11,6 +11,77 @@ from resource import Path as path
 import pygame
 from primitives import Get_Grid_Size, GVector, PVector
 
+class StaticSprite(object):
+    """A sprite that does not support dynamic rotation/scaling"""
+    def __init__(self, filename, pwidth=None):
+        """Load image from disk"""
+        assert filename.endswith('.png')
+        self.gcenter = GVector(0, 0)
+        img = pygame.image.load(path(filename))
+
+        if pwidth:
+            aw, ah = img.get_size()
+            pheight = int(float(ah) / aw * pwidth)
+            img = smoothscale(img, (pwidth, pheight))
+
+        self._img = img
+        self._phalfsize = PVector(self._img.get_size()) / 2
+        self._grayscale_img = None
+
+    @property
+    def phalfsize(self):
+        return self._phalfsize
+
+    def draw(self, output, pcenter, grayed_out=False, highlighted=False):
+        """Draw sprite on a surface"""
+        pos = pcenter - self.phalfsize
+
+        if grayed_out:
+            i = self.grayed_out()
+        elif highlighted:
+            i = self.highlight()
+        else:
+            i = self._img
+
+        output.blit(i, (pos.x, pos.y, 0, 0))
+
+    def set_gcenter(self, x, y):
+        """Set sprite center in game units."""
+        self.gcenter = GVector(x, y)
+
+    def grayed_out(self):
+        """Generate a grayscale image"""
+        if self._grayscale_img:
+            return self._grayscale_img
+
+        w, h = self._img.get_size()
+        new = pygame.Surface((w, h), pygame.SRCALPHA)
+
+        for x in xrange(w):
+            for y in xrange(h):
+                red, green, blue, alpha = self._img.get_at((x, y))
+                v = 0.3 * red + 0.59 * green + 0.11 * blue
+                new.set_at((x, y), (v, v, v, alpha))
+
+        self._grayscale_img = new
+        return new
+
+    def highlight(self):
+        """Generate a hightlighted image"""
+        w, h = self._img.get_size()
+        new = pygame.Surface((w, h), pygame.SRCALPHA)
+
+        for x in xrange(w):
+            for y in xrange(h):
+                red, green, blue, alpha = self._img.get_at((x, y))
+                red = min(254, red + 30)
+                green = min(254, green + 30)
+                blue = min(254, blue + 30)
+                new.set_at((x, y), (red, green, blue, alpha))
+
+        return new
+
+
 class Sprite(object):
     def __init__(self, filename, scale=1.0):
         """Load image from disk"""
@@ -22,6 +93,7 @@ class Sprite(object):
         i = pygame.image.load(path(filename))
         self._ratio = i.get_height() / float(i.get_width())
         self._rawimg = i
+        self._img = None
 
     def rotate(self, angle):
         """Add rotation"""
@@ -37,6 +109,9 @@ class Sprite(object):
 
     def transform(self):
         """Apply enqueued transformations"""
+        #if self._img and self._zoom == 1 and self._rotation == 0:
+        #    return # No change needed
+
         img = self._rawimg
 
         if self._scaling:
