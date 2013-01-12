@@ -691,12 +691,11 @@ class ControlMenu(object):
     """Game Control Menu"""
     def __init__(self):
         self._buttons = {
-            'build node': ControlMenuButton('btn_pipe.png', BUILD_NODE),
-            'build pipe': ControlMenuButton('node_00.png', BUILD_PIPE),
+            'build pipe': ControlMenuButton('btn_pipe.png', BUILD_NODE),
+            'build node': ControlMenuButton('node_00.png', BUILD_PIPE),
             'upgrade item': ControlMenuButton('node_under_construction_00.png', UPGRADE),
             'hydro': ControlMenuButton('hydro.png', BUILD_NODE),
             'build super node': ControlMenuButton('node_super_00.png', BUILD_PIPE, enabled=False),
-            'upgrade2': ControlMenuButton('node_under_construction_00.png', UPGRADE),
             'destroy item': ControlMenuButton('destroy.png', BUILD_PIPE),
         }
         self._ptopleft = None
@@ -753,9 +752,14 @@ class ControlMenu(object):
             return # Ignore non-ascii keys
 
         for btn in self._buttons.itervalues():
-            if c == btn.key:
+            if c == btn.key and btn.enabled:
+                self.unselect_all_buttons()
                 btn.select()
 
+    def unselect_all_buttons(self):
+        """Unselect all buttons"""
+        for btn in self._buttons.itervalues():
+            btn.reset_selected()
 
     def Get_Command(self, *args, **kwargs):
         #FIXME
@@ -779,6 +783,7 @@ class ControlMenuButton(object):
         self.enabled = enabled
         self._picture = StaticSprite(fname, 24)
         self._background = StaticSprite('btn_background.png')
+        self._background_lit = StaticSprite('btn_background_lit.png')
         self.phalfsize = self._background.phalfsize
 
     def click(self):
@@ -802,15 +807,22 @@ class ControlMenuButton(object):
         """Select button"""
         self._selected = True
 
+    def reset_selected(self):
+        self._selected = False
+
     def draw(self, output, position):
         """Draw button"""
         g = not self.enabled # Grayed out button
         h = self._hovered and self.enabled # Hover on an enabled button
-        self._background.draw(output, position, grayed_out=g, highlighted=h)
-        self._picture.draw(output, position, grayed_out=g, highlighted=h)
 
         if self._selected:
-            pass
+            # Activate selection light
+            self._background_lit.draw(output, position, highlighted=h)
+        else:
+            self._background.draw(output, position, grayed_out=g, highlighted=h)
+
+        self._picture.draw(output, position, grayed_out=g, highlighted=h)
+
 
 
 
