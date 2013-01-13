@@ -684,17 +684,17 @@ class User_Interface:
 class ControlMenu(object):
     """Game Control Menu"""
     def __init__(self):
-        self._buttons = {
-            'build pipe': ControlMenuButton('btn_pipe.png', BUILD_NODE),
-            'build node': ControlMenuButton('node_00.png', BUILD_PIPE),
-            'upgrade item': ControlMenuButton('upgrade.png', UPGRADE),
-            'build research': ControlMenuButton('research_00.png', BUILD_NODE),
-            'build hydroponics': ControlMenuButton('hydro.png', BUILD_NODE, enabled=False),
-            'build super node': ControlMenuButton('node_super_00.png', BUILD_PIPE, enabled=False),
-            'build tower': ControlMenuButton('tower_00.png', BUILD_PIPE, enabled=False),
-            'destroy item': ControlMenuButton('destroy.png', BUILD_PIPE),
-            'exit': ControlMenuButton('destroy.png', BUILD_PIPE),
-        }
+        self._buttons = [
+            ControlMenuButton('build pipe','btn_pipe.png'),
+            ControlMenuButton('build node','node_00.png'),
+            ControlMenuButton('upgrade item','upgrade.png'),
+            ControlMenuButton('build research','research_00.png'),
+            ControlMenuButton('build hydroponics','hydro.png', enabled=False),
+            ControlMenuButton('build super node','node_super_00.png', enabled=False),
+            ControlMenuButton('build tower','tower_00.png', enabled=False),
+            ControlMenuButton('destroy item','destroy.png'),
+            ControlMenuButton('exit','destroy.png'),
+        ]
         self._ptopleft = None
         self._buttons_pdelta = PVector(5, 100)
 
@@ -702,7 +702,7 @@ class ControlMenu(object):
         columns_num = 4
         corner = PVector(20, 20)
         n = 0
-        for b in sorted(self._buttons.values()):
+        for b in sorted(self._buttons):
             row = n / columns_num
             col = n % columns_num
             n += 1
@@ -710,10 +710,9 @@ class ControlMenu(object):
 
 
         # Bind keys and actions to buttons
-        for name, btn in self._buttons.iteritems():
-            btn.action = name
+        for btn in self._buttons:
             for key, action in config.cfg.keys.iteritems():
-                if name == action:
+                if btn.action == action:
                     btn.key = key
 
     def Draw(self, output, top):
@@ -731,7 +730,7 @@ class ControlMenu(object):
 
         # Draw buttons
         pcorner = self._ptopleft + self._buttons_pdelta
-        for b in self._buttons.itervalues():
+        for b in self._buttons:
             pos = pcorner + b.pcenter
             b.draw(output, pos)
 
@@ -742,7 +741,8 @@ class ControlMenu(object):
         prel_mousepos = PVector(pmousepos) - self._ptopleft \
             - self._buttons_pdelta
 
-        for b in self._buttons.itervalues():
+        for b in self._buttons:
+            # Update hovered attribute on every button
             b.hovered = b.check_hover(prel_mousepos)
 
     def Mouse_Down(self, pmousepos):
@@ -753,8 +753,9 @@ class ControlMenu(object):
         prel_mousepos = PVector(pmousepos) - self._ptopleft \
             - self._buttons_pdelta
 
-        for b in self._buttons.itervalues():
-            b._selected = b.enabled and b.check_hover(prel_mousepos)
+        for b in self._buttons:
+            # Update selected attribute on every enabled button
+            b.selected = b.enabled and b.check_hover(prel_mousepos)
 
     def Key_Press(self, k):
         """Handle key press"""
@@ -763,17 +764,21 @@ class ControlMenu(object):
         except:
             return # Ignore non-ascii keys
 
-        for btn in self._buttons.itervalues():
-            btn._selected = btn.enabled and (btn.key == c)
+        for btn in self._buttons:
+            # Update selected attribute on every enabled button
+            btn.selected = btn.enabled and (btn.key == c)
 
     def unselect_all_buttons(self):
         """Unselect all buttons"""
-        for btn in self._buttons.itervalues():
+        for btn in self._buttons:
             btn.reset_selected()
 
-    def Get_Command(self, *args, **kwargs):
-        #FIXME
-        pass
+    def Get_Command(self):
+        """Get the selected command"""
+        for btn in self._buttons:
+            if btn.selected:
+                return btn.action
+
 
     def Select(self, *args, **kwargs):
         #FIXME
@@ -781,12 +786,12 @@ class ControlMenu(object):
 
 class ControlMenuButton(object):
     """A button that supports hover and selection"""
-    def __init__(self, fname, cmd, enabled=True):
+    def __init__(self, name, fname, enabled=True):
         self._init(fname, enabled)
-        self._cmd = cmd
-        self._selected = False
+        self.selected = False
         self.hovered = False
         self.key = None
+        self.action = name
 
     def _init(self, fname, enabled=True):
         from sprites import StaticSprite
@@ -808,15 +813,12 @@ class ControlMenuButton(object):
 
         return False
 
-    def reset_selected(self):
-        self._selected = False
-
     def draw(self, output, position):
         """Draw button"""
         g = not self.enabled # Grayed out button
         h = self.hovered and self.enabled # Hover on an enabled button
 
-        if self._selected:
+        if self.selected:
             # Activate selection light
             self._background_lit.draw(output, position, highlighted=h)
         else:
