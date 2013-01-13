@@ -188,22 +188,6 @@ class Menu(object):
     game_1, game_2, game_3, game_4, game_5 = range(37)
 
 
-# Menu plus pictures!
-class Enhanced_Menu(Menu):
-    def __init__(self, menu_options, pictures, force_width=0):
-        self.pictures = pictures
-        Menu.__init__(self, menu_options, force_width)
-
-    def Enhancement_Interface(self, surf, num, rect, margin):
-        if self.pictures.has_key( num ):
-            img = resource.Load_Image( self.pictures[ num ] )
-            img_r = img.get_rect()
-            img_r.center = rect.center
-            img_r.left = rect.left + margin
-            surf.blit(img, img_r.topleft)
-
-
-
 class InputMenu(Menu):
     """Input Menu"""
     def __init__(self, title, current_value):

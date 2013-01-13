@@ -680,6 +680,7 @@ class User_Interface:
             p.Frame_Advance(frame_time)
 
 #TODO: enable actions
+#TODO: create action "dashboard"
 class ControlMenu(object):
     """Game Control Menu"""
     def __init__(self):
@@ -695,6 +696,7 @@ class ControlMenu(object):
             'exit': ControlMenuButton('destroy.png', BUILD_PIPE),
         }
         self._ptopleft = None
+        self._buttons_pdelta = PVector(5, 100)
 
         # Place buttons in rows and columns
         columns_num = 4
@@ -715,19 +717,30 @@ class ControlMenu(object):
                     btn.key = key
 
     def Draw(self, output, top):
-        """ """
+        """Draw menu"""
         if not self._ptopleft:
-            self._ptopleft = PVector(10, 10 + top)
+            self._ptopleft = PVector(10, 4 + top)
 
+        box_size = PVector(
+            44 * 4, # Width
+            150
+        )
+        box = Rect(self._ptopleft, self._ptopleft + box_size)
+        extra.Tile_Texture(output, "006metal.jpg", box)
+        extra.Line_Edging(output, box, False)
+
+        # Draw buttons
+        pcorner = self._ptopleft + self._buttons_pdelta
         for b in self._buttons.itervalues():
-            pos = self._ptopleft + b.pcenter
+            pos = pcorner + b.pcenter
             b.draw(output, pos)
 
     def Mouse_Move(self, pmousepos):
         if pmousepos is None:
             return
 
-        prel_mousepos = PVector(pmousepos) - self._ptopleft
+        prel_mousepos = PVector(pmousepos) - self._ptopleft \
+            - self._buttons_pdelta
 
         for b in self._buttons.itervalues():
             b.hovered = b.check_hover(prel_mousepos)
@@ -737,7 +750,8 @@ class ControlMenu(object):
         if pmousepos is None:
             return
 
-        prel_mousepos = PVector(pmousepos) - self._ptopleft
+        prel_mousepos = PVector(pmousepos) - self._ptopleft \
+            - self._buttons_pdelta
 
         for b in self._buttons.itervalues():
             b._selected = b.enabled and b.check_hover(prel_mousepos)
