@@ -672,13 +672,6 @@ class User_Interface:
         self.Update_Area(r)
 
     def __Make_Control_Menu(self, width):
-        pictures = dict()
-        pictures[ BUILD_NODE ] = "bricks.png"
-        pictures[ BUILD_PIPE ] = "bricks2.png"
-        pictures[ DESTROY ] = "destroy.png"
-        pictures[ UPGRADE ] = "upgrade.png"
-        pictures[ OPEN_MENU ] = "menuicon.png"
-
         self.control_menu = ControlMenu()
 
 
@@ -686,37 +679,33 @@ class User_Interface:
         for p in self.net.pipe_list:
             p.Frame_Advance(frame_time)
 
-
+#TODO: enable actions
 class ControlMenu(object):
     """Game Control Menu"""
     def __init__(self):
         self._buttons = {
             'build pipe': ControlMenuButton('btn_pipe.png', BUILD_NODE),
             'build node': ControlMenuButton('node_00.png', BUILD_PIPE),
-            'upgrade item': ControlMenuButton('node_under_construction_00.png', UPGRADE),
-            'hydro': ControlMenuButton('hydro.png', BUILD_NODE),
+            'upgrade item': ControlMenuButton('upgrade.png', UPGRADE),
+            'build research': ControlMenuButton('research_00.png', BUILD_NODE),
+            'build hydroponics': ControlMenuButton('hydro.png', BUILD_NODE, enabled=False),
             'build super node': ControlMenuButton('node_super_00.png', BUILD_PIPE, enabled=False),
+            'build tower': ControlMenuButton('tower_00.png', BUILD_PIPE, enabled=False),
             'destroy item': ControlMenuButton('destroy.png', BUILD_PIPE),
+            'exit': ControlMenuButton('destroy.png', BUILD_PIPE),
         }
         self._ptopleft = None
 
+        # Place buttons in rows and columns
+        columns_num = 4
         corner = PVector(20, 20)
         n = 0
         for b in sorted(self._buttons.values()):
-            row = n / 3
-            col = n % 3
+            row = n / columns_num
+            col = n % columns_num
             n += 1
             b.pcenter = corner + PVector(col * 44, row * 44)
 
-        #TODO: remove this
-        #self.control_menu = menu.Enhanced_Menu([
-        #        (BUILD_NODE, "Build &Node", [ K_n ]),
-        #        (BUILD_PIPE, "Build &Pipe", [ K_p ]),
-        #        (DESTROY, "&Destroy", [ K_d , K_BACKSPACE ]),
-        #        (UPGRADE, "&Upgrade", [ K_u ]),
-        #        (None, None, None),
-        #        (OPEN_MENU, "Menu", [ K_ESCAPE ])], 
-        #        pictures, width)
 
         # Bind keys and actions to buttons
         for name, btn in self._buttons.iteritems():
@@ -741,8 +730,17 @@ class ControlMenu(object):
         prel_mousepos = PVector(pmousepos) - self._ptopleft
 
         for b in self._buttons.itervalues():
-            b._hovered = False
-            b.check_hover(prel_mousepos)
+            b.hovered = b.check_hover(prel_mousepos)
+
+    def Mouse_Down(self, pmousepos):
+        """Handle click on a button"""
+        if pmousepos is None:
+            return
+
+        prel_mousepos = PVector(pmousepos) - self._ptopleft
+
+        for b in self._buttons.itervalues():
+            b._selected = b.enabled and b.check_hover(prel_mousepos)
 
     def Key_Press(self, k):
         """Handle key press"""
@@ -752,9 +750,7 @@ class ControlMenu(object):
             return # Ignore non-ascii keys
 
         for btn in self._buttons.itervalues():
-            if c == btn.key and btn.enabled:
-                self.unselect_all_buttons()
-                btn.select()
+            btn._selected = btn.enabled and (btn.key == c)
 
     def unselect_all_buttons(self):
         """Unselect all buttons"""
@@ -765,7 +761,7 @@ class ControlMenu(object):
         #FIXME
         pass
 
-    def Mouse_Down(self, *args, **kwargs):
+    def Select(self, *args, **kwargs):
         #FIXME
         pass
 
@@ -775,7 +771,7 @@ class ControlMenuButton(object):
         self._init(fname, enabled)
         self._cmd = cmd
         self._selected = False
-        self._hovered = False
+        self.hovered = False
         self.key = None
 
     def _init(self, fname, enabled=True):
@@ -790,22 +786,13 @@ class ControlMenuButton(object):
         """Receive mouse click"""
         raise NotImplementedError
 
-    def reset(self):
-        """Reset selected/hovered status"""
-        self._hovered = self._selected = False
-
-    def hover(self):
-        """Mouse hover"""
-        self._hovered = True
-
     def check_hover(self, pmousepos):
+        """Check if the mouse pointer is hovering the button"""
         delta = pmousepos - self.pcenter
         if abs(delta.x) <  self.phalfsize.x and abs(delta.y) < self.phalfsize.y:
-            self.hover()
+            return True
 
-    def select(self):
-        """Select button"""
-        self._selected = True
+        return False
 
     def reset_selected(self):
         self._selected = False
@@ -813,7 +800,7 @@ class ControlMenuButton(object):
     def draw(self, output, position):
         """Draw button"""
         g = not self.enabled # Grayed out button
-        h = self._hovered and self.enabled # Hover on an enabled button
+        h = self.hovered and self.enabled # Hover on an enabled button
 
         if self._selected:
             # Activate selection light
