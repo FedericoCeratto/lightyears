@@ -17,6 +17,9 @@ from primitives import *
 from mail import New_Mail
 from multiplayer import UserException
 
+from sprites import StaticSprite
+from stats import Get_Font
+
 import logging
 log = logging.getLogger(__name__)
 
@@ -696,6 +699,7 @@ class ControlMenu(object):
             ControlMenuButton('exit','destroy.png'),
         ]
         self._ptopleft = None
+        self._dashboard_glass = StaticSprite('dashboard_glass.png', 180)
         self._buttons_pdelta = PVector(5, 100)
 
         # Place buttons in rows and columns
@@ -720,6 +724,7 @@ class ControlMenu(object):
         if not self._ptopleft:
             self._ptopleft = PVector(10, 4 + top)
 
+        # Draw background and borders
         box_size = PVector(
             44 * 4, # Width
             150
@@ -733,6 +738,30 @@ class ControlMenu(object):
         for b in self._buttons:
             pos = pcorner + b.pcenter
             b.draw(output, pos)
+
+        self._draw_dashboard(output)
+
+    def _draw_dashboard(self, output):
+        """Draw dashboard"""
+        pos = self._ptopleft + PVector(6+24, 22+24)
+        for b in self._buttons:
+            if b.selected:
+                b.dashboard_picture.draw(output, pcenter=pos)
+                self._draw_dashboard_text(output, pos, b.action)
+
+        # Draw dashboard glass
+        pos = self._ptopleft + PVector(3, 3)
+        self._dashboard_glass.draw(output, pos=pos)
+
+    def _draw_dashboard_text(self, output, pos, action):
+        """Draw dashboard text"""
+        lines = "%s\n" % action.capitalize()
+
+        linepos = pos + PVector(30, -20)
+        for line in lines.split('\n'):
+            txt = Get_Font(18).render(line, True, CITY_COLOUR)
+            output.blit(txt, linepos)
+            linepos += PVector(0, 10)
 
     def Mouse_Move(self, pmousepos):
         if pmousepos is None:
@@ -794,9 +823,9 @@ class ControlMenuButton(object):
         self.action = name
 
     def _init(self, fname, enabled=True):
-        from sprites import StaticSprite
         self.enabled = enabled
         self._picture = StaticSprite(fname, 24)
+        self.dashboard_picture = StaticSprite(fname, 48)
         self._background = StaticSprite('btn_background.png')
         self._background_lit = StaticSprite('btn_background_lit.png')
         self.phalfsize = self._background.phalfsize

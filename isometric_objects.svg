@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.5355339"
-     inkscape:cx="-152.68319"
-     inkscape:cy="-129.33885"
+     inkscape:zoom="10"
+     inkscape:cx="-62.834298"
+     inkscape:cy="-183.24803"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -58,6 +58,17 @@
   </sodipodi:namedview>
   <defs
      id="defs4">
+    <linearGradient
+       id="linearGradient4895">
+      <stop
+         id="stop4897"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         id="stop4899"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+    </linearGradient>
     <linearGradient
        id="linearGradient66398">
       <stop
@@ -4156,15 +4167,6 @@
     <filter
        color-interpolation-filters="sRGB"
        inkscape:collect="always"
-       id="filter5982-3-1">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.80132883"
-         id="feGaussianBlur5984-8-7" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       inkscape:collect="always"
        id="filter7866-1-4-4"
        x="-0.080047719"
        width="1.1600955"
@@ -4855,6 +4857,28 @@
        id="linearGradient66450"
        xlink:href="#linearGradient6130-3-4"
        inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4895"
+       id="linearGradient4904"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.45064377,0,0,0.93518519,12.358606,52.604796)"
+       x1="19.139038"
+       y1="728.88727"
+       x2="26.101629"
+       y2="740.00214" />
+    <filter
+       inkscape:collect="always"
+       id="filter5028"
+       x="-0.032619632"
+       width="1.0652393"
+       y="-0.15839548"
+       height="1.316791">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.61404347"
+         id="feGaussianBlur5030" />
+    </filter>
   </defs>
   <metadata
      id="metadata7">
@@ -4874,8 +4898,8 @@
      id="layer1"
      transform="translate(-120.69874,-391.39084)">
     <image
-       y="845.43225"
-       x="-19.783943"
+       y="783.43225"
+       x="-16.983942"
        id="image6618"
        xlink:href="file:///home/fede/projects/lightyears/data/moon_surface.orig.jpg"
        height="669.02399"
@@ -7487,7 +7511,7 @@
          inkscape:export-xdpi="959.51685"
          inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
          transform="translate(120.69873,408.20902)"
-         d="m -167.52376,300.35608 a 12.515916,6.8181953 0 1 1 -25.03183,0 12.515916,6.8181953 0 1 1 25.03183,0 z"
+         d="m -167.52376,300.35608 c 0,3.76558 -5.60356,6.81819 -12.51591,6.81819 -6.91235,0 -12.51592,-3.05261 -12.51592,-6.81819 0,-3.76559 5.60357,-6.8182 12.51592,-6.8182 6.91235,0 12.51591,3.05261 12.51591,6.8182 z"
          sodipodi:ry="6.8181953"
          sodipodi:rx="12.515916"
          sodipodi:cy="300.35608"
@@ -7520,7 +7544,7 @@
          inkscape:export-xdpi="959.51685"
          inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
          transform="translate(120.69873,393.89082)"
-         d="m -165.03637,300.35608 a 15.003306,7.5 0 1 1 -30.00661,0 15.003306,7.5 0 1 1 30.00661,0 z"
+         d="m -165.03637,300.35608 c 0,4.14213 -6.71721,7.5 -15.0033,7.5 -8.2861,0 -15.00331,-3.35787 -15.00331,-7.5 0,-4.14214 6.71721,-7.5 15.00331,-7.5 8.28609,0 15.0033,3.35786 15.0033,7.5 z"
          sodipodi:ry="7.5"
          sodipodi:rx="15.003306"
          sodipodi:cy="300.35608"
@@ -7627,6 +7651,67 @@
        inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
        inkscape:export-xdpi="964.49908"
        inkscape:export-ydpi="964.49908" />
+    <rect
+       style="fill:#000000;fill-opacity:0.29646020000000001;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="rect4099"
+       width="65.902351"
+       height="30.547012"
+       x="-104.6518"
+       y="342.99997"
+       transform="translate(120.69874,391.39084)"
+       ry="7.3539104"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_glass.png"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-ydpi="672.9505" />
+    <path
+       style="fill:url(#linearGradient4904);fill-opacity:1;stroke:none"
+       d="m 23.400849,735.23938 1.343501,-0.14142 c 18.35826,2.12655 -7.230129,26.7488 -7.778172,7.97198 l 0,-0.88258 c 0,-2.55247 1.64742,-6.44406 6.434671,-6.94798 z"
+       id="rect4099-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sccss"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_glass.png"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-ydpi="672.9505" />
+    <g
+       id="g5032"
+       transform="translate(-7.2,37.9)">
+      <text
+         transform="scale(0.9049181,1.1050724)"
+         sodipodi:linespacing="125%"
+         id="text4906"
+         y="683.62848"
+         x="29.272339"
+         style="font-size:10.9341774px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#fff0b3;fill-opacity:0.2964602;stroke:none;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif"
+         xml:space="preserve"><tspan
+           rotate="0 0 0 0 0 0 0 0 0 0"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;letter-spacing:0.28155509px;word-spacing:-0.21321644px;fill:#fff0b3;fill-opacity:0.2964602;stroke:none;font-family:VL Gothic;-inkscape-font-specification:VL Gothic Bold"
+           y="683.62848"
+           x="29.272339"
+           id="tspan4908"
+           sodipodi:role="line">NixieTest</tspan></text>
+      <use
+         style="filter:url(#filter5028)"
+         id="use4950"
+         xlink:href="#text4906"
+         y="0"
+         x="0"
+         width="314.35358"
+         height="195.35606" />
+      <use
+         id="use4988"
+         xlink:href="#use4950"
+         y="0"
+         x="0"
+         width="314.35358"
+         height="195.35606" />
+      <use
+         id="use4990"
+         xlink:href="#text4906"
+         y="0"
+         x="0"
+         width="314.35358"
+         height="195.35606" />
+    </g>
   </g>
   <path
      style="fill:#986c00;fill-opacity:1;stroke:#000000;stroke-width:0.07319083;stroke-opacity:1"

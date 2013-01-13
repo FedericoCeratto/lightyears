@@ -32,9 +32,12 @@ class StaticSprite(object):
     def phalfsize(self):
         return self._phalfsize
 
-    def draw(self, output, pcenter, grayed_out=False, highlighted=False):
+    def draw(self, output, pcenter=None, pos=None, grayed_out=False, highlighted=False):
         """Draw sprite on a surface"""
-        pos = pcenter - self.phalfsize
+        if pcenter:
+            pos = pcenter - self.phalfsize
+        else:
+            assert pos, "pcenter or pos must be specified on draw()"
 
         if grayed_out:
             i = self.grayed_out()
