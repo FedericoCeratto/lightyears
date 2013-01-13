@@ -86,7 +86,7 @@ def Main(data_dir):
     config.cfg = config.Config(delete_file=cli_args.safe)
 
     # Pygame things
-    flags = 0
+    flags = pygame.HWSURFACE # Hardware acceleration enabled in fullscreen.
     if cli_args.fullscreen:
         flags |= FULLSCREEN
 
@@ -109,7 +109,7 @@ def Main(data_dir):
             if resolution[:2] not in pygame.display.list_modes():
                 RESOLUTIONS.remove(resolution)
 
-        
+
     if cli_args.no_sound:
         resource.No_Sound()
     else:
@@ -142,7 +142,7 @@ def Main(data_dir):
     quakes.Init_Quakes()
 
     quit = False
-    while ( not quit ):
+    while not quit:
         if resolution != (width, height):
 
             # As the toggle mode thing doesn't work outside of Unix, 
