@@ -696,7 +696,7 @@ class ControlMenu(object):
             ControlMenuButton('build super node','node_super_00.png', enabled=False),
             ControlMenuButton('build tower','tower_00.png', enabled=False),
             ControlMenuButton('destroy item','destroy.png'),
-            ControlMenuButton('exit','destroy.png'),
+            ControlMenuButton('exit','btn_menu.png'),
         ]
         self._ptopleft = None
         self._dashboard_back = StaticSprite('dashboard_back.png', 180)

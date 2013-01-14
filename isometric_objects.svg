@@ -28,18 +28,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="10"
-     inkscape:cx="-62.834298"
-     inkscape:cy="-183.24803"
+     inkscape:zoom="1.767767"
+     inkscape:cx="-31.046629"
+     inkscape:cy="-291.15668"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="true"
+     showgrid="false"
      gridtolerance="5"
      guidetolerance="5"
      inkscape:window-width="1680"
      inkscape:window-height="1050"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-maximized="0"
@@ -4862,7 +4862,7 @@
        xlink:href="#linearGradient4895"
        id="linearGradient4904"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.45064377,0,0,0.93518519,12.358606,52.604796)"
+       gradientTransform="matrix(0.45064377,0,0,0.93518519,12.358606,-7.395204)"
        x1="19.139038"
        y1="728.88727"
        x2="26.101629"
@@ -4879,6 +4879,58 @@
          stdDeviation="0.61404347"
          id="feGaussianBlur5030" />
     </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4895"
+       id="linearGradient5242"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.45064377,0,0,0.93518519,12.358606,24.604796)"
+       x1="19.139038"
+       y1="728.88727"
+       x2="26.101629"
+       y2="740.00214" />
+    <linearGradient
+       id="linearGradient4895-7">
+      <stop
+         id="stop4897-8"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         id="stop4899-1"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4895-79"
+       id="linearGradient5242-55"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.45064377,0,0,0.93518519,85.859236,19.887389)"
+       x1="19.139038"
+       y1="728.88727"
+       x2="26.101629"
+       y2="740.00214" />
+    <linearGradient
+       id="linearGradient4895-79">
+      <stop
+         id="stop4897-9"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         id="stop4899-2"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4895-7"
+       id="linearGradient5315"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.45064377,0,0,0.93518519,84.859236,59.287389)"
+       x1="19.139038"
+       y1="728.88727"
+       x2="26.101629"
+       y2="740.00214" />
   </defs>
   <metadata
      id="metadata7">
@@ -7652,20 +7704,19 @@
        inkscape:export-xdpi="964.49908"
        inkscape:export-ydpi="964.49908" />
     <rect
-       style="fill:#000000;fill-opacity:0.29646020000000001;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       style="fill:#000000;fill-opacity:0.2964602;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
        id="rect4099"
        width="65.902351"
        height="30.547012"
-       x="-104.6518"
-       y="342.99997"
-       transform="translate(120.69874,391.39084)"
+       x="16.04694"
+       y="674.39081"
        ry="7.3539104"
        inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_glass.png"
        inkscape:export-xdpi="672.9505"
        inkscape:export-ydpi="672.9505" />
     <path
        style="fill:url(#linearGradient4904);fill-opacity:1;stroke:none"
-       d="m 23.400849,735.23938 1.343501,-0.14142 c 18.35826,2.12655 -7.230129,26.7488 -7.778172,7.97198 l 0,-0.88258 c 0,-2.55247 1.64742,-6.44406 6.434671,-6.94798 z"
+       d="m 23.400849,675.23938 1.343501,-0.14142 c 18.35826,2.12655 -7.230129,26.7488 -7.778172,7.97198 l 0,-0.88258 c 0,-2.55247 1.64742,-6.44406 6.434671,-6.94798 z"
        id="rect4099-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sccss"
@@ -7712,6 +7763,137 @@
          width="314.35358"
          height="195.35606" />
     </g>
+    <rect
+       inkscape:export-ydpi="672.9505"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_back.png"
+       ry="7.3539104"
+       y="638.39081"
+       x="16.04694"
+       height="30.547012"
+       width="65.902351"
+       id="use5116"
+       style="fill:#000000;fill-opacity:0.60176992;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+    <rect
+       style="fill:#000000;fill-opacity:0.6017699;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="use5236"
+       width="65.902351"
+       height="30.547012"
+       x="16.04694"
+       y="706.39081"
+       ry="7.3539104"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_back.png"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-ydpi="672.9505" />
+    <path
+       style="opacity:0.05833333;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 20.570357,706.90064 c -0.905627,0.46285 -1.696087,1.11388 -2.336778,1.907 l 61.463411,0 c -0.640689,-0.79312 -1.431154,-1.44415 -2.336778,-1.907 l -56.789855,0 z m -3.289937,3.43261 c -0.283493,0.60225 -0.4958,1.25818 -0.614942,1.93879 l 64.599614,0 c -0.119532,-0.68285 -0.330026,-1.33487 -0.614942,-1.93879 l -63.36973,0 z m -0.73793,3.46439 0,1.907 64.84559,0 0,-1.907 -64.84559,0 z m 0,3.4326 0,1.907 64.84559,0 0,-1.907 -64.84559,0 z m 0,3.43261 0,1.93879 64.84559,0 0,-1.93879 -64.84559,0 z m 0,3.49617 0,1.907 64.84559,0 0,-1.907 -64.84559,0 z m 0,3.4326 0,1.907 64.84559,0 0,-1.907 -64.84559,0 z m 0.122988,3.43261 c 0.115009,0.68523 0.302807,1.33196 0.584195,1.93879 l 63.431224,0 c 0.282851,-0.60856 0.468797,-1.25125 0.584195,-1.93879 l -64.599614,0 z m 1.537354,3.46439 c 0.631344,0.79143 1.411857,1.43919 2.306031,1.907 l 56.912844,0 c 0.894173,-0.46781 1.674685,-1.11557 2.306031,-1.907 l -61.524906,0 z"
+       id="rect4879"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="672.9505"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_glass.png"
+       sodipodi:nodetypes="sccss"
+       inkscape:connector-curvature="0"
+       id="use5238"
+       d="m 23.400849,707.23938 1.343501,-0.14142 c 18.35826,2.12655 -7.230129,26.7488 -7.778172,7.97198 l 0,-0.88258 c 0,-2.55247 1.64742,-6.44406 6.434671,-6.94798 z"
+       style="fill:url(#linearGradient5242);fill-opacity:1;stroke:none" />
+    <rect
+       inkscape:export-ydpi="672.9505"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_back.png"
+       ry="7.3539104"
+       y="706.39081"
+       x="16.04694"
+       height="30.547012"
+       width="65.902351"
+       id="use5246"
+       style="fill:none;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+    <rect
+       style="fill:#000000;fill-opacity:0.6017699;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="use5236-6"
+       width="65.902351"
+       height="30.547012"
+       x="88.547569"
+       y="741.07343"
+       ry="7.3539104"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_back.png"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-ydpi="672.9505" />
+    <g
+       id="g5310"
+       transform="translate(-70,0)"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_glass.png"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-ydpi="672.9505">
+      <path
+         inkscape:connector-curvature="0"
+         id="rect4879-3"
+         d="m 93.070986,741.58323 c -0.90563,0.46285 -1.69609,1.11388 -2.33678,1.907 l 61.463414,0 c -0.64069,-0.79312 -1.43115,-1.44415 -2.33678,-1.907 l -56.789854,0 z m -3.28994,3.43261 c -0.28349,0.60225 -0.4958,1.25818 -0.61494,1.93879 l 64.599614,0 c -0.11953,-0.68285 -0.33002,-1.33487 -0.61494,-1.93879 l -63.369734,0 z m -0.73793,3.46439 0,1.907 64.845594,0 0,-1.907 -64.845594,0 z m 0,3.4326 0,1.907 64.845594,0 0,-1.907 -64.845594,0 z m 0,3.43261 0,1.93879 64.845594,0 0,-1.93879 -64.845594,0 z m 0,3.49617 0,1.907 64.845594,0 0,-1.907 -64.845594,0 z m 0,3.4326 0,1.907 64.845594,0 0,-1.907 -64.845594,0 z m 0.12299,3.43261 c 0.11501,0.68523 0.30281,1.33196 0.58419,1.93879 l 63.431234,0 c 0.28285,-0.60856 0.46879,-1.25125 0.58419,-1.93879 l -64.599614,0 z m 1.53735,3.46439 c 0.63135,0.79143 1.41186,1.43919 2.30603,1.907 l 56.912854,0 c 0.89417,-0.46781 1.67468,-1.11557 2.30603,-1.907 l -61.524914,0 z"
+         style="opacity:0.19583333;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+      <path
+         style="fill:url(#linearGradient5315);fill-opacity:1;stroke:none"
+         d="m 95.901476,741.92197 1.3435,-0.14142 c 18.358264,2.12655 -7.23013,26.7488 -7.77817,7.97198 l 0,-0.88258 c 0,-2.55247 1.64742,-6.44406 6.43467,-6.94798 z"
+         id="use5238-7"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="sccss"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_glass.png"
+         inkscape:export-xdpi="672.9505"
+         inkscape:export-ydpi="672.9505" />
+      <rect
+         style="fill:none;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         id="use5246-6"
+         width="65.902351"
+         height="30.547012"
+         x="88.547569"
+         y="741.07343"
+         ry="7.3539104"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_back.png"
+         inkscape:export-xdpi="672.9505"
+         inkscape:export-ydpi="672.9505" />
+    </g>
+    <rect
+       style="fill:#000000;fill-opacity:0.6017699;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="use5236-5"
+       width="65.902351"
+       height="30.547012"
+       x="89.547569"
+       y="701.6734"
+       ry="7.3539104"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_back.png"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-ydpi="672.9505" />
+    <path
+       style="opacity:0.05833333;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 94.070986,702.18323 c -0.90563,0.46285 -1.69609,1.11388 -2.33678,1.907 l 61.463414,0 c -0.64069,-0.79312 -1.43115,-1.44415 -2.33678,-1.907 l -56.789854,0 z m -3.28994,3.43261 c -0.28349,0.60225 -0.4958,1.25818 -0.61494,1.93879 l 64.599614,0 c -0.11953,-0.68285 -0.33002,-1.33487 -0.61494,-1.93879 l -63.369734,0 z m -0.73793,3.46439 0,1.907 64.845594,0 0,-1.907 -64.845594,0 z m 0,3.4326 0,1.907 64.845594,0 0,-1.907 -64.845594,0 z m 0,3.43261 0,1.93879 64.845594,0 0,-1.93879 -64.845594,0 z m 0,3.49617 0,1.907 64.845594,0 0,-1.907 -64.845594,0 z m 0,3.4326 0,1.907 64.845594,0 0,-1.907 -64.845594,0 z m 0.12299,3.43261 c 0.11501,0.68523 0.30281,1.33196 0.58419,1.93879 l 63.431234,0 c 0.28285,-0.60856 0.46879,-1.25125 0.58419,-1.93879 l -64.599614,0 z m 1.53735,3.46439 c 0.63135,0.79143 1.41186,1.43919 2.30603,1.907 l 56.912854,0 c 0.89417,-0.46781 1.67468,-1.11557 2.30603,-1.907 l -61.524914,0 z"
+       id="rect4879-30"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="672.9505"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_glass.png"
+       sodipodi:nodetypes="sccss"
+       inkscape:connector-curvature="0"
+       id="use5238-4"
+       d="m 96.901476,702.52197 1.3435,-0.14142 c 18.358264,2.12655 -7.23013,26.7488 -7.77817,7.97198 l 0,-0.88258 c 0,-2.55247 1.64742,-6.44406 6.43467,-6.94798 z"
+       style="fill:url(#linearGradient5242-55);fill-opacity:1;stroke:none" />
+    <rect
+       inkscape:export-ydpi="672.9505"
+       inkscape:export-xdpi="672.9505"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_back.png"
+       ry="7.3539104"
+       y="701.6734"
+       x="89.547569"
+       height="30.547012"
+       width="65.902351"
+       id="use5246-1"
+       style="fill:none;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+    <path
+       style="fill:#000000;fill-opacity:0.54222221;fill-rule:nonzero;stroke:#000000;stroke-width:0.10224965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m -19.715858,747.22185 c -0.38838,0 -0.76363,0.0684 -1.125,0.15625 0.11823,0.5682 -0.15039,1.15865 -0.6875,1.46875 -0.53221,0.30727 -1.18779,0.22673 -1.625,-0.15625 -0.52451,0.54471 -0.87542,1.22344 -1.09375,1.96875 0.53894,0.18941 0.9375,0.70984 0.9375,1.3125 0,0.61277 -0.41577,1.12256 -0.96875,1.3125 0.2162,0.76108 0.59088,1.44592 1.125,2 0.23773,-0.21797 0.53654,-0.35329 0.84375,-0.375 0.26773,-0.0189 0.53132,0.0432 0.78125,0.1875 0.53711,0.3101 0.80573,0.92392 0.6875,1.5 0.3591,0.0866 0.73929,0.15625 1.125,0.15625 0.38571,0 0.7659,-0.0696 1.125,-0.15625 -0.11823,-0.57608 0.15039,-1.1899 0.6875,-1.5 0.24993,-0.1443 0.51352,-0.20642 0.78125,-0.1875 0.30721,0.0217 0.60602,0.15703 0.84375,0.375 0.53412,-0.55408 0.9088,-1.23892 1.125,-2 -0.55298,-0.18994 -0.96875,-0.69973 -0.96875,-1.3125 0,-0.60266 0.39856,-1.12309 0.9375,-1.3125 -0.21833,-0.74531 -0.56924,-1.42404 -1.09375,-1.96875 -0.43721,0.38298 -1.09279,0.46352 -1.625,0.15625 -0.53711,-0.3101 -0.80573,-0.90055 -0.6875,-1.46875 -0.36137,-0.0878 -0.73662,-0.15625 -1.125,-0.15625 z m 0,3.21875 c 0.8594,0 1.5625,0.67185 1.5625,1.53125 0,0.8594 -0.7031,1.5625 -1.5625,1.5625 -0.8594,0 -1.5625,-0.7031 -1.5625,-1.5625 0,-0.8594 0.7031,-1.53125 1.5625,-1.53125 z"
+       id="path5340"
+       inkscape:connector-curvature="0" />
   </g>
   <path
      style="fill:#986c00;fill-opacity:1;stroke:#000000;stroke-width:0.07319083;stroke-opacity:1"
