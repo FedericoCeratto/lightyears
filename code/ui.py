@@ -699,6 +699,7 @@ class ControlMenu(object):
             ControlMenuButton('exit','destroy.png'),
         ]
         self._ptopleft = None
+        self._dashboard_back = StaticSprite('dashboard_back.png', 180)
         self._dashboard_glass = StaticSprite('dashboard_glass.png', 180)
         self._buttons_pdelta = PVector(5, 100)
 
@@ -743,13 +744,18 @@ class ControlMenu(object):
 
     def _draw_dashboard(self, output):
         """Draw dashboard"""
+        # Draw back
+        pos = self._ptopleft + PVector(3, 3)
+        self._dashboard_back.draw(output, pos=pos)
+
+        # Draw item picture and text
         pos = self._ptopleft + PVector(6+24, 22+24)
         for b in self._buttons:
             if b.selected:
                 b.dashboard_picture.draw(output, pcenter=pos)
                 self._draw_dashboard_text(output, pos, b.action)
 
-        # Draw dashboard glass
+        # Draw glass
         pos = self._ptopleft + PVector(3, 3)
         self._dashboard_glass.draw(output, pos=pos)
 
