@@ -223,9 +223,9 @@ class User_Interface:
 
         #FIXME: remove examples
         self.net.Add_Grid_Item(Node((22,23)))
-        self.net.Add_Grid_Item(ResearchNode((23,23)))
+        self.net.Add_Grid_Item(ResearchNode((23,33)))
         self.net.Add_Grid_Item(HydroponicsNode((24,23)))
-        self.net.Add_Grid_Item(TowerNode((26,23)))
+        self.net.Add_Grid_Item(TowerNode((26,33)))
         self.net.Add_Grid_Item(SuperNode((28,23)))
 
         self.Reset()
@@ -699,7 +699,7 @@ class ControlMenu(object):
             ControlMenuButton('build node','node_00.png'),
             ControlMenuButton('upgrade item','upgrade.png'),
             ControlMenuButton('build research','research_00.png'),
-            ControlMenuButton('build hydroponics','hydro.png', enabled=False),
+            ControlMenuButton('build hydroponics','hydroponics_00.png', enabled=False),
             ControlMenuButton('build super node','node_super_00.png', enabled=False),
             ControlMenuButton('build tower','tower_00.png', enabled=False),
             ControlMenuButton('destroy item','destroy.png'),

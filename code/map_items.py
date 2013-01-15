@@ -853,29 +853,24 @@ class SuperNode(Node):
         super(SuperNode, self).__init__(*args, **kwargs)
         self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT * 2
         self._sp_incomplete = sprites.AnimatedSprite('node_super.anim')
-        self._sp_venting = sprites.AnimatedSprite('node_super.anim')
 
 class ResearchNode(Node):
     """Research station node"""
     def __init__(self, *args, **kwargs):
         super(ResearchNode, self).__init__(*args, **kwargs)
-        self._sp_incomplete = sprites.Sprite('research_00.png')
-        self._sp_venting = sprites.Sprite('research_00.png')
+        self._sp_incomplete = sprites.AnimatedSprite('research.anim')
 
 class HydroponicsNode(Node):
     """Hydroponics node"""
     def __init__(self, *args, **kwargs):
         super(HydroponicsNode, self).__init__(*args, **kwargs)
-        self._sp_incomplete = sprites.Sprite('hydro.png')
-        self._sp_venting = sprites.Sprite('hydro.png')
+        self._sp_incomplete = sprites.AnimatedSprite('hydroponics.anim')
 
 class TowerNode(Node):
     """Tower node"""
     def __init__(self, *args, **kwargs):
         super(TowerNode, self).__init__(*args, **kwargs)
-        self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT * 6
-        self._sp_incomplete = sprites.Sprite('tower_00.png')
-        self._sp_venting = sprites.Sprite('tower_00.png')
+        self._sp_incomplete = sprites.AnimatedSprite('tower.anim')
 
 
 class City_Node(Node):

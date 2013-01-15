@@ -5,11 +5,13 @@
 
 # Animated sprites
 
+from random import randint
 from time import time
+
+from primitives import Get_Grid_Size, GVector, PVector
 from pygame.transform import smoothscale, rotate
 from resource import Path as path
 import pygame
-from primitives import Get_Grid_Size, GVector, PVector
 
 class StaticSprite(object):
     """A sprite that does not support dynamic rotation/scaling"""
@@ -181,11 +183,16 @@ class AnimatedSprite(Sprite):
         self._rotation = 0
         self._zoom = 1
         self.scale(1.0)
+        self.sequence = 'linear' # linear or random
 
         with open(path(filename)) as f:
             for line in f:
-                if line.startswith("# Scale:"):
+                if line.startswith('# Scale:'):
                     self.scale(float(line[8:]))
+                    continue
+
+                if line.startswith('# Sequence: random'):
+                    self.sequence = 'random'
                     continue
 
                 if line.startswith('#'):
@@ -199,6 +206,8 @@ class AnimatedSprite(Sprite):
 
         f.close()
         assert self._frames, "%s did not load any frame" % filename
+        assert self.sequence in ('linear', 'random'), \
+            "Animation sequence must be 'linear' or 'random'"
         self._ratio = img.get_height() / float(img.get_width())
         self._frame_expiry_time = time() + self._frames[0][1]
         self._rawimg = self._img = self._frames[0][0]
@@ -210,8 +219,12 @@ class AnimatedSprite(Sprite):
         if time() > self._frame_expiry_time:
             self._frame_expiry_time = time() \
                 + self._frames[self._current_frame_num][1]
-            self._current_frame_num += 1
-            self._current_frame_num %= len(self._frames)
+
+            if self.sequence == 'linear':
+                self._current_frame_num += 1
+                self._current_frame_num %= len(self._frames)
+            else:
+                self._current_frame_num = randint(0, len(self._frames) - 1)
 
             self._rawimg = self._frames[self._current_frame_num][0]
 
