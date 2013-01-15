@@ -187,6 +187,10 @@ class AnimatedSprite(Sprite):
 
         with open(path(filename)) as f:
             for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+
                 if line.startswith('# Scale:'):
                     self.scale(float(line[8:]))
                     continue
