@@ -845,13 +845,37 @@ class Node(Building):
 #TODO: display max health on dashboard
 #TODO: display selected item image on dashboard
 
-class SuperNode(Building):
+#FIXME: images and animations for the new classes
+
+class SuperNode(Node):
     """Node with increased storage capacity and health"""
     def __init__(self, *args, **kwargs):
         super(SuperNode, self).__init__(*args, **kwargs)
         self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT * 2
-        self._sp_finished = sprites.AnimatedSprite('node_super.anim')
-        self._sp_venting = sprites.AnimatedSprite('node_super_venting.anim')
+        self._sp_incomplete = sprites.AnimatedSprite('node_super.anim')
+        self._sp_venting = sprites.AnimatedSprite('node_super.anim')
+
+class ResearchNode(Node):
+    """Research station node"""
+    def __init__(self, *args, **kwargs):
+        super(ResearchNode, self).__init__(*args, **kwargs)
+        self._sp_incomplete = sprites.Sprite('research_00.png')
+        self._sp_venting = sprites.Sprite('research_00.png')
+
+class HydroponicsNode(Node):
+    """Hydroponics node"""
+    def __init__(self, *args, **kwargs):
+        super(HydroponicsNode, self).__init__(*args, **kwargs)
+        self._sp_incomplete = sprites.Sprite('hydro.png')
+        self._sp_venting = sprites.Sprite('hydro.png')
+
+class TowerNode(Node):
+    """Tower node"""
+    def __init__(self, *args, **kwargs):
+        super(TowerNode, self).__init__(*args, **kwargs)
+        self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT * 6
+        self._sp_incomplete = sprites.Sprite('tower_00.png')
+        self._sp_venting = sprites.Sprite('tower_00.png')
 
 
 class City_Node(Node):

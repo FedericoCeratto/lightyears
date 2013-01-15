@@ -28,18 +28,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.767767"
-     inkscape:cx="-31.046629"
-     inkscape:cy="-291.15668"
+     inkscape:zoom="20"
+     inkscape:cx="-198.92601"
+     inkscape:cy="-200.67719"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      gridtolerance="5"
      guidetolerance="5"
-     inkscape:window-width="1680"
-     inkscape:window-height="1050"
+     inkscape:window-width="1602"
+     inkscape:window-height="987"
      inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-y="59"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-maximized="0"
@@ -4931,6 +4931,35 @@
        y1="728.88727"
        x2="26.101629"
        y2="740.00214" />
+    <filter
+       id="filter5411"
+       inkscape:label="Torn edges"
+       inkscape:menu="Distort"
+       inkscape:menu-tooltip="Displace the outside of shapes and pictures without altering their content"
+       height="1.4"
+       y="-0.2"
+       width="1.4"
+       x="-0.2"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence5413"
+         baseFrequency="0.05"
+         numOctaves="5"
+         type="fractalNoise"
+         result="result91" />
+      <feDisplacementMap
+         id="feDisplacementMap5415"
+         in2="result91"
+         scale="25"
+         result="result5"
+         xChannelSelector="R"
+         in="SourceGraphic" />
+      <feComposite
+         id="feComposite5417"
+         in2="result5"
+         in="SourceGraphic"
+         operator="atop" />
+    </filter>
   </defs>
   <metadata
      id="metadata7">
@@ -7523,16 +7552,38 @@
        d="m -184.97913,172.42813 c 0,1.41565 -1.00515,2.56326 -2.24507,2.56326 -1.23991,0 -2.24506,-1.14761 -2.24506,-2.56326 0,-1.41565 1.00515,-2.56326 2.24506,-2.56326 1.23992,0 2.24507,1.14761 2.24507,2.56326 z"
        transform="translate(120.27448,391.70904)" />
     <text
+       sodipodi:linespacing="125%"
+       id="text5389"
+       y="687.62982"
+       x="-126.39671"
+       style="font-size:8.80601311px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         y="687.62982"
+         x="-126.39671"
+         id="tspan5391"
+         sodipodi:role="line">tower</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text5393"
+       y="756.07776"
+       x="-127.24524"
+       style="font-size:8.80601311px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         y="756.07776"
+         x="-127.24524"
+         id="tspan5395"
+         sodipodi:role="line">config</tspan></text>
+    <text
        xml:space="preserve"
        style="font-size:8.80601311px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="-126.39671"
-       y="687.62982"
+       x="-126.9624"
+       y="791.43311"
        id="text3882-4"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3884-7"
-         x="-126.39671"
-         y="687.62982">tower</tspan></text>
+         x="-126.9624"
+         y="791.43311">menu</tspan></text>
     <path
        transform="matrix(1.3890898,0,0,1.0939157,-101.97368,300.67325)"
        inkscape:connector-curvature="0"
@@ -7723,46 +7774,6 @@
        inkscape:export-filename="/home/fede/projects/lightyears/data/dashboard_glass.png"
        inkscape:export-xdpi="672.9505"
        inkscape:export-ydpi="672.9505" />
-    <g
-       id="g5032"
-       transform="translate(-7.2,37.9)">
-      <text
-         transform="scale(0.9049181,1.1050724)"
-         sodipodi:linespacing="125%"
-         id="text4906"
-         y="683.62848"
-         x="29.272339"
-         style="font-size:10.9341774px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#fff0b3;fill-opacity:0.2964602;stroke:none;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif"
-         xml:space="preserve"><tspan
-           rotate="0 0 0 0 0 0 0 0 0 0"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;letter-spacing:0.28155509px;word-spacing:-0.21321644px;fill:#fff0b3;fill-opacity:0.2964602;stroke:none;font-family:VL Gothic;-inkscape-font-specification:VL Gothic Bold"
-           y="683.62848"
-           x="29.272339"
-           id="tspan4908"
-           sodipodi:role="line">NixieTest</tspan></text>
-      <use
-         style="filter:url(#filter5028)"
-         id="use4950"
-         xlink:href="#text4906"
-         y="0"
-         x="0"
-         width="314.35358"
-         height="195.35606" />
-      <use
-         id="use4988"
-         xlink:href="#use4950"
-         y="0"
-         x="0"
-         width="314.35358"
-         height="195.35606" />
-      <use
-         id="use4990"
-         xlink:href="#text4906"
-         y="0"
-         x="0"
-         width="314.35358"
-         height="195.35606" />
-    </g>
     <rect
        inkscape:export-ydpi="672.9505"
        inkscape:export-xdpi="672.9505"
@@ -7891,9 +7902,96 @@
        style="fill:none;stroke:#fff1cd;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
     <path
        style="fill:#000000;fill-opacity:0.54222221;fill-rule:nonzero;stroke:#000000;stroke-width:0.10224965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -19.715858,747.22185 c -0.38838,0 -0.76363,0.0684 -1.125,0.15625 0.11823,0.5682 -0.15039,1.15865 -0.6875,1.46875 -0.53221,0.30727 -1.18779,0.22673 -1.625,-0.15625 -0.52451,0.54471 -0.87542,1.22344 -1.09375,1.96875 0.53894,0.18941 0.9375,0.70984 0.9375,1.3125 0,0.61277 -0.41577,1.12256 -0.96875,1.3125 0.2162,0.76108 0.59088,1.44592 1.125,2 0.23773,-0.21797 0.53654,-0.35329 0.84375,-0.375 0.26773,-0.0189 0.53132,0.0432 0.78125,0.1875 0.53711,0.3101 0.80573,0.92392 0.6875,1.5 0.3591,0.0866 0.73929,0.15625 1.125,0.15625 0.38571,0 0.7659,-0.0696 1.125,-0.15625 -0.11823,-0.57608 0.15039,-1.1899 0.6875,-1.5 0.24993,-0.1443 0.51352,-0.20642 0.78125,-0.1875 0.30721,0.0217 0.60602,0.15703 0.84375,0.375 0.53412,-0.55408 0.9088,-1.23892 1.125,-2 -0.55298,-0.18994 -0.96875,-0.69973 -0.96875,-1.3125 0,-0.60266 0.39856,-1.12309 0.9375,-1.3125 -0.21833,-0.74531 -0.56924,-1.42404 -1.09375,-1.96875 -0.43721,0.38298 -1.09279,0.46352 -1.625,0.15625 -0.53711,-0.3101 -0.80573,-0.90055 -0.6875,-1.46875 -0.36137,-0.0878 -0.73662,-0.15625 -1.125,-0.15625 z m 0,3.21875 c 0.8594,0 1.5625,0.67185 1.5625,1.53125 0,0.8594 -0.7031,1.5625 -1.5625,1.5625 -0.8594,0 -1.5625,-0.7031 -1.5625,-1.5625 0,-0.8594 0.7031,-1.53125 1.5625,-1.53125 z"
+       d="m -79.961356,749.20175 c -0.38838,0 -0.76363,0.0684 -1.125,0.15625 0.11823,0.5682 -0.15039,1.15865 -0.6875,1.46875 -0.53221,0.30727 -1.18779,0.22673 -1.625,-0.15625 -0.52451,0.54471 -0.87542,1.22344 -1.09375,1.96875 0.53894,0.18941 0.9375,0.70984 0.9375,1.3125 0,0.61277 -0.41577,1.12256 -0.96875,1.3125 0.2162,0.76108 0.59088,1.44592 1.125,2 0.23773,-0.21797 0.53654,-0.35329 0.84375,-0.375 0.26773,-0.0189 0.53132,0.0432 0.78125,0.1875 0.53711,0.3101 0.80573,0.92392 0.6875,1.5 0.3591,0.0866 0.73929,0.15625 1.125,0.15625 0.38571,0 0.7659,-0.0696 1.125,-0.15625 -0.11823,-0.57608 0.15039,-1.1899 0.6875,-1.5 0.24993,-0.1443 0.51352,-0.20642 0.78125,-0.1875 0.30721,0.0217 0.60602,0.15703 0.84375,0.375 0.53412,-0.55408 0.9088,-1.23892 1.125,-2 -0.55298,-0.18994 -0.96875,-0.69973 -0.96875,-1.3125 0,-0.60266 0.39856,-1.12309 0.9375,-1.3125 -0.21833,-0.74531 -0.56924,-1.42404 -1.09375,-1.96875 -0.43721,0.38298 -1.09279,0.46352 -1.625,0.15625 -0.53711,-0.3101 -0.80573,-0.90055 -0.6875,-1.46875 -0.36137,-0.0878 -0.73662,-0.15625 -1.125,-0.15625 z m 0,3.21875 c 0.8594,0 1.5625,0.67185 1.5625,1.53125 0,0.8594 -0.7031,1.5625 -1.5625,1.5625 -0.8594,0 -1.5625,-0.7031 -1.5625,-1.5625 0,-0.8594 0.7031,-1.53125 1.5625,-1.53125 z"
        id="path5340"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/config.png"
+       inkscape:export-xdpi="975.75"
+       inkscape:export-ydpi="975.75" />
+    <g
+       id="g5455"
+       transform="translate(-0.11501312,0)"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/btn_menu.png"
+       inkscape:export-xdpi="2914.1135"
+       inkscape:export-ydpi="2914.1135">
+      <rect
+         inkscape:export-ydpi="3102.7583"
+         inkscape:export-xdpi="3102.7583"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/btn_menu.png"
+         transform="matrix(0.06382982,0,0,0.06382982,-87.898985,728.40657)"
+         ry="0"
+         y="820.37494"
+         x="17.743994"
+         height="221.74869"
+         width="132.93608"
+         id="rect5409"
+         style="fill:#fff8d5;fill-opacity:1;fill-rule:nonzero;stroke:none;filter:url(#filter5411)" />
+      <text
+         inkscape:export-ydpi="3102.7583"
+         inkscape:export-xdpi="3102.7583"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/btn_menu.png"
+         xml:space="preserve"
+         style="font-size:2.32425618px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;opacity:0.45833333;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif"
+         x="-97.210419"
+         y="690.14038"
+         id="text5423"
+         sodipodi:linespacing="125%"
+         transform="scale(0.87863,1.1381355)"><tspan
+           sodipodi:role="line"
+           id="tspan5425"
+           x="-97.210419"
+           y="690.14038">menu</tspan></text>
+      <text
+         inkscape:export-ydpi="3102.7583"
+         inkscape:export-xdpi="3102.7583"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/btn_menu.png"
+         xml:space="preserve"
+         style="font-size:2.32425618px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;opacity:0.45833333;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif"
+         x="-97.210419"
+         y="692.86414"
+         id="text5427"
+         sodipodi:linespacing="125%"
+         transform="scale(0.87863,1.1381355)"><tspan
+           sodipodi:role="line"
+           id="tspan5429"
+           x="-97.210419"
+           y="692.86414">menu</tspan></text>
+      <text
+         inkscape:export-ydpi="3102.7583"
+         inkscape:export-xdpi="3102.7583"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/btn_menu.png"
+         transform="scale(0.87863,1.1381355)"
+         sodipodi:linespacing="125%"
+         id="text5419"
+         y="695.71967"
+         x="-97.210419"
+         style="font-size:2.32425618px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;opacity:0.45833333;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif"
+         xml:space="preserve"><tspan
+           y="695.71967"
+           x="-97.210419"
+           id="tspan5421"
+           sodipodi:role="line">menu</tspan></text>
+    </g>
+    <rect
+       style="opacity:0.45833333;fill:none;stroke:none"
+       id="rect5464"
+       width="1.95"
+       height="3.05"
+       x="-90.501259"
+       y="786.32306"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/btn_menu.png"
+       inkscape:export-xdpi="2914.1135"
+       inkscape:export-ydpi="2914.1135" />
+    <rect
+       style="opacity:0.45833333;fill:none;stroke:none"
+       id="rect5466"
+       width="2.0999999"
+       height="2.95"
+       x="-76.801262"
+       y="786.37305"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/btn_menu.png"
+       inkscape:export-xdpi="2914.1135"
+       inkscape:export-ydpi="2914.1135" />
   </g>
   <path
      style="fill:#986c00;fill-opacity:1;stroke:#000000;stroke-width:0.07319083;stroke-opacity:1"

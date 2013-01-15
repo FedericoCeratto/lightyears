@@ -221,6 +221,13 @@ class User_Interface:
         self.control_menu = None
         self._game_data = g
 
+        #FIXME: remove examples
+        self.net.Add_Grid_Item(Node((22,23)))
+        self.net.Add_Grid_Item(ResearchNode((23,23)))
+        self.net.Add_Grid_Item(HydroponicsNode((24,23)))
+        self.net.Add_Grid_Item(TowerNode((26,23)))
+        self.net.Add_Grid_Item(SuperNode((28,23)))
+
         self.Reset()
         self.blink = 0xff
 
