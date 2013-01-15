@@ -217,8 +217,6 @@ class AnimatedSprite(Sprite):
 
         # Switch frame if needed
         if time() > self._frame_expiry_time:
-            self._frame_expiry_time = time() \
-                + self._frames[self._current_frame_num][1]
 
             if self.sequence == 'linear':
                 self._current_frame_num += 1
@@ -226,7 +224,8 @@ class AnimatedSprite(Sprite):
             else:
                 self._current_frame_num = randint(0, len(self._frames) - 1)
 
-            self._rawimg = self._frames[self._current_frame_num][0]
+            self._rawimg, sleeptime = self._frames[self._current_frame_num]
+            self._frame_expiry_time = time() + sleeptime
 
         self.transform()
 
