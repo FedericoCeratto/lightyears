@@ -754,6 +754,10 @@ class Node(Building):
             self.draw_obj = self._sp_incomplete
         elif self.Needs_Work():
             # It's being built or repaired
+            if self.draw_obj != self._sp_under_construction:
+                # Start construction animation from the first frame
+                self._sp_under_construction.reset_animation()
+
             self.draw_obj = self._sp_under_construction
         else:
             if self.steam.venting:
@@ -852,25 +856,41 @@ class SuperNode(Node):
     def __init__(self, *args, **kwargs):
         super(SuperNode, self).__init__(*args, **kwargs)
         self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT * 2
-        self._sp_incomplete = sprites.AnimatedSprite('node_super.anim')
+        self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
+        self._sp_under_construction = sprites.AnimatedSprite(
+            'node_under_construction.anim')
+        self._sp_finished = sprites.AnimatedSprite('node_super.anim')
+        self._sp_venting = sprites.AnimatedSprite('node_super.anim')
 
 class ResearchNode(Node):
     """Research station node"""
     def __init__(self, *args, **kwargs):
         super(ResearchNode, self).__init__(*args, **kwargs)
-        self._sp_incomplete = sprites.AnimatedSprite('research.anim')
+        self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
+        self._sp_under_construction = sprites.AnimatedSprite(
+            'node_under_construction.anim')
+        self._sp_finished = sprites.AnimatedSprite('research.anim')
+        self._sp_venting = sprites.AnimatedSprite('research.anim')
 
 class HydroponicsNode(Node):
     """Hydroponics node"""
     def __init__(self, *args, **kwargs):
         super(HydroponicsNode, self).__init__(*args, **kwargs)
-        self._sp_incomplete = sprites.AnimatedSprite('hydroponics.anim')
+        self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
+        self._sp_under_construction = sprites.AnimatedSprite(
+            'node_under_construction.anim')
+        self._sp_finished = sprites.AnimatedSprite('hydroponics.anim')
+        self._sp_venting = sprites.AnimatedSprite('hydroponics.anim')
 
 class TowerNode(Node):
     """Tower node"""
     def __init__(self, *args, **kwargs):
         super(TowerNode, self).__init__(*args, **kwargs)
-        self._sp_incomplete = sprites.AnimatedSprite('tower.anim')
+        self._sp_incomplete = sprites.Sprite('tower_incomplete.png', 1.3)
+        self._sp_under_construction = sprites.AnimatedSprite(
+            'tower_under_construction.anim')
+        self._sp_finished = sprites.AnimatedSprite('tower.anim')
+        self._sp_venting = sprites.AnimatedSprite('tower.anim')
 
 
 class City_Node(Node):

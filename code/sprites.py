@@ -167,6 +167,9 @@ class Sprite(object):
         """Set sprite center in game units."""
         self.gcenter = GVector(x, y)
 
+    def reset_animation(self):
+        """Used by animations. Performs no actions on static sprites."""
+        pass
 
 class AnimatedSprite(Sprite):
     def __init__(self, filename):
@@ -213,8 +216,9 @@ class AnimatedSprite(Sprite):
         assert self.sequence in ('linear', 'random'), \
             "Animation sequence must be 'linear' or 'random'"
         self._ratio = img.get_height() / float(img.get_width())
-        self._frame_expiry_time = time() + self._frames[0][1]
-        self._rawimg = self._img = self._frames[0][0]
+
+        self._rawimg, sleeptime = self._frames[self._current_frame_num]
+        self._frame_expiry_time = time() + sleeptime
 
     def update_current_img(self):
         """Update current image"""
@@ -234,3 +238,8 @@ class AnimatedSprite(Sprite):
         self.transform()
 
 
+    def reset_animation(self):
+        """Start the animation from the first frame"""
+        self._current_frame_num = 0
+        self._rawimg, sleeptime = self._frames[self._current_frame_num]
+        self._frame_expiry_time = time() + sleeptime

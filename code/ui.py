@@ -223,9 +223,9 @@ class User_Interface:
 
         #FIXME: remove examples
         self.net.Add_Grid_Item(Node((22,23)))
-        self.net.Add_Grid_Item(ResearchNode((23,33)))
+        self.net.Add_Grid_Item(ResearchNode((23,26)))
         self.net.Add_Grid_Item(HydroponicsNode((24,23)))
-        self.net.Add_Grid_Item(TowerNode((26,33)))
+        self.net.Add_Grid_Item(TowerNode((26,26)))
         self.net.Add_Grid_Item(SuperNode((28,23)))
 
         self.Reset()
@@ -237,7 +237,7 @@ class User_Interface:
 
         img = resource.Load_Image("moon_surface.orig.jpg")
         zoom = 1 + random.random() # zoom in between 1 and 2
-        zoom = 1
+        zoom = 1 #FIXME
         scaled = pygame.transform.smoothscale(img,
             (int(width * zoom), int(height * zoom))
         )
@@ -331,7 +331,7 @@ class User_Interface:
 
         gpos = self.mouse_pos
         if gpos is not None:
-            if self.mode == BUILD_NODE:
+            if self.mode == 'build node':
                 # could put a node here.
                 r = Grid_To_Scr_Rect(gpos)
                 self.Update_Area(r)
@@ -352,7 +352,7 @@ class User_Interface:
                 draw_ellipse(output, Point(r.topleft),
                     INITIAL_NODE_EXCAVATION_DISTANCE , (0, 0, 0, 30), 1)
 
-            elif (( self.mode == BUILD_PIPE )
+            elif (( self.mode == 'build pipe' )
             and ( self.selection is not None )
             and ( isinstance(self.selection, Node) )):
                 # pipe route illustrated
@@ -453,12 +453,12 @@ class User_Interface:
             self.mode = self.control_menu.Get_Command()
 
             if self.selection is not None:
-                if self.mode == DESTROY:
+                if self.mode == 'destroy item':
                     self.net.Destroy(self.selection)
                     self.__Clear_Control_Selection()
                     self.selection = None
 
-                elif self.mode == UPGRADE:
+                elif self.mode == 'upgrade item':
                     self.selection.Begin_Upgrade()
                     self.__Clear_Control_Selection()
 
@@ -489,7 +489,7 @@ class User_Interface:
         self.update_area_list = []
 
     def Is_Menu_Open(self):
-        return ( self.mode == OPEN_MENU )
+        return self.mode == 'quit to menu'
 
     def _build_node(self, gpos, tutor):
         """Create new node if possible"""
@@ -588,11 +588,11 @@ class User_Interface:
             self.selection = self.net.Get_Pipe(gpos)
 
             # empty (may contain pipes)
-            if self.mode == BUILD_NODE:
+            if self.mode == 'build node':
                 # create new node (not a well), if possible
                 self._build_node(gpos, tutor)
 
-            elif self.mode == DESTROY:
+            elif self.mode == 'destroy item':
                 # I presume you are referring to a pipe?
                 pipe = self.selection
                 if pipe is not None:
@@ -600,7 +600,7 @@ class User_Interface:
                     self.__Clear_Control_Selection()
                 self.selection = None
 
-            elif self.mode == UPGRADE:
+            elif self.mode == 'upgrade item':
                 if self.selection is not None:
 
                     if self.net.use_metal('up_node'):
@@ -614,7 +614,7 @@ class User_Interface:
             # Contains node
 
             n = self.net.ground_grid[ gpos ]
-            if self.mode == BUILD_PIPE:
+            if self.mode == 'build pipe':
                 if (( self.selection is None )
                 or ( isinstance(self.selection, Pipe))):
                     # start a new pipe here
@@ -627,12 +627,12 @@ class User_Interface:
                     # end pipe here
                     self._build_pipe(self.selection, n, tutor)
 
-            elif self.mode == DESTROY:
+            elif self.mode == 'destroy item':
                 self.net.Destroy(n)
                 self.selection = None
                 self.__Clear_Control_Selection()
 
-            elif self.mode == UPGRADE:
+            elif self.mode == 'upgrade item':
                 if self.net.use_metal('up_node'):
                     n.Begin_Upgrade()
                 self.selection = n
@@ -645,7 +645,7 @@ class User_Interface:
         elif ( isinstance(self.net.ground_grid[ gpos ], Well)):
             # Contains well (unimproved)
             w = self.net.ground_grid[ gpos ]
-            if self.mode == BUILD_NODE:
+            if self.mode == 'build node':
                 # A node is planned on top of the well, if possible.
                 self._build_node_on_well(gpos, tutor)
 
@@ -816,7 +816,10 @@ class ControlMenu(object):
             btn.reset_selected()
 
     def Get_Command(self):
-        """Get the selected command"""
+        """Get the selected command
+
+        :returns: command as a string
+        """
         for btn in self._buttons:
             if btn.selected:
                 return btn.action
@@ -867,7 +870,6 @@ class ControlMenuButton(object):
             self._background.draw(output, position, grayed_out=g, highlighted=h)
 
         self._picture.draw(output, position, grayed_out=g, highlighted=h)
-
 
 
 
