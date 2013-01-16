@@ -214,7 +214,7 @@ class AnimatedSprite(Sprite):
         f.close()
         assert self._frames, "%s did not load any frame" % filename
         assert self.sequence in ('linear', 'random'), \
-            "Animation sequence must be 'linear' or 'random'"
+            "Animation sequence must be linear or random"
         self._ratio = img.get_height() / float(img.get_width())
 
         self._rawimg, sleeptime = self._frames[self._current_frame_num]
@@ -227,9 +227,12 @@ class AnimatedSprite(Sprite):
         if time() > self._frame_expiry_time:
 
             if self.sequence == 'linear':
+                # Increase and restart from 0
                 self._current_frame_num += 1
                 self._current_frame_num %= len(self._frames)
+
             else:
+                # Pick the next frame randomly
                 self._current_frame_num = randint(0, len(self._frames) - 1)
 
             self._rawimg, sleeptime = self._frames[self._current_frame_num]
