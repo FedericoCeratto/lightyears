@@ -682,7 +682,11 @@ class User_Interface(object):
         self.Update_Area(r)
 
     def __Make_Control_Menu(self, width):
+        """Instantiate ControlMenu"""
         self.control_menu = ControlMenu()
+        #FIXME: hack
+        for n in self.net.node_list:
+            n._controlmenu = self.control_menu
 
 
     def Frame_Advance(self, frame_time):
@@ -699,9 +703,9 @@ class ControlMenu(object):
             ControlMenuButton('build node','node_00.png'),
             ControlMenuButton('upgrade item','upgrade.png'),
             ControlMenuButton('build research','research_00.png'),
-            ControlMenuButton('build hydroponics','hydroponics_00.png', enabled=True),
-            ControlMenuButton('build super node','node_super_00.png', enabled=True),
-            ControlMenuButton('build tower','tower_00.png', enabled=True),
+            ControlMenuButton('build hydroponics','hydroponics_00.png', enabled=False),
+            ControlMenuButton('build super node','node_super_00.png', enabled=False),
+            ControlMenuButton('build tower','tower_00.png', enabled=False),
             ControlMenuButton('destroy item','destroy.png'),
             ControlMenuButton('exit','btn_menu.png'),
         ]
@@ -753,7 +757,7 @@ class ControlMenu(object):
     def _enable_button(self, name):
         """Enable a button"""
         for b in self._buttons:
-            if b.name == name:
+            if b.action == name:
                 b.enabled = True
 
     def Draw(self, output, top):
