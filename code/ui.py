@@ -215,7 +215,7 @@ class MechanicalCounter(object):
 
 
 
-class User_Interface:
+class User_Interface(object):
     def __init__(self, net, (width, height), g):
         self.net = net
         self.control_menu = None
@@ -699,9 +699,9 @@ class ControlMenu(object):
             ControlMenuButton('build node','node_00.png'),
             ControlMenuButton('upgrade item','upgrade.png'),
             ControlMenuButton('build research','research_00.png'),
-            ControlMenuButton('build hydroponics','hydroponics_00.png', enabled=False),
-            ControlMenuButton('build super node','node_super_00.png', enabled=False),
-            ControlMenuButton('build tower','tower_00.png', enabled=False),
+            ControlMenuButton('build hydroponics','hydroponics_00.png', enabled=True),
+            ControlMenuButton('build super node','node_super_00.png', enabled=True),
+            ControlMenuButton('build tower','tower_00.png', enabled=True),
             ControlMenuButton('destroy item','destroy.png'),
             ControlMenuButton('exit','btn_menu.png'),
         ]
@@ -709,6 +709,13 @@ class ControlMenu(object):
         self._dashboard_back = StaticSprite('dashboard_back.png', 180)
         self._dashboard_glass = StaticSprite('dashboard_glass.png', 180)
         self._buttons_pdelta = PVector(5, 100)
+
+        # Track if technologies has been completed once
+        self._improvements_completion = {
+            'research': False,
+            'hydroponics': False,
+            'tower': False,
+        }
 
         # Place buttons in rows and columns
         columns_num = 4
@@ -726,6 +733,28 @@ class ControlMenu(object):
             for key, action in config.cfg.keys.iteritems():
                 if btn.action == action:
                     btn.key = key
+
+    def notify_item_completion(self, itemname):
+        """Receive notification that an item has been completed.
+        Track achieved technologies and unlock new ones.
+        """
+        if self._improvements_completion[itemname]:
+            return # The same technology has been achieved before.
+
+        self._improvements_completion[itemname] = True
+        New_Mail("%s node technology achieved" % itemname)
+
+        if itemname == 'hydroponics':
+            self._enable_button('build research')
+        elif itemname == 'research':
+            self._enable_button('build super node')
+            self._enable_button('build tower')
+
+    def _enable_button(self, name):
+        """Enable a button"""
+        for b in self._buttons:
+            if b.name == name:
+                b.enabled = True
 
     def Draw(self, output, top):
         """Draw menu"""
@@ -751,6 +780,19 @@ class ControlMenu(object):
 
     def _draw_dashboard(self, output):
         """Draw dashboard"""
+
+        self._dashboard_infos = {
+            'build pipe': ('Pipe','Metal cost: ', 'Armor: 1', 'Capacity: 2'),
+            'build node': ('Route steam','Metal cost: ', 'Armor: 1', 'Capacity: 2'),
+            'upgrade item': ('Upgrade an item','Metal cost: variable',),
+            'build research': ('Improve tech','Metal cost: ', 'Armor: 1', 'Capacity: 1'),
+            'build hydroponics': ('Grow crops','Metal cost: ', 'Armor: 1', 'Capacity: 1'),
+            'build super node': ('Improved steam','Metal cost: ', 'Armor: 2', 'Capacity: 2'),
+            'build tower': ('Defense turret','Metal cost: ', 'Armor: 3', 'Capacity: 1'),
+            'destroy item': ('Metal cost: 0',),
+            'exit': ('Quit to menu',),
+        }
+
         # Draw back
         pos = self._ptopleft + PVector(3, 3)
         self._dashboard_back.draw(output, pos=pos)
@@ -766,15 +808,23 @@ class ControlMenu(object):
         pos = self._ptopleft + PVector(3, 3)
         self._dashboard_glass.draw(output, pos=pos)
 
+
     def _draw_dashboard_text(self, output, pos, action):
         """Draw dashboard text"""
-        lines = "%s\n" % action.capitalize()
+        linepos = pos + PVector(25, -35)
 
-        linepos = pos + PVector(30, -20)
-        for line in lines.split('\n'):
-            txt = Get_Font(18).render(line, True, CITY_COLOUR)
+        # Print first line
+        line = "%s" % action.capitalize()
+        txt = Get_Font(18).render(line, True, CITY_COLOUR)
+        output.blit(txt, linepos)
+        linepos += PVector(4, 13)
+
+        # Print 
+        lines = self._dashboard_infos[action]
+        for line in lines:
+            txt = Get_Font(16).render(line, True, CITY_COLOUR)
             output.blit(txt, linepos)
-            linepos += PVector(0, 10)
+            linepos += PVector(0, 13)
 
     def Mouse_Move(self, pmousepos):
         if pmousepos is None:
@@ -840,8 +890,10 @@ class ControlMenuButton(object):
 
     def _init(self, fname, enabled=True):
         self.enabled = enabled
-        self._picture = StaticSprite(fname, 24)
-        self.dashboard_picture = StaticSprite(fname, 48)
+        self._picture = StaticSprite(fname, 24) # Picture on the button
+        self.dashboard_picture = StaticSprite(fname, 48) # Pic on the dashboard
+        # Text on the dashboard
+        self.dashboard_infos = None
         self._background = StaticSprite('btn_background.png')
         self._background_lit = StaticSprite('btn_background_lit.png')
         self.phalfsize = self._background.phalfsize

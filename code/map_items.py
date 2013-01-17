@@ -706,6 +706,7 @@ class Node(Building):
         # Update ownership if the Node has been completed now
         if status ^ self.complete and owned_by_me:
             self.owned_by_me = True
+            self._status_changed_to_finished()
             log.debug('setting node %s as owned' % repr(self))
             if broadcast_update:
                 broadcast_update(
@@ -733,6 +734,7 @@ class Node(Building):
             self.steam.Capacity_Upgrade()
 
     def Steam_Think(self):
+        """Update node status"""
         nl = []
         for p in self.Exits():
             if p.valve_open and not p.Is_Broken():
@@ -772,6 +774,10 @@ class Node(Building):
                 # It's working normally
                 self.draw_obj = self._sp_finished
 
+
+    def _status_changed_to_finished(self):
+        """Internal trigger on item completion."""
+        pass
 
     def Exits(self):
         return self.pipes
@@ -872,6 +878,12 @@ class ResearchNode(Node):
         self._sp_finished = sprites.AnimatedSprite('research.anim')
         self._sp_venting = sprites.AnimatedSprite('research.anim')
 
+    def _status_changed_to_finished(self):
+        """Internal trigger on item completion."""
+        self._controlmenu.notify_item_completion('research')
+        #FIXME
+
+
 class HydroponicsNode(Node):
     """Hydroponics node"""
     def __init__(self, *args, **kwargs):
@@ -882,6 +894,10 @@ class HydroponicsNode(Node):
         self._sp_finished = sprites.AnimatedSprite('hydroponics.anim')
         self._sp_venting = sprites.AnimatedSprite('hydroponics.anim')
 
+    def _status_changed_to_finished(self):
+        """Internal trigger on item completion."""
+        self._controlmenu.notify_item_completion('hydroponics')
+
 class TowerNode(Node):
     """Tower node"""
     def __init__(self, *args, **kwargs):
@@ -891,6 +907,10 @@ class TowerNode(Node):
             'tower_under_construction.anim')
         self._sp_finished = sprites.AnimatedSprite('tower.anim')
         self._sp_venting = sprites.AnimatedSprite('tower.anim')
+
+    def _status_changed_to_finished(self):
+        """Internal trigger on item completion."""
+        self._controlmenu.notify_item_completion('tower')
 
 
 class City_Node(Node):
