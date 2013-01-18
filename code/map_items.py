@@ -862,6 +862,7 @@ class SuperNode(Node):
     def __init__(self, *args, **kwargs):
         super(SuperNode, self).__init__(*args, **kwargs)
         self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT * 2
+        self._nodetype = 'super'
         self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
         self._sp_under_construction = sprites.AnimatedSprite(
             'node_under_construction.anim')
@@ -872,6 +873,7 @@ class ResearchNode(Node):
     """Research station node"""
     def __init__(self, *args, **kwargs):
         super(ResearchNode, self).__init__(*args, **kwargs)
+        self._nodetype = 'research'
         self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
         self._sp_under_construction = sprites.AnimatedSprite(
             'node_under_construction.anim')
@@ -880,14 +882,13 @@ class ResearchNode(Node):
 
     def _status_changed_to_finished(self):
         """Internal trigger on item completion."""
-        self._controlmenu.notify_item_completion('research')
-        #FIXME
-
+        self._control_menu.notify_item_completion('research')
 
 class HydroponicsNode(Node):
     """Hydroponics node"""
     def __init__(self, *args, **kwargs):
         super(HydroponicsNode, self).__init__(*args, **kwargs)
+        self._nodetype = 'hydroponics'
         self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
         self._sp_under_construction = sprites.AnimatedSprite(
             'node_under_construction.anim')
@@ -896,12 +897,13 @@ class HydroponicsNode(Node):
 
     def _status_changed_to_finished(self):
         """Internal trigger on item completion."""
-        self._controlmenu.notify_item_completion('hydroponics')
+        self._control_menu.notify_item_completion('hydroponics')
 
 class TowerNode(Node):
     """Tower node"""
     def __init__(self, *args, **kwargs):
         super(TowerNode, self).__init__(*args, **kwargs)
+        self._nodetype = 'tower'
         self._sp_incomplete = sprites.Sprite('tower_incomplete.png', 1.3)
         self._sp_under_construction = sprites.AnimatedSprite(
             'tower_under_construction.anim')
@@ -910,7 +912,54 @@ class TowerNode(Node):
 
     def _status_changed_to_finished(self):
         """Internal trigger on item completion."""
-        self._controlmenu.notify_item_completion('tower')
+        self._control_menu.notify_item_completion('tower')
+
+
+buildings = {
+    'pipe': {
+        'purpose': 'Pipe',
+        'class': Node,
+        'metal': 50,
+        'armor': 1,
+        'capacity': 1,
+    },
+    'node': {
+        'purpose': 'Route steam',
+        'class': Node,
+        'metal': 50,
+        'armor': 1,
+        'capacity': 1,
+    },
+    'research': {
+        'purpose': 'Improve tech',
+        'class': ResearchNode,
+        'metal': 50,
+        'armor': 1,
+        'capacity': 1,
+    },
+    'hydroponics': {
+        'purpose': 'Grow crops',
+        'class': HydroponicsNode,
+        'metal': 50,
+        'armor': 1,
+        'capacity': 1,
+    },
+    'super node': {
+        'purpose': 'Improved node',
+        'class': SuperNode,
+        'metal': 50,
+        'armor': 2,
+        'capacity': 2,
+    },
+    'tower': {
+        'purpose': 'Defense turret',
+        'class': TowerNode,
+        'metal': 50,
+        'armor': 3,
+        'capacity': 1,
+    },
+
+}
 
 
 class City_Node(Node):

@@ -326,6 +326,11 @@ class Network(object):
             'up_node': 50,
             'node': 75,
             'well': 25,
+            #'pipe': 100,
+            'hydroponics': 100,
+            'research': 100,
+            'super node': 100,
+            'tower': 100,
         }
         cost = costs.get(building_type, 40)
         if self.hub.metal_quantity > cost:
@@ -343,6 +348,11 @@ class Network(object):
             'up_node': 50,
             'node': 75,
             'well': 25,
+            #'pipe': 100,
+            'hydroponics': 100,
+            'research': 100,
+            'super node': 100,
+            'tower': 100,
         }
         cost = costs.get(building_type, 40)
         if self.hub.metal_quantity > cost:

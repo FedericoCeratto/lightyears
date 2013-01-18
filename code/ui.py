@@ -12,6 +12,7 @@ import config
 import stats , menu , draw_obj , mail , particle , tutor
 import resource
 from map_items import *
+import map_items
 from primitives import *
 
 from mail import New_Mail
@@ -221,13 +222,6 @@ class User_Interface(object):
         self.control_menu = None
         self._game_data = g
 
-        #FIXME: remove examples
-        self.net.Add_Grid_Item(Node((22,23)))
-        self.net.Add_Grid_Item(ResearchNode((23,26)))
-        self.net.Add_Grid_Item(HydroponicsNode((24,23)))
-        self.net.Add_Grid_Item(TowerNode((26,26)))
-        self.net.Add_Grid_Item(SuperNode((28,23)))
-
         self.Reset()
         self.blink = 0xff
 
@@ -331,7 +325,8 @@ class User_Interface(object):
 
         gpos = self.mouse_pos
         if gpos is not None:
-            if self.mode == 'build node':
+            if isinstance(self.mode, str) and 'build ' in self.mode \
+                and ' pipe' not in self.mode:
                 # could put a node here.
                 r = Grid_To_Scr_Rect(gpos)
                 self.Update_Area(r)
@@ -352,9 +347,9 @@ class User_Interface(object):
                 draw_ellipse(output, Point(r.topleft),
                     INITIAL_NODE_EXCAVATION_DISTANCE , (0, 0, 0, 30), 1)
 
-            elif (( self.mode == 'build pipe' )
-            and ( self.selection is not None )
-            and ( isinstance(self.selection, Node) )):
+            elif (self.mode == 'build pipe'
+                and self.selection is not None
+                and isinstance(self.selection, Node)):
                 # pipe route illustrated
 
                 sp = Grid_To_Scr(self.selection.pos)
@@ -468,14 +463,15 @@ class User_Interface(object):
             self.mode = self.control_menu.Get_Command()
 
     def Right_Mouse_Down(self):
+        """Handle right mouse click on the game area"""
         self.selection = None
         self.mouse_pos = None
         self.__Clear_Control_Selection()
 
     def __Clear_Control_Selection(self):
         self.mode = NEUTRAL
-        if self.control_menu is not None:
-            self.control_menu.Select(NEUTRAL)
+        if self.control_menu:
+            self.control_menu.unselect_all_buttons()
 
     def Reset(self):
         self.selection = None
@@ -491,12 +487,14 @@ class User_Interface(object):
     def Is_Menu_Open(self):
         return self.mode == 'quit to menu'
 
-    def _build_node(self, gpos, tutor):
+    def _build_node(self, gpos, tutor, nodetype='node'):
         """Create new node if possible"""
-        if not self.net.metal_available('node'):
+        if not self.net.metal_available(nodetype):
             return
 
-        n = Node(gpos, rocks=self.net.rock_list)
+        NodeClass = map_items.buildings[nodetype]['class']
+        n = NodeClass(gpos, rocks=self.net.rock_list)
+        n._control_menu = self.control_menu
 
         # In multiplayer mode, nodes can be placed only in proximity
         # of owned nodes
@@ -511,7 +509,7 @@ class User_Interface(object):
                 log.error("Not building node: %s" % e)
                 return
 
-        self.net.use_metal('node')
+        self.net.use_metal(nodetype)
         n.Sound_Effect()
         self.selection = None
         if self.net.Add_Grid_Item(n):
@@ -588,9 +586,10 @@ class User_Interface(object):
             self.selection = self.net.Get_Pipe(gpos)
 
             # empty (may contain pipes)
-            if self.mode == 'build node':
-                # create new node (not a well), if possible
-                self._build_node(gpos, tutor)
+            if isinstance(self.mode, str) and 'build ' in self.mode:
+                nodetype = self.mode[6:]
+                # create new node if possible
+                self._build_node(gpos, tutor, nodetype=nodetype)
 
             elif self.mode == 'destroy item':
                 # I presume you are referring to a pipe?
@@ -686,7 +685,7 @@ class User_Interface(object):
         self.control_menu = ControlMenu()
         #FIXME: hack
         for n in self.net.node_list:
-            n._controlmenu = self.control_menu
+            n._control_menu = self.control_menu
 
 
     def Frame_Advance(self, frame_time):
@@ -698,21 +697,21 @@ class User_Interface(object):
 class ControlMenu(object):
     """Game Control Menu"""
     def __init__(self):
+        self._ptopleft = None
+        self._dashboard_back = StaticSprite('dashboard_back.png', 180)
+        self._dashboard_glass = StaticSprite('dashboard_glass.png', 180)
+        self._buttons_pdelta = PVector(5, 100)
         self._buttons = [
             ControlMenuButton('build pipe','btn_pipe.png'),
             ControlMenuButton('build node','node_00.png'),
             ControlMenuButton('upgrade item','upgrade.png'),
-            ControlMenuButton('build research','research_00.png'),
-            ControlMenuButton('build hydroponics','hydroponics_00.png', enabled=False),
+            ControlMenuButton('build hydroponics','hydroponics_00.png'),
+            ControlMenuButton('build research','research_00.png', enabled=False),
             ControlMenuButton('build super node','node_super_00.png', enabled=False),
             ControlMenuButton('build tower','tower_00.png', enabled=False),
             ControlMenuButton('destroy item','destroy.png'),
             ControlMenuButton('exit','btn_menu.png'),
         ]
-        self._ptopleft = None
-        self._dashboard_back = StaticSprite('dashboard_back.png', 180)
-        self._dashboard_glass = StaticSprite('dashboard_glass.png', 180)
-        self._buttons_pdelta = PVector(5, 100)
 
         # Track if technologies has been completed once
         self._improvements_completion = {
@@ -748,6 +747,8 @@ class ControlMenu(object):
         self._improvements_completion[itemname] = True
         New_Mail("%s node technology achieved" % itemname)
 
+        # Progression:
+        # hydroponics -> research -> tower, super node
         if itemname == 'hydroponics':
             self._enable_button('build research')
         elif itemname == 'research':
@@ -785,18 +786,6 @@ class ControlMenu(object):
     def _draw_dashboard(self, output):
         """Draw dashboard"""
 
-        self._dashboard_infos = {
-            'build pipe': ('Pipe','Metal cost: ', 'Armor: 1', 'Capacity: 2'),
-            'build node': ('Route steam','Metal cost: ', 'Armor: 1', 'Capacity: 2'),
-            'upgrade item': ('Upgrade an item','Metal cost: variable',),
-            'build research': ('Improve tech','Metal cost: ', 'Armor: 1', 'Capacity: 1'),
-            'build hydroponics': ('Grow crops','Metal cost: ', 'Armor: 1', 'Capacity: 1'),
-            'build super node': ('Improved steam','Metal cost: ', 'Armor: 2', 'Capacity: 2'),
-            'build tower': ('Defense turret','Metal cost: ', 'Armor: 3', 'Capacity: 1'),
-            'destroy item': ('Metal cost: 0',),
-            'exit': ('Quit to menu',),
-        }
-
         # Draw back
         pos = self._ptopleft + PVector(3, 3)
         self._dashboard_back.draw(output, pos=pos)
@@ -823,8 +812,22 @@ class ControlMenu(object):
         output.blit(txt, linepos)
         linepos += PVector(4, 13)
 
-        # Print 
-        lines = self._dashboard_infos[action]
+
+        dashboard_infos = {
+            'upgrade item': ('Upgrade an item','Metal cost: variable',),
+            'destroy item': ('Metal cost: 0',),
+            'exit': ('Quit to menu',),
+        }
+
+        if action in dashboard_infos:
+            lines = dashboard_infos[action]
+        else:
+            nodetype = action[6:]
+            d = map_items.buildings[nodetype]
+            lines = ["%(purpose)s" % d, "Metal cost: %(metal)d" % d,
+                "Armor: %(armor)d" % d, "Capacity: %(capacity)d" % d]
+
+        # Print other lines
         for line in lines:
             txt = Get_Font(16).render(line, True, CITY_COLOUR)
             output.blit(txt, linepos)
@@ -867,7 +870,7 @@ class ControlMenu(object):
     def unselect_all_buttons(self):
         """Unselect all buttons"""
         for btn in self._buttons:
-            btn.reset_selected()
+            btn.selected = False
 
     def Get_Command(self):
         """Get the selected command
@@ -879,9 +882,6 @@ class ControlMenu(object):
                 return btn.action
 
 
-    def Select(self, *args, **kwargs):
-        #FIXME
-        pass
 
 class ControlMenuButton(object):
     """A button that supports hover and selection"""
