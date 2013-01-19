@@ -476,7 +476,7 @@ class Rock(Item):
 
     def Draw(self, output):
         """Make the rock shine"""
-        # print the rock
+        # draw the rock
         p = self._tlp
         output.blit(self.shadow_img, p)
         output.blit(self.rock_img, p)
@@ -490,7 +490,7 @@ class Rock(Item):
 
         scale = self._sizep.modulo / 120.0
         for reflex in self.reflexes:
-            # print a reflex
+            # draw a reflex
             reflex[2] += 1
             x, y, seq = reflex
             if seq < 32:
@@ -684,6 +684,15 @@ class Node(Building):
         self.max_rock_distance = INITIAL_NODE_EXCAVATION_DISTANCE
         self.rocks_nearby = self.locate_nearby_rocks(rocks)
 
+        # Setup building properties from global buildings dict
+        if self.name_type in buildings:
+            d = buildings[self.name_type]
+            self.steam.capacity = d['capacity']
+            self.steam.max_capacity = 500
+        else:
+            self.steam.capacity = 50
+
+
     def locate_nearby_rocks(self, rocks):
         """Locate rocks close to this node
         Set sef.rocks_nearby to [(rock, distance), ... ]
@@ -746,7 +755,7 @@ class Node(Building):
                         nl.append((p.n1.steam, p.resistance))
 
         nd = self.steam.Think(nl)
-        for (p, current) in zip(self.Exits(), nd):
+        for p, current in zip(self.Exits(), nd):
             # current > 0 means outgoing flow
             if current > 0.0:
                 p.Flowing_From(self, current)
@@ -860,20 +869,21 @@ class Node(Building):
 class SuperNode(Node):
     """Node with increased storage capacity and health"""
     def __init__(self, *args, **kwargs):
+        kwargs['name'] = 'Super node'
         super(SuperNode, self).__init__(*args, **kwargs)
         self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT * 2
-        self._nodetype = 'super'
         self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
         self._sp_under_construction = sprites.AnimatedSprite(
             'node_under_construction.anim')
         self._sp_finished = sprites.AnimatedSprite('node_super.anim')
         self._sp_venting = sprites.AnimatedSprite('node_super.anim')
+        self._control_menu.notify_item_completion(self.name_type)
 
 class ResearchNode(Node):
     """Research station node"""
     def __init__(self, *args, **kwargs):
+        kwargs['name'] = 'Research node'
         super(ResearchNode, self).__init__(*args, **kwargs)
-        self._nodetype = 'research'
         self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
         self._sp_under_construction = sprites.AnimatedSprite(
             'node_under_construction.anim')
@@ -882,13 +892,13 @@ class ResearchNode(Node):
 
     def _status_changed_to_finished(self):
         """Internal trigger on item completion."""
-        self._control_menu.notify_item_completion('research')
+        self._control_menu.notify_item_completion(self.name_type)
 
 class HydroponicsNode(Node):
     """Hydroponics node"""
     def __init__(self, *args, **kwargs):
+        kwargs['name'] = 'Hydroponics node'
         super(HydroponicsNode, self).__init__(*args, **kwargs)
-        self._nodetype = 'hydroponics'
         self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
         self._sp_under_construction = sprites.AnimatedSprite(
             'node_under_construction.anim')
@@ -897,11 +907,12 @@ class HydroponicsNode(Node):
 
     def _status_changed_to_finished(self):
         """Internal trigger on item completion."""
-        self._control_menu.notify_item_completion('hydroponics')
+        self._control_menu.notify_item_completion(self.name_type)
 
 class TowerNode(Node):
     """Tower node"""
     def __init__(self, *args, **kwargs):
+        kwargs['name'] = 'Tower node'
         super(TowerNode, self).__init__(*args, **kwargs)
         self._nodetype = 'tower'
         self._sp_incomplete = sprites.Sprite('tower_incomplete.png', 1.3)
@@ -912,51 +923,57 @@ class TowerNode(Node):
 
     def _status_changed_to_finished(self):
         """Internal trigger on item completion."""
-        self._control_menu.notify_item_completion('tower')
+        self._control_menu.notify_item_completion(self.name_type)
 
 
 buildings = {
-    'pipe': {
-        'purpose': 'Pipe',
+    'Pipe': {
+        'purpose': 'Carry steam',
         'class': Node,
         'metal': 50,
-        'armor': 1,
-        'capacity': 1,
+        'armor': 5,
+        'capacity': 50,
     },
-    'node': {
+    'Node': {
         'purpose': 'Route steam',
         'class': Node,
         'metal': 50,
-        'armor': 1,
-        'capacity': 1,
+        'armor': 10,
+        'capacity': 50,
     },
-    'research': {
+    'Research node': {
         'purpose': 'Improve tech',
         'class': ResearchNode,
         'metal': 50,
-        'armor': 1,
-        'capacity': 1,
+        'armor': 10,
+        'capacity': 15,
     },
-    'hydroponics': {
+    'Hydroponics node': {
         'purpose': 'Grow crops',
         'class': HydroponicsNode,
         'metal': 50,
-        'armor': 1,
-        'capacity': 1,
+        'armor': 10,
+        'capacity': 15,
     },
-    'super node': {
+    'Super node': {
         'purpose': 'Improved node',
         'class': SuperNode,
         'metal': 50,
-        'armor': 2,
-        'capacity': 2,
+        'armor': 20,
+        'capacity': 150,
     },
-    'tower': {
+    'Tower': {
         'purpose': 'Defense turret',
         'class': TowerNode,
         'metal': 50,
-        'armor': 3,
-        'capacity': 1,
+        'armor': 50,
+        'capacity': 30,
+    },
+    'City': {
+        'purpose': '',
+        'metal': 50,
+        'armor': 50,
+        'capacity': 50,
     },
 
 }

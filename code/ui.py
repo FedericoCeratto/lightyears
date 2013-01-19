@@ -489,6 +489,8 @@ class User_Interface(object):
 
     def _build_node(self, gpos, tutor, nodetype='node'):
         """Create new node if possible"""
+        nodetype = nodetype.capitalize()
+
         if not self.net.metal_available(nodetype):
             return
 
@@ -587,7 +589,7 @@ class User_Interface(object):
 
             # empty (may contain pipes)
             if isinstance(self.mode, str) and 'build ' in self.mode:
-                nodetype = self.mode[6:]
+                nodetype = self.mode[6:].capitalize()
                 # create new node if possible
                 self._build_node(gpos, tutor, nodetype=nodetype)
 
@@ -705,19 +707,19 @@ class ControlMenu(object):
             ControlMenuButton('build pipe','btn_pipe.png'),
             ControlMenuButton('build node','node_00.png'),
             ControlMenuButton('upgrade item','upgrade.png'),
-            ControlMenuButton('build hydroponics','hydroponics_00.png'),
-            ControlMenuButton('build research','research_00.png', enabled=False),
+            ControlMenuButton('build hydroponics node','hydroponics_00.png'),
+            ControlMenuButton('build research node','research_00.png', enabled=False),
             ControlMenuButton('build super node','node_super_00.png', enabled=False),
-            ControlMenuButton('build tower','tower_00.png', enabled=False),
+            ControlMenuButton('build tower node','tower_00.png', enabled=False),
             ControlMenuButton('destroy item','destroy.png'),
             ControlMenuButton('exit','btn_menu.png'),
         ]
 
         # Track if technologies has been completed once
         self._improvements_completion = {
-            'research': False,
-            'hydroponics': False,
-            'tower': False,
+            'Research node': False,
+            'Hydroponics node': False,
+            'Tower node': False,
         }
 
         # Place buttons in rows and columns
@@ -749,11 +751,11 @@ class ControlMenu(object):
 
         # Progression:
         # hydroponics -> research -> tower, super node
-        if itemname == 'hydroponics':
-            self._enable_button('build research')
-        elif itemname == 'research':
+        if itemname == 'Hydroponics node':
+            self._enable_button('build research node')
+        elif itemname == 'Research node':
             self._enable_button('build super node')
-            self._enable_button('build tower')
+            self._enable_button('build tower node')
 
     def _enable_button(self, name):
         """Enable a button"""
@@ -822,7 +824,7 @@ class ControlMenu(object):
         if action in dashboard_infos:
             lines = dashboard_infos[action]
         else:
-            nodetype = action[6:]
+            nodetype = action[6:].capitalize()
             d = map_items.buildings[nodetype]
             lines = ["%(purpose)s" % d, "Metal cost: %(metal)d" % d,
                 "Armor: %(armor)d" % d, "Capacity: %(capacity)d" % d]
