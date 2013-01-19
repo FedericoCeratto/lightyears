@@ -899,9 +899,9 @@ class HydroponicsNode(Node):
     def __init__(self, *args, **kwargs):
         kwargs['name'] = 'Hydroponics node'
         super(HydroponicsNode, self).__init__(*args, **kwargs)
-        self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
+        self._sp_incomplete = sprites.Sprite('hydroponics_incomplete.png', 2)
         self._sp_under_construction = sprites.AnimatedSprite(
-            'node_under_construction.anim')
+            'hydroponics_under_construction.anim')
         self._sp_finished = sprites.AnimatedSprite('hydroponics.anim')
         self._sp_venting = sprites.AnimatedSprite('hydroponics.anim')
 
