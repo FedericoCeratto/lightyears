@@ -884,9 +884,9 @@ class ResearchNode(Node):
     def __init__(self, *args, **kwargs):
         kwargs['name'] = 'Research node'
         super(ResearchNode, self).__init__(*args, **kwargs)
-        self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
+        self._sp_incomplete = sprites.Sprite('research_incomplete.png', 2)
         self._sp_under_construction = sprites.AnimatedSprite(
-            'node_under_construction.anim')
+            'research_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('research.anim')
         self._sp_venting = sprites.AnimatedSprite('research.anim')
 
