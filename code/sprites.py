@@ -172,7 +172,7 @@ class Sprite(object):
         pass
 
 class AnimatedSprite(Sprite):
-    def __init__(self, filename):
+    def __init__(self, filename, building=None):
         """Load images from disk"""
         # .anim file format:
         # # Scale: <scale>
@@ -186,7 +186,8 @@ class AnimatedSprite(Sprite):
         self._rotation = 0
         self._zoom = 1
         self.scale(1.0)
-        self.sequence = 'linear' # linear or random
+        self.sequence = 'linear' # linear, health or random
+        self.building = building
 
         with open(path(filename)) as f:
             for line in f:
@@ -196,6 +197,10 @@ class AnimatedSprite(Sprite):
 
                 if line.startswith('# Scale:'):
                     self.scale(float(line[8:]))
+                    continue
+
+                if line.startswith('# Sequence: health'):
+                    self.sequence = 'health'
                     continue
 
                 if line.startswith('# Sequence: random'):
@@ -213,8 +218,8 @@ class AnimatedSprite(Sprite):
 
         f.close()
         assert self._frames, "%s did not load any frame" % filename
-        assert self.sequence in ('linear', 'random'), \
-            "Animation sequence must be linear or random"
+        assert self.sequence in ('linear', 'random', 'health'), \
+            "Animation sequence must be linear, health or random"
         self._ratio = img.get_height() / float(img.get_width())
 
         self._rawimg, sleeptime = self._frames[self._current_frame_num]
@@ -226,14 +231,20 @@ class AnimatedSprite(Sprite):
         # Switch frame if needed
         if time() > self._frame_expiry_time:
 
-            if self.sequence == 'linear':
+            if self.sequence == 'random':
+                # Pick the next frame randomly
+                self._current_frame_num = randint(0, len(self._frames) - 1)
+
+            elif self.sequence == 'health' and self.building:
+                # Pick a frame number based on the building health
+                # (fallback to linear if the health is not set)
+                h = self.building.health / float(self.building.max_health)
+                self._current_frame_num = int(len(self._frames) * h)
+
+            else:
                 # Increase and restart from 0
                 self._current_frame_num += 1
                 self._current_frame_num %= len(self._frames)
-
-            else:
-                # Pick the next frame randomly
-                self._current_frame_num = randint(0, len(self._frames) - 1)
 
             self._rawimg, sleeptime = self._frames[self._current_frame_num]
             self._frame_expiry_time = time() + sleeptime
