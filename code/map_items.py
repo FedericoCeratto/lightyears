@@ -962,7 +962,7 @@ buildings = {
         'armor': 20,
         'capacity': 150,
     },
-    'Tower': {
+    'Tower node': {
         'purpose': 'Defense turret',
         'class': TowerNode,
         'metal': 50,

@@ -747,15 +747,17 @@ class ControlMenu(object):
             return # The same technology has been achieved before.
 
         self._improvements_completion[itemname] = True
-        New_Mail("%s node technology achieved" % itemname)
+        New_Mail("%s technology achieved" % itemname)
 
         # Progression:
         # hydroponics -> research -> tower, super node
         if itemname == 'Hydroponics node':
             self._enable_button('build research node')
+            New_Mail('Now you can build research nodes')
         elif itemname == 'Research node':
             self._enable_button('build super node')
             self._enable_button('build tower node')
+            New_Mail('Now you can build super nodes and towers')
 
     def _enable_button(self, name):
         """Enable a button"""
