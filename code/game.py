@@ -411,8 +411,7 @@ class Main_Loop(object):
                     loop_running = False
                     quit = True
 
-                elif (( e.type == MOUSEBUTTONDOWN )
-                or ( e.type == MOUSEMOTION )):
+                elif e.type in (MOUSEBUTTONDOWN, MOUSEMOTION):
                     if (( e.type == MOUSEBUTTONDOWN ) 
                     and ( e.button != 1 )):
                         if not menu_inhibit:
