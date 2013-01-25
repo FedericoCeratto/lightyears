@@ -22,6 +22,12 @@ import sprites
 import logging
 log = logging.getLogger(__name__)
 
+
+# Connected to a ControlMenu method at runtime to receive notifications
+# on completed buildings
+controlmenu_router = None
+
+
 class Item(pygame.sprite.Sprite, object):
     def __init__(self, name):
         self.pos = None
@@ -863,9 +869,9 @@ class Node(Building):
     def _status_changed_to_finished(self):
         """Internal trigger on item completion."""
         try:
-            self._control_menu.notify_item_completion(self.name_type)
+            controlmenu_router.notify_item_completion(self.name_type)
         except:
-            pass # FIXME: refactor this
+            pass
 
 #TODO: implement capacity
 #TODO: display max health on dashboard

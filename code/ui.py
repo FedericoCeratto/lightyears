@@ -226,7 +226,7 @@ class MechanicalCounter(object):
 class User_Interface(object):
     def __init__(self, net, (width, height), g):
         self.net = net
-        self.control_menu = None
+        self.control_menu = ControlMenu()
         self._game_data = g
 
         self.Reset()
@@ -238,7 +238,7 @@ class User_Interface(object):
 
         img = resource.Load_Image("moon_surface.orig.jpg")
         zoom = 1 + random.random() # zoom in between 1 and 2
-        zoom = 1 #FIXME
+        zoom = 1 #TODO - disabled until higher resolution backgrounds
         scaled = pygame.transform.smoothscale(img,
             (int(width * zoom), int(height * zoom))
         )
@@ -260,13 +260,15 @@ class User_Interface(object):
         self.valve = Valve()
         self.day_counter = MechanicalCounter(g)
 
-        self.vehicle_list = []
+        #self.vehicle_list = []
         #self.vehicle_list.extend(
         #    Transport(network=self.net) for x in xrange(2)
         #)
         #self.vehicle_list.extend(
         #    [Tank(network=self.net, vehicles=self.vehicle_list) for x in xrange(10)]
         #)
+        map_items.item_completion_router = self
+
 
     def Update_Area(self, area):
         if area is not None:
@@ -324,8 +326,8 @@ class User_Interface(object):
         for r in self.net.rock_list:
             r.Draw(output)
 
-        for v in self.vehicle_list:
-            v.draw(output)
+        #for v in self.vehicle_list:
+        #    v.draw(output)
 
         season_fx.Draw(output, self.Update_Area)
 
@@ -410,8 +412,7 @@ class User_Interface(object):
         stats.Draw_Stats_Window(output, l)
 
     def Draw_Controls(self, output):
-        if self.control_menu is None:
-            self.__Make_Control_Menu(output.get_rect().width)
+        """Draw control menu and gauges"""
 
         # draw city pressure gauge
         self.gauges['city_pressure'].draw(
@@ -685,14 +686,6 @@ class User_Interface(object):
         r.midbottom = Grid_To_Scr(pos)
         output.blit(sfx, r.topleft)
         self.Update_Area(r)
-
-    def __Make_Control_Menu(self, width):
-        """Instantiate ControlMenu"""
-        self.control_menu = ControlMenu()
-        #FIXME: hack
-        for n in self.net.node_list:
-            n._control_menu = self.control_menu
-
 
     def Frame_Advance(self, frame_time):
         for p in self.net.pipe_list:
