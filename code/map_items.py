@@ -860,6 +860,13 @@ class Node(Building):
     def Sound_Effect(self):
         sound.FX("node_rap")
 
+    def _status_changed_to_finished(self):
+        """Internal trigger on item completion."""
+        try:
+            self._control_menu.notify_item_completion(self.name_type)
+        except:
+            pass # FIXME: refactor this
+
 #TODO: implement capacity
 #TODO: display max health on dashboard
 #TODO: display selected item image on dashboard
@@ -877,7 +884,7 @@ class SuperNode(Node):
             'node_under_construction.anim')
         self._sp_finished = sprites.AnimatedSprite('node_super.anim')
         self._sp_venting = sprites.AnimatedSprite('node_super.anim')
-        self._control_menu.notify_item_completion(self.name_type)
+
 
 class ResearchNode(Node):
     """Research station node"""
@@ -890,9 +897,6 @@ class ResearchNode(Node):
         self._sp_finished = sprites.AnimatedSprite('research.anim')
         self._sp_venting = sprites.AnimatedSprite('research.anim')
 
-    def _status_changed_to_finished(self):
-        """Internal trigger on item completion."""
-        self._control_menu.notify_item_completion(self.name_type)
 
 class HydroponicsNode(Node):
     """Hydroponics node"""
@@ -905,9 +909,6 @@ class HydroponicsNode(Node):
         self._sp_finished = sprites.AnimatedSprite('hydroponics.anim')
         self._sp_venting = sprites.AnimatedSprite('hydroponics.anim')
 
-    def _status_changed_to_finished(self):
-        """Internal trigger on item completion."""
-        self._control_menu.notify_item_completion(self.name_type)
 
 class TowerNode(Node):
     """Tower node"""
@@ -920,10 +921,6 @@ class TowerNode(Node):
             'tower_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('tower.anim')
         self._sp_venting = sprites.AnimatedSprite('tower.anim')
-
-    def _status_changed_to_finished(self):
-        """Internal trigger on item completion."""
-        self._control_menu.notify_item_completion(self.name_type)
 
 
 buildings = {

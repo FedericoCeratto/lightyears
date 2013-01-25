@@ -15,11 +15,13 @@ import pygame
 
 class StaticSprite(object):
     """A sprite that does not support dynamic rotation/scaling"""
-    def __init__(self, filename, pwidth=None):
+    def __init__(self, filename, pwidth=None, prerotate=0):
         """Load image from disk"""
         assert filename.endswith('.png')
         self.gcenter = GVector(0, 0)
         img = pygame.image.load(path(filename))
+        if prerotate:
+            img = rotate(img, prerotate)
 
         if pwidth:
             aw, ah = img.get_size()

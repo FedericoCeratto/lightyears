@@ -24,6 +24,11 @@ from stats import Get_Font
 import logging
 log = logging.getLogger(__name__)
 
+#FIXME: pipe mode creates nodes on click
+#FIXME: fix menus/dashboard/gauges layout based on screen resolution
+#TODO: rescale, improve day counter
+
+
 class Gauge(object):
     """Round steampunk gauge"""
     def __init__(self, x, y, d):
@@ -76,11 +81,13 @@ class Gauge(object):
         v = self._vibration
         if v > 200:
             self._vibration = 0
+
         if v % 2 == 0:
             if v < 40:
                 bar += v / 100.0
             elif v < 80:
                 bar += (80 - v) / 100.0
+
         self._vibration += 1
 
         hand, hand_rect = self.rotate_hand(bar=bar)
@@ -398,14 +405,10 @@ class User_Interface(object):
             if not self.net.Is_Connected(self.selection):
                 l += [ ((255,0,0), 15, "Not connected to network") ]
 
-        h = hash(str(l))
-        if h != self.stats_hash:
-            # Stats have changed.
-            output.fill((0,0,0))
-            stats.Draw_Stats_Window(output, l)
-            self.stats_hash = h
+        # Stats have changed.
+        output.fill((0,0,0))
+        stats.Draw_Stats_Window(output, l)
 
-        
     def Draw_Controls(self, output):
         if self.control_menu is None:
             self.__Make_Control_Menu(output.get_rect().width)
@@ -425,6 +428,7 @@ class User_Interface(object):
             bar = abs(bar)
         else:
             bar = 0
+
         self.gauges['selected_pressure'].draw(
             output,
             bar=bar,
@@ -436,7 +440,7 @@ class User_Interface(object):
             self.valve.draw(output)
 
         self.day_counter.draw(output)
-        self.control_menu.Draw(output, top=5*Get_Grid_Size())
+        self.control_menu.Draw(output)
 
     def Control_Mouse_Move(self, spos):
         if self.control_menu is not None:
@@ -699,10 +703,11 @@ class User_Interface(object):
 class ControlMenu(object):
     """Game Control Menu"""
     def __init__(self):
-        self._ptopleft = None
         self._dashboard_back = StaticSprite('dashboard_back.png', 180)
         self._dashboard_glass = StaticSprite('dashboard_glass.png', 180)
-        self._buttons_pdelta = PVector(5, 100)
+        self._support_horizontal = StaticSprite('support.png', 50)
+        self._support_vertical = StaticSprite('support.png', pwidth=10, prerotate=90)
+        self._buttons_pdelta = PVector(8, 100)
         self._buttons = [
             ControlMenuButton('build pipe','btn_pipe.png'),
             ControlMenuButton('build node','node_00.png'),
@@ -765,17 +770,29 @@ class ControlMenu(object):
             if b.action == name:
                 b.enabled = True
 
-    def Draw(self, output, top):
+    def Draw(self, output):
         """Draw menu"""
-        if not self._ptopleft:
-            self._ptopleft = PVector(10, 4 + top)
+        menubox_size = PVector(187, 235)
+        right_margin = 20
+
+        output_width = output.get_width()
+        self._ptopleft = PVector(output_width - menubox_size.x - right_margin, 80)
+        if self._ptopleft.x < 4:
+            self._ptopleft = PVector(4, self._ptopleft.y)
+
+        # Draw supports
+        pos = self._ptopleft + PVector(menubox_size.x, 70)
+        self._support_horizontal.draw(output, pos=pos)
+        pos += PVector(0, 60)
+        self._support_horizontal.draw(output, pos=pos)
+
+        pos = self._ptopleft + PVector(25,-15)
+        self._support_vertical.draw(output, pos=pos)
+        pos = self._ptopleft + PVector(105,-15)
+        self._support_vertical.draw(output, pos=pos)
 
         # Draw background and borders
-        box_size = PVector(
-            44 * 4, # Width
-            150
-        )
-        box = Rect(self._ptopleft, self._ptopleft + box_size)
+        box = Rect(self._ptopleft, menubox_size)
         extra.Tile_Texture(output, "006metal.jpg", box)
         extra.Line_Edging(output, box, False)
 

@@ -52,8 +52,8 @@ class Main_Loop(object):
         Set_Grid_Size(height / h)
 
         # Windows..
-        game_screen_rect = Rect(0, 0, menu_margin, height)
-        game_screen_surf = screen.subsurface(game_screen_rect)
+        game_screen_rect = Rect(0, 0, width, height)
+        game_screen_surf = screen
         menu_area = screen.subsurface(Rect(menu_margin, 0,
                             width - menu_margin, height))
         menu_width = width - menu_margin
@@ -63,8 +63,8 @@ class Main_Loop(object):
         assert menu_width >= 100
 
         margin = self.Sc(10, height)
-        x1 = menu_margin + margin 
-        menu_width1 = menu_width - ( margin * 2 )
+        x1 = menu_margin
+        menu_width1 = menu_width - margin * 2
 
         picture = resource.Load_Image("headersm.jpg")
         picture_rect = picture.get_rect().inflate(10,10)
@@ -78,16 +78,14 @@ class Main_Loop(object):
         global_stats_rect = Rect(x1, stats_rect.bottom + margin, 
                     menu_width1, self.Sc(110, height))
         global_stats_surf = screen.subsurface(global_stats_rect)
-        controls_rect = Rect(x1, global_stats_rect.bottom + 4,
-                    menu_width1, height - 
-                        ( margin + global_stats_rect.bottom + margin ))
+        controls_rect = Rect(x1, global_stats_rect.bottom, menu_width, height - global_stats_rect.bottom)
         controls_surf = screen.subsurface(controls_rect)
 
 
         self.Special_Refresh(screen, menu_margin, menu_width, stats_rect,
             global_stats_rect, picture, picture_surf)
 
-        stats_surf.fill((0,0,0))
+        #stats_surf.fill((0,0,0))
 
         FRAME_RATE = 35
 
@@ -141,7 +139,7 @@ class Main_Loop(object):
             (game_screen_rect, ui.Game_Mouse_Down, ui.Game_Mouse_Move) ]
         self._exit_options = [
             (menu.Menu.menu, "Exit to Main Menu", []),
-            (menu.Menu.quit, "Exit to " + extra.Get_OS(), [ K_F10 ])]
+            (menu.Menu.quit, "Quit", [ K_F10 ])]
 
         save_available = [(menu.Menu.save, "Save Game", []),
             (menu.Menu.load, "Restore Game", []),
@@ -242,8 +240,12 @@ class Main_Loop(object):
 
             cur_time = g.game_time.time()
             mail.Set_Day(g.game_time.Get_Day())
-                
+
+            self.Special_Refresh(screen, menu_margin, menu_width, stats_rect,
+                global_stats_rect, picture, picture_surf)
             ui.Draw_Game(game_screen_surf, g.season_fx)
+            self.Special_Refresh(screen, menu_margin, menu_width, stats_rect,
+                global_stats_rect, picture, picture_surf)
 
             #if flash:
             #ui.Draw_Selection(picture_surf)
@@ -563,15 +565,9 @@ class Main_Loop(object):
     @staticmethod
     def Special_Refresh(screen, menu_margin, menu_width, stats_rect,
         global_stats_rect, picture, picture_surf):
-        extra.Tile_Texture(screen, "rivets.jpg", 
-                Rect(menu_margin, 0, 
-                    menu_width, screen.get_rect().height))
 
-        edge = Rect(menu_margin, -10, 
-            menu_width + 10, screen.get_rect().height + 10)
-
-        for r in [ stats_rect, global_stats_rect, edge ]:
-            extra.Line_Edging(screen, r, False)
+        extra.Line_Edging(screen, stats_rect, False)
+        extra.Line_Edging(screen, global_stats_rect, False)
 
         r = picture.get_rect()
         r.center = picture_surf.get_rect().center

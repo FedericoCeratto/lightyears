@@ -184,8 +184,7 @@ def Main_Menu_Loop(name, clock, screen, (width, height), cli_args):
                 (menu.Menu.manual, "View Manual", []),
                 (menu.Menu.updates, "Check for Updates", []),
                 (None, None, []),
-                (menu.Menu.quit, "Exit to " + extra.Get_OS(), 
-                    [ K_ESCAPE , K_F10 ])],
+                (menu.Menu.quit, "Quit", [K_ESCAPE , K_F10])],
                 title = 'Main menu',
     )
     resolution_menu = menu.Menu( 

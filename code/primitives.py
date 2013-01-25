@@ -287,7 +287,7 @@ class GVector(Point):
         return self.in_pixels
 
     def __getitem__(self, i):
-        """The Point/Vector behaves as a tuple, mostly for interacting with pyga
+        """The Point/Vector behaves as a tuple, mostly for interacting with pygame
         Return integers measured in pixels
         """
         return int(self.tup[i] * Get_Grid_Size())
