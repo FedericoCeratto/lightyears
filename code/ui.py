@@ -25,8 +25,6 @@ import logging
 log = logging.getLogger(__name__)
 
 #FIXME: pipe mode creates nodes on click
-#FIXME: fix menus/dashboard/gauges layout based on screen resolution
-#TODO: rescale, improve day counter
 
 
 class Gauge(object):
@@ -584,10 +582,11 @@ class User_Interface(object):
             self.selection = None
 
     def Game_Mouse_Down(self, spos):
+        """Handle mouse clicks"""
         gpos = Scr_To_Grid(spos)
 
-        if (( self.selection is not None )
-        and ( self.selection.Is_Destroyed() )):
+        if (self.selection is not None
+            and self.selection.Is_Destroyed()):
             self.selection = None
 
         if DEBUG:
@@ -601,13 +600,15 @@ class User_Interface(object):
             print 'End'
 
 
-        if not self.net.ground_grid.has_key(gpos):
+        if gpos not in self.net.ground_grid:
+            # No node on the clicked location (but there might be a pipe)
             self.selection = self.net.Get_Pipe(gpos)
 
             # empty (may contain pipes)
-            if isinstance(self.mode, str) and 'build ' in self.mode:
-                nodetype = self.mode[6:].capitalize()
+            if (isinstance(self.mode, str) and 'pipe' not in self.mode
+                and 'build ' in self.mode):
                 # create new node if possible
+                nodetype = self.mode[6:].capitalize()
                 self._build_node(gpos, tutor, nodetype=nodetype)
 
             elif self.mode == 'destroy item':
@@ -627,9 +628,9 @@ class User_Interface(object):
 
             elif self.selection is not None:
                 self.selection.Sound_Effect()
-                
-        elif ( isinstance(self.net.ground_grid[ gpos ], Node)):
-            # Contains node
+
+        elif isinstance(self.net.ground_grid[gpos], Node):
+            # The player clicked on an existing node
 
             n = self.net.ground_grid[ gpos ]
             if self.mode == 'build pipe':
@@ -703,7 +704,6 @@ class User_Interface(object):
         for p in self.net.pipe_list:
             p.Frame_Advance(frame_time)
 
-#TODO: enable actions
 #TODO: create action "dashboard"
 class ControlMenu(object):
     """Game Control Menu"""
