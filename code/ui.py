@@ -31,17 +31,16 @@ log = logging.getLogger(__name__)
 
 class Gauge(object):
     """Round steampunk gauge"""
-    def __init__(self, x, y, d):
-        d = d * Get_Grid_Size() # diameter
-        self._diameter = d
+    def __init__(self):
+        self._diameter = d = 80 # diameter
         self.back_img = resource.Load_Image("gauge.png", scale_to=(d, d))
         self.hand_img = resource.Load_Image("gauge_hand.png")
         self.red_hand_img = resource.Load_Image("gauge_hand_red.png", scale_to=(d, d))
         self.glass_img = resource.Load_Image("gauge_glass.png", scale_to=(d, d))
-        self._pos = GVector(x, y).in_pixels
         self._animated_pressure = 0
         self._speed = .2
         self._vibration = random.randint(0, 200)
+        self._pos = None # Set at runtime
 
     def rotate_hand(self, bar=None):
         """Rotate pressure hand"""
@@ -106,8 +105,8 @@ class Gauge(object):
 class Valve(object):
     """Big valve"""
     def __init__(self):
-        self._pos = PVector(9.5 * Get_Grid_Size(), 0)
-        h = 5 * Get_Grid_Size() # height
+        self._pos = None
+        h = 100 # height
         d = Get_Grid_Size() # handle diameter
 
         self._back_img = resource.Load_Image("valve_back.png", scale_to=(None, h))
@@ -150,13 +149,13 @@ class MechanicalCounter(object):
     """Mechanical counter"""
     def __init__(self, game):
         self._game = game
-        self._pos = GVector(3.75, 4.25)
+        self._pos = None
         self._num_digits = 4
-        digit_size = GVector(.5, .5)
+        digit_size = PVector(15, 15)
         self._height = digit_size[0]
         self._dwidth = digit_size[1]
         self._width = self._dwidth * self._num_digits
-        self._dvscale = GVector(1.45, 0)[0] # Digit vertical scale
+        self._dvscale = digit_size.x # Digit vertical scale
 
         # Numbers from 0 to 9, vertically
         self._numbers_img = resource.Load_Image("counter_numbers.png",
@@ -168,7 +167,7 @@ class MechanicalCounter(object):
         self._overlay_img = resource.Load_Image("counter_overlay.png",
             scale_to=(self._height, self._dwidth))
         self._background_color = (255, 247, 225)
-        self._border_color = (144, 102, 25)
+        self._border_color = (100, 102, 25)
 
     def _animate_counter(self):
         """Set the counter to the given (float) value.
@@ -231,6 +230,7 @@ class User_Interface(object):
 
         self.Reset()
         self.blink = 0xff
+        self._first_draw = True
 
         # Although there is only one base image, it is scaled and
         # cropped on startup to create different backdrops.
@@ -254,8 +254,8 @@ class User_Interface(object):
         self.steam_effect_frame = 0
 
         self.gauges = dict(
-            city_pressure = Gauge(0, 0, 4),
-            selected_pressure = Gauge(4.5, 0, 4)
+            city_pressure = Gauge(),
+            selected_pressure = Gauge()
         )
         self.valve = Valve()
         self.day_counter = MechanicalCounter(g)
@@ -414,6 +414,19 @@ class User_Interface(object):
     def Draw_Controls(self, output):
         """Draw control menu and gauges"""
 
+        self.control_menu.Draw(output)
+
+        if self._first_draw:
+            # Set gauges position
+            #TODO: hack
+            self._first_draw = False
+            ptl = self.control_menu._ptopleft
+            self.gauges['city_pressure']._pos = ptl + PVector(-25, -90)
+            self.gauges['selected_pressure']._pos = ptl + PVector(65, -90)
+            self.valve._pos = ptl + PVector(150, -104)
+            self.day_counter._pos = ptl + PVector(120, 210)
+
+
         # draw city pressure gauge
         self.gauges['city_pressure'].draw(
             output,
@@ -441,7 +454,6 @@ class User_Interface(object):
             self.valve.draw(output)
 
         self.day_counter.draw(output)
-        self.control_menu.Draw(output)
 
     def Control_Mouse_Move(self, spos):
         if self.control_menu is not None:
@@ -769,7 +781,10 @@ class ControlMenu(object):
         right_margin = 20
 
         output_width = output.get_width()
-        self._ptopleft = PVector(output_width - menubox_size.x - right_margin, 80)
+        self._ptopleft = PVector(
+            output_width - menubox_size.x - right_margin,
+            108
+        )
         if self._ptopleft.x < 4:
             self._ptopleft = PVector(4, self._ptopleft.y)
 
@@ -779,9 +794,9 @@ class ControlMenu(object):
         pos += PVector(0, 60)
         self._support_horizontal.draw(output, pos=pos)
 
-        pos = self._ptopleft + PVector(25,-15)
+        pos = self._ptopleft + PVector(10,-15)
         self._support_vertical.draw(output, pos=pos)
-        pos = self._ptopleft + PVector(105,-15)
+        pos = self._ptopleft + PVector(100,-15)
         self._support_vertical.draw(output, pos=pos)
 
         # Draw background and borders
