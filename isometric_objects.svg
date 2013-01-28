@@ -29,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="-272.55676"
-     inkscape:cy="224.74011"
+     inkscape:cx="680.40177"
+     inkscape:cy="112.71109"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -58,6 +58,39 @@
   </sodipodi:namedview>
   <defs
      id="defs4">
+    <linearGradient
+       id="linearGradient6567">
+      <stop
+         style="stop-color:#372121;stop-opacity:0.99619764;"
+         offset="0"
+         id="stop6569" />
+      <stop
+         style="stop-color:#888a85;stop-opacity:1"
+         offset="1"
+         id="stop6571" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient7050">
+      <stop
+         id="stop7052"
+         offset="0"
+         style="stop-color:#c39999;stop-opacity:0.99619764;" />
+      <stop
+         id="stop7054"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient7044">
+      <stop
+         style="stop-color:#d6c9c8;stop-opacity:1;"
+         offset="0"
+         id="stop7046" />
+      <stop
+         style="stop-color:#888a85;stop-opacity:1"
+         offset="1"
+         id="stop7048" />
+    </linearGradient>
     <linearGradient
        id="linearGradient8485">
       <stop
@@ -252,7 +285,7 @@
        fx="231.77881"
        fy="533.42224"
        r="10.812"
-       gradientTransform="matrix(1,0,0,0.7022489,114.90758,45.109614)"
+       gradientTransform="matrix(1.2167,0,0,0.85442624,479.94546,43.198307)"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
@@ -11536,6 +11569,667 @@
        y1="469.43201"
        x2="195.8125"
        y2="469.61218" />
+    <linearGradient
+       id="linearGradient66398-6">
+      <stop
+         id="stop66400-63"
+         offset="0"
+         style="stop-color:#d6c9ae;stop-opacity:1;" />
+      <stop
+         id="stop66402-9"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <filter
+       id="filter3882-4-2-14-9"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       inkscape:label="Film grain"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Adds a small scale graininess"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence3884-1-0-3-4"
+         type="turbulence"
+         numOctaves="4"
+         baseFrequency="0.40000000000000002"
+         seed="0"
+         result="result0" />
+      <feColorMatrix
+         id="feColorMatrix3886-2-3-6-6"
+         result="result4"
+         values="0"
+         type="saturate" />
+      <feComposite
+         k4="0"
+         id="feComposite3888-8-1-7-5"
+         in2="result4"
+         in="SourceGraphic"
+         operator="arithmetic"
+         k1="1.25"
+         k2="0.5"
+         k3="0.5"
+         result="result2" />
+      <feBlend
+         id="feBlend3890-3-3-4-7"
+         in2="SourceGraphic"
+         result="result5"
+         mode="normal"
+         in="result2" />
+      <feComposite
+         id="feComposite3892-80-3-9-3"
+         in2="SourceGraphic"
+         in="result5"
+         operator="in"
+         result="result3" />
+    </filter>
+    <linearGradient
+       id="linearGradient5651">
+      <stop
+         id="stop5653"
+         offset="0"
+         style="stop-color:#d6c9ae;stop-opacity:1;" />
+      <stop
+         id="stop5655"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <filter
+       id="filter3882-4-2-1-0-6"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       inkscape:label="Film grain"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Adds a small scale graininess"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence3884-1-0-9-5-9"
+         type="turbulence"
+         numOctaves="4"
+         baseFrequency="0.40000000000000002"
+         seed="0"
+         result="result0" />
+      <feColorMatrix
+         id="feColorMatrix3886-2-3-3-8-6"
+         result="result4"
+         values="0"
+         type="saturate" />
+      <feComposite
+         k4="0"
+         id="feComposite3888-8-1-1-6-81"
+         in2="result4"
+         in="SourceGraphic"
+         operator="arithmetic"
+         k1="1.25"
+         k2="0.5"
+         k3="0.5"
+         result="result2" />
+      <feBlend
+         id="feBlend3890-3-3-6-4-4"
+         in2="SourceGraphic"
+         result="result5"
+         mode="normal"
+         in="result2" />
+      <feComposite
+         id="feComposite3892-80-3-0-6-9"
+         in2="SourceGraphic"
+         in="result5"
+         operator="in"
+         result="result3" />
+    </filter>
+    <linearGradient
+       id="linearGradient6130-3-0">
+      <stop
+         id="stop6132-6-1"
+         offset="0"
+         style="stop-color:#d5953b;stop-opacity:1;" />
+      <stop
+         id="stop6134-1-36"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5668">
+      <stop
+         id="stop5670"
+         offset="0"
+         style="stop-color:#d5953b;stop-opacity:1;" />
+      <stop
+         id="stop5672"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient6130-3-4-6">
+      <stop
+         id="stop6132-6-2-2"
+         offset="0"
+         style="stop-color:#d5953b;stop-opacity:1;" />
+      <stop
+         id="stop6134-1-4-0"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4958-3-25">
+      <stop
+         id="stop4960-2-3"
+         offset="0"
+         style="stop-color:#afb98e;stop-opacity:1;" />
+      <stop
+         id="stop4962-3-4"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <filter
+       id="filter3882-4-0"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       inkscape:label="Film grain"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Adds a small scale graininess"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence3884-1-4"
+         type="turbulence"
+         numOctaves="4"
+         baseFrequency="0.40000000000000002"
+         seed="0"
+         result="result0" />
+      <feColorMatrix
+         id="feColorMatrix3886-2-2"
+         result="result4"
+         values="0"
+         type="saturate" />
+      <feComposite
+         k4="0"
+         id="feComposite3888-8-25"
+         in2="result4"
+         in="SourceGraphic"
+         operator="arithmetic"
+         k1="1.25"
+         k2="0.5"
+         k3="0.5"
+         result="result2" />
+      <feBlend
+         id="feBlend3890-3-7"
+         in2="SourceGraphic"
+         result="result5"
+         mode="normal"
+         in="result2" />
+      <feComposite
+         id="feComposite3892-80-8"
+         in2="SourceGraphic"
+         in="result5"
+         operator="in"
+         result="result3" />
+    </filter>
+    <filter
+       id="filter5805"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       inkscape:label="Film grain"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Adds a small scale graininess"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence5807"
+         type="turbulence"
+         numOctaves="4"
+         baseFrequency="0.40000000000000002"
+         seed="0"
+         result="result0" />
+      <feColorMatrix
+         id="feColorMatrix5809"
+         result="result4"
+         values="0"
+         type="saturate" />
+      <feComposite
+         k4="0"
+         id="feComposite5811"
+         in2="result4"
+         in="SourceGraphic"
+         operator="arithmetic"
+         k1="1.25"
+         k2="0.5"
+         k3="0.5"
+         result="result2" />
+      <feBlend
+         id="feBlend5813"
+         in2="SourceGraphic"
+         result="result5"
+         mode="normal"
+         in="result2" />
+      <feComposite
+         id="feComposite5815"
+         in2="SourceGraphic"
+         in="result5"
+         operator="in"
+         result="result3" />
+    </filter>
+    <filter
+       id="filter5817"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       inkscape:label="Film grain"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Adds a small scale graininess"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence5819"
+         type="turbulence"
+         numOctaves="4"
+         baseFrequency="0.40000000000000002"
+         seed="0"
+         result="result0" />
+      <feColorMatrix
+         id="feColorMatrix5821"
+         result="result4"
+         values="0"
+         type="saturate" />
+      <feComposite
+         k4="0"
+         id="feComposite5823"
+         in2="result4"
+         in="SourceGraphic"
+         operator="arithmetic"
+         k1="1.25"
+         k2="0.5"
+         k3="0.5"
+         result="result2" />
+      <feBlend
+         id="feBlend5825"
+         in2="SourceGraphic"
+         result="result5"
+         mode="normal"
+         in="result2" />
+      <feComposite
+         id="feComposite5827"
+         in2="SourceGraphic"
+         in="result5"
+         operator="in"
+         result="result3" />
+    </filter>
+    <filter
+       id="filter5829"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       inkscape:label="Film grain"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Adds a small scale graininess"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence5831"
+         type="turbulence"
+         numOctaves="4"
+         baseFrequency="0.40000000000000002"
+         seed="0"
+         result="result0" />
+      <feColorMatrix
+         id="feColorMatrix5833"
+         result="result4"
+         values="0"
+         type="saturate" />
+      <feComposite
+         k4="0"
+         id="feComposite5835"
+         in2="result4"
+         in="SourceGraphic"
+         operator="arithmetic"
+         k1="1.25"
+         k2="0.5"
+         k3="0.5"
+         result="result2" />
+      <feBlend
+         id="feBlend5837"
+         in2="SourceGraphic"
+         result="result5"
+         mode="normal"
+         in="result2" />
+      <feComposite
+         id="feComposite5839"
+         in2="SourceGraphic"
+         in="result5"
+         operator="in"
+         result="result3" />
+    </filter>
+    <filter
+       id="filter5841"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       inkscape:label="Film grain"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Adds a small scale graininess"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence5843"
+         type="turbulence"
+         numOctaves="4"
+         baseFrequency="0.40000000000000002"
+         seed="0"
+         result="result0" />
+      <feColorMatrix
+         id="feColorMatrix5845"
+         result="result4"
+         values="0"
+         type="saturate" />
+      <feComposite
+         k4="0"
+         id="feComposite5847"
+         in2="result4"
+         in="SourceGraphic"
+         operator="arithmetic"
+         k1="1.25"
+         k2="0.5"
+         k3="0.5"
+         result="result2" />
+      <feBlend
+         id="feBlend5849"
+         in2="SourceGraphic"
+         result="result5"
+         mode="normal"
+         in="result2" />
+      <feComposite
+         id="feComposite5851"
+         in2="SourceGraphic"
+         in="result5"
+         operator="in"
+         result="result3" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter7866-1-4-4-44"
+       x="-0.080047719"
+       width="1.1600955"
+       y="-0.28120825"
+       height="1.5624166">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.64317106"
+         id="feGaussianBlur7868-6-8-9-0" />
+    </filter>
+    <linearGradient
+       id="linearGradient66398-13">
+      <stop
+         id="stop66400-1"
+         offset="0"
+         style="stop-color:#d6c9ae;stop-opacity:1;" />
+      <stop
+         id="stop66402-88"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <filter
+       id="filter3882-4-2-14-70"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       inkscape:label="Film grain"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Adds a small scale graininess"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence3884-1-0-3-2"
+         type="turbulence"
+         numOctaves="4"
+         baseFrequency="0.40000000000000002"
+         seed="0"
+         result="result0" />
+      <feColorMatrix
+         id="feColorMatrix3886-2-3-6-9"
+         result="result4"
+         values="0"
+         type="saturate" />
+      <feComposite
+         k4="0"
+         id="feComposite3888-8-1-7-3"
+         in2="result4"
+         in="SourceGraphic"
+         operator="arithmetic"
+         k1="1.25"
+         k2="0.5"
+         k3="0.5"
+         result="result2" />
+      <feBlend
+         id="feBlend3890-3-3-4-9"
+         in2="SourceGraphic"
+         result="result5"
+         mode="normal"
+         in="result2" />
+      <feComposite
+         id="feComposite3892-80-3-9-63"
+         in2="SourceGraphic"
+         in="result5"
+         operator="in"
+         result="result3" />
+    </filter>
+    <linearGradient
+       id="linearGradient6040">
+      <stop
+         id="stop6042"
+         offset="0"
+         style="stop-color:#d6c9ae;stop-opacity:1;" />
+      <stop
+         id="stop6044"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <filter
+       id="filter3882-4-2-1-0-1"
+       height="1"
+       width="1"
+       y="0"
+       x="0"
+       inkscape:label="Film grain"
+       inkscape:menu="Image effects"
+       inkscape:menu-tooltip="Adds a small scale graininess"
+       color-interpolation-filters="sRGB">
+      <feTurbulence
+         id="feTurbulence3884-1-0-9-5-0"
+         type="turbulence"
+         numOctaves="4"
+         baseFrequency="0.40000000000000002"
+         seed="0"
+         result="result0" />
+      <feColorMatrix
+         id="feColorMatrix3886-2-3-3-8-37"
+         result="result4"
+         values="0"
+         type="saturate" />
+      <feComposite
+         k4="0"
+         id="feComposite3888-8-1-1-6-2"
+         in2="result4"
+         in="SourceGraphic"
+         operator="arithmetic"
+         k1="1.25"
+         k2="0.5"
+         k3="0.5"
+         result="result2" />
+      <feBlend
+         id="feBlend3890-3-3-6-4-2"
+         in2="SourceGraphic"
+         result="result5"
+         mode="normal"
+         in="result2" />
+      <feComposite
+         id="feComposite3892-80-3-0-6-0"
+         in2="SourceGraphic"
+         in="result5"
+         operator="in"
+         result="result3" />
+    </filter>
+    <linearGradient
+       id="linearGradient6130-3-9">
+      <stop
+         id="stop6132-6-0"
+         offset="0"
+         style="stop-color:#d5953b;stop-opacity:1;" />
+      <stop
+         id="stop6134-1-85"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient6057">
+      <stop
+         id="stop6059"
+         offset="0"
+         style="stop-color:#d5953b;stop-opacity:1;" />
+      <stop
+         id="stop6061"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient6130-3-4-55">
+      <stop
+         id="stop6132-6-2-51"
+         offset="0"
+         style="stop-color:#d5953b;stop-opacity:1;" />
+      <stop
+         id="stop6134-1-4-7"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7044"
+       id="linearGradient6968"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3886"
+       id="radialGradient6980"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.7022489,114.90758,45.109614)"
+       cx="231.77881"
+       cy="533.42224"
+       fx="231.77881"
+       fy="533.42224"
+       r="10.812" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6567"
+       id="linearGradient6998"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6130-3-4-55-5"
+       id="linearGradient6987-7"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.85086448,0,0,0.85086448,637.6749,225.98678)"
+       x1="-197.46432"
+       y1="322.64566"
+       x2="-199.04387"
+       y2="335.85608" />
+    <linearGradient
+       id="linearGradient6130-3-4-55-5">
+      <stop
+         id="stop6132-6-2-51-5"
+         offset="0"
+         style="stop-color:#d5953b;stop-opacity:1;" />
+      <stop
+         id="stop6134-1-4-7-0"
+         offset="1"
+         style="stop-color:#888a85;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7044"
+       id="linearGradient5723"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7050"
+       id="linearGradient5725"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7044"
+       id="linearGradient5747"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6567"
+       id="linearGradient5749"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7044"
+       id="linearGradient5771"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6567"
+       id="linearGradient5773"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7044"
+       id="linearGradient5795"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6567"
+       id="linearGradient5797"
+       gradientUnits="userSpaceOnUse"
+       x1="178.52122"
+       y1="469.43201"
+       x2="195.8125"
+       y2="469.61218" />
   </defs>
   <metadata
      id="metadata7">
@@ -11545,7 +12239,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -11749,11 +12443,11 @@
        d="m 410.75161,471.26816 c 0,2.94962 -4.78778,5.3435 -10.68701,5.3435 -5.89921,0 -10.68699,-2.39388 -10.68699,-5.3435 0,-2.94961 4.78779,-15.59193 10.68699,-15.59193 5.89923,0 10.68701,12.64232 10.68701,15.59193 z"
        style="fill:url(#radialGradient3896);fill-opacity:1;fill-rule:nonzero;stroke:#2e3436;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0" />
     <path
-       inkscape:connector-curvature="0"
-       style="fill:url(#radialGradient3892);fill-opacity:1;fill-rule:nonzero;stroke:#2e3436;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0"
+       sodipodi:nodetypes="csssc"
+       id="path6978"
        d="m 354.87341,424.95401 c 0,2.94962 -4.78778,5.3435 -10.68701,5.3435 -5.89921,0 -10.68699,-2.39388 -10.68699,-5.3435 0,-2.94961 4.78779,-9.59193 10.68699,-9.59193 5.89923,0 10.68701,6.64232 10.68701,9.59193 z"
-       id="path3842"
-       sodipodi:nodetypes="csssc" />
+       style="fill:url(#radialGradient6980);fill-opacity:1;fill-rule:nonzero;stroke:#2e3436;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0"
+       inkscape:connector-curvature="0" />
     <g
        id="g28034"
        transform="translate(105.42857,-12.999996)">
@@ -13137,7 +13831,7 @@
        sodipodi:cy="464.11035"
        sodipodi:rx="8.7778225"
        sodipodi:ry="8.7778225"
-       d="m 191.65333,464.11035 a 8.7778225,8.7778225 0 1 1 -17.55565,0 8.7778225,8.7778225 0 1 1 17.55565,0 z"
+       d="m 191.65333,464.11035 c 0,4.84786 -3.92997,8.77782 -8.77783,8.77782 -4.84785,0 -8.77782,-3.92996 -8.77782,-8.77782 0,-4.84786 3.92997,-8.77782 8.77782,-8.77782 4.84786,0 8.77783,3.92996 8.77783,8.77782 z"
        transform="matrix(1.4332476,-0.00528286,0.00264143,0.71662387,679.75587,346.59212)"
        inkscape:export-filename="/home/fede/projects/lightyears/data/node_under_construction_00.png"
        inkscape:export-xdpi="905.54486"
@@ -13184,7 +13878,7 @@
        inkscape:export-ydpi="905.54486" />
     <path
        transform="translate(1194.4353,504.23653)"
-       d="m -247.4375,172.54356 a 5,2.5625 0 1 1 -10,0 5,2.5625 0 1 1 10,0 z"
+       d="m -247.4375,172.54356 c 0,1.41523 -2.23858,2.5625 -5,2.5625 -2.76142,0 -5,-1.14727 -5,-2.5625 0,-1.41523 2.23858,-2.5625 5,-2.5625 2.76142,0 5,1.14727 5,2.5625 z"
        sodipodi:ry="2.5625"
        sodipodi:rx="5"
        sodipodi:cy="172.54356"
@@ -13197,7 +13891,7 @@
        inkscape:export-ydpi="905.54486" />
     <path
        transform="matrix(0.36585366,0,0,0.36585366,1036.2905,616.1544)"
-       d="m -247.4375,172.54356 a 5,2.5625 0 1 1 -10,0 5,2.5625 0 1 1 10,0 z"
+       d="m -247.4375,172.54356 c 0,1.41523 -2.23858,2.5625 -5,2.5625 -2.76142,0 -5,-1.14727 -5,-2.5625 0,-1.41523 2.23858,-2.5625 5,-2.5625 2.76142,0 5,1.14727 5,2.5625 z"
        sodipodi:ry="2.5625"
        sodipodi:rx="5"
        sodipodi:cy="172.54356"
@@ -13210,7 +13904,7 @@
        inkscape:export-ydpi="905.54486" />
     <path
        transform="matrix(0.51219512,0,0,0.51219512,1077.6076,589.71662)"
-       d="m -247.4375,172.54356 a 5,2.5625 0 1 1 -10,0 5,2.5625 0 1 1 10,0 z"
+       d="m -247.4375,172.54356 c 0,1.41523 -2.23858,2.5625 -5,2.5625 -2.76142,0 -5,-1.14727 -5,-2.5625 0,-1.41523 2.23858,-2.5625 5,-2.5625 2.76142,0 5,1.14727 5,2.5625 z"
        sodipodi:ry="2.5625"
        sodipodi:rx="5"
        sodipodi:cy="172.54356"
@@ -13223,7 +13917,7 @@
        inkscape:export-ydpi="905.54486" />
     <path
        transform="matrix(0.87755102,0,0,0.87755102,1163.439,516.48745)"
-       d="m -247.4375,172.54356 a 5,2.5625 0 1 1 -10,0 5,2.5625 0 1 1 10,0 z"
+       d="m -247.4375,172.54356 c 0,1.41523 -2.23858,2.5625 -5,2.5625 -2.76142,0 -5,-1.14727 -5,-2.5625 0,-1.41523 2.23858,-2.5625 5,-2.5625 2.76142,0 5,1.14727 5,2.5625 z"
        sodipodi:ry="2.5625"
        sodipodi:rx="5"
        sodipodi:cy="172.54356"
@@ -17231,6 +17925,500 @@
          xlink:href="#use10440"
          y="0"
          x="0" />
+    </g>
+    <g
+       id="g8046-6"
+       transform="translate(481.87044,-201.38896)">
+      <text
+         transform="scale(0.67483109,1.4818523)"
+         sodipodi:linespacing="125%"
+         id="text8030-9"
+         y="429.73981"
+         x="282.66666"
+         style="font-size:18.60082436px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="429.73981"
+           x="282.66666"
+           id="tspan8032-4"
+           sodipodi:role="line">new</tspan></text>
+      <text
+         transform="scale(0.67483109,1.4818523)"
+         sodipodi:linespacing="125%"
+         id="text8034-4"
+         y="458.65179"
+         x="145.71259"
+         style="font-size:18.60082436px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="458.65179"
+           x="145.71259"
+           id="tspan8036-0"
+           sodipodi:role="line">under construction</tspan></text>
+      <text
+         transform="scale(0.67483109,1.4818523)"
+         sodipodi:linespacing="125%"
+         id="text8038-7"
+         y="485.70645"
+         x="248.58028"
+         style="font-size:18.60082436px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="485.70645"
+           x="248.58028"
+           id="tspan8040-56"
+           sodipodi:role="line">finished</tspan></text>
+      <text
+         transform="scale(0.67483109,1.4818523)"
+         sodipodi:linespacing="125%"
+         id="text8042-2"
+         y="510.95822"
+         x="251.70462"
+         style="font-size:18.60082436px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="510.95822"
+           x="251.70462"
+           id="tspan8044-0"
+           sodipodi:role="line">venting</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:43.68154526px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif"
+       x="-445.69196"
+       y="703.63062"
+       id="text8698-5"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1.2476951,0.80147786,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan8700-2"
+         x="-445.69196"
+         y="703.63062">well</tspan></text>
+    <g
+       inkscape:export-ydpi="407.91037"
+       inkscape:export-xdpi="407.91037"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       id="g5703"
+       transform="translate(-68.589359,5.3033009)">
+      <g
+         id="g5705"
+         transform="translate(25.00548,-2.5000139)"
+         style="opacity:0">
+        <rect
+           style="fill:#000000;fill-opacity:1;stroke:none"
+           id="rect5707"
+           width="5.0010915"
+           height="2.4999797"
+           x="775.84314"
+           y="529.24689" />
+        <rect
+           style="opacity:0.68018021;fill:#000000;fill-opacity:1;stroke:none"
+           id="rect5709"
+           width="5.0010715"
+           height="2.4999862"
+           x="750.83765"
+           y="476.74692" />
+      </g>
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="csscccc"
+         id="path5711"
+         d="m 27.590382,376.32267 c 2.593807,-1.50519 -6.773207,6.46341 -6.773207,6.64969 0,2.98143 4.45033,5.70242 9.788374,5.70241 5.09681,0 9.310774,-1.81843 9.678164,-4.61303 l 0.451648,-0.73863 -6.821486,-7.06247 c -2.696867,-1.07437 -6.323493,0.062 -6.323493,0.062 z"
+         style="fill:none;stroke:#000000;stroke-width:3.70000005;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter7866-1-4-4-44)"
+         inkscape:connector-curvature="0"
+         transform="matrix(1.1030858,0,0,0.86868597,757.02255,172.44565)" />
+      <path
+         inkscape:export-ydpi="959.51685"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccsccc"
+         inkscape:connector-curvature="0"
+         style="fill:url(#linearGradient5723);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.35943419;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3882-4-2-14-70)"
+         d="m 181.82114,453.47384 c -0.78992,0.90251 -7.24385,5.08626 -7.29206,6.21448 0,2.92024 4.83263,5.47736 10.67311,5.47735 5.57654,0 10.70133,-2.18854 10.71312,-5.39852 0.063,-1.34681 -6.06017,-4.94082 -6.89531,-5.92058 -5.09238,0.55539 -2.47281,-2.10539 -7.19886,-0.37273 z"
+         id="path5713"
+         transform="matrix(1.1141809,-0.00403688,0.0041068,1.0952105,582.61848,2.3396956)" />
+      <path
+         inkscape:export-ydpi="959.51685"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         transform="matrix(0.37795906,0,0,0.3273299,858.92513,401.26334)"
+         d="m -167.6303,300.35608 c 0,3.9068 -5.55586,7.0739 -12.40937,7.0739 -6.85351,0 -12.40938,-3.1671 -12.40938,-7.0739 0,-3.90681 5.55587,-7.0739 12.40938,-7.0739 6.85351,0 12.40937,3.16709 12.40937,7.0739 z"
+         sodipodi:ry="7.0738969"
+         sodipodi:rx="12.409376"
+         sodipodi:cy="300.35608"
+         sodipodi:cx="-180.03967"
+         id="path5715"
+         style="color:#000000;fill:url(#linearGradient5725);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.7960211;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter3882-4-2-1-0-1);enable-background:accumulate"
+         sodipodi:type="arc" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5717"
+         d="m 792.912,510.93837 -0.87216,-5.48898 c -2.03448,0.30102 -2.16121,0 -2.16121,0 l -1.0356,5.48898 z"
+         style="opacity:0.95416667;fill:#f92305;fill-opacity:0.42477878;stroke:#000000;stroke-width:0.18665884;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5719"
+         d="m 801.44124,507.77606 -4.60612,-3.65881 c -0.64164,0.34999 -1.02119,0.69997 -2.01282,0.87496 0.38489,0.67057 3.28369,4.80882 3.28369,4.80882 z"
+         style="opacity:0.95416667;fill:#f92305;fill-opacity:0.42477878;stroke:#000000;stroke-width:0.15882137;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5721"
+         d="m 780.55359,507.80522 4.60611,-3.6588 c 0.64164,0.34999 1.0212,0.69996 2.01282,0.87495 -0.38489,0.67058 -3.28368,4.80882 -3.28368,4.80882 z"
+         style="opacity:0.95416667;fill:#f92305;fill-opacity:0.42477878;stroke:#000000;stroke-width:0.15882137;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <g
+       inkscape:export-ydpi="407.91037"
+       inkscape:export-xdpi="407.91037"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       id="g5727"
+       transform="translate(-71.417786,-77.07464)">
+      <g
+         id="g5729"
+         transform="translate(25.00548,-2.5000139)"
+         style="opacity:0">
+        <rect
+           style="fill:#000000;fill-opacity:1;stroke:none"
+           id="rect5731"
+           width="5.0010915"
+           height="2.4999797"
+           x="775.84314"
+           y="529.24689" />
+        <rect
+           style="opacity:0.68018021;fill:#000000;fill-opacity:1;stroke:none"
+           id="rect5733"
+           width="5.0010715"
+           height="2.4999862"
+           x="750.83765"
+           y="476.74692" />
+      </g>
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="csscccc"
+         id="path5735"
+         d="m 27.590382,376.32267 c 2.593807,-1.50519 -6.773207,6.46341 -6.773207,6.64969 0,2.98143 4.45033,5.70242 9.788374,5.70241 5.09681,0 9.310774,-1.81843 9.678164,-4.61303 l 0.451648,-0.73863 -6.821486,-7.06247 c -2.696867,-1.07437 -6.323493,0.062 -6.323493,0.062 z"
+         style="fill:none;stroke:#000000;stroke-width:3.70000005;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter7866-1-4-4-44)"
+         inkscape:connector-curvature="0"
+         transform="matrix(1.1030858,0,0,0.86868597,757.02255,172.44565)" />
+      <path
+         inkscape:export-ydpi="959.51685"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccsccc"
+         inkscape:connector-curvature="0"
+         style="fill:url(#linearGradient5747);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.35943419;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3882-4-2-14-70)"
+         d="m 181.82114,453.47384 c -0.78992,0.90251 -7.24385,5.08626 -7.29206,6.21448 0,2.92024 4.83263,5.47736 10.67311,5.47735 5.57654,0 10.70133,-2.18854 10.71312,-5.39852 0.063,-1.34681 -6.06017,-4.94082 -6.89531,-5.92058 -5.09238,0.55539 -2.47281,-2.10539 -7.19886,-0.37273 z"
+         id="path5737"
+         transform="matrix(1.1141809,-0.00403688,0.0041068,1.0952105,582.61848,2.3396956)" />
+      <path
+         inkscape:export-ydpi="959.51685"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         transform="matrix(0.37795906,0,0,0.3273299,858.92513,401.26334)"
+         d="m -167.6303,300.35608 c 0,3.9068 -5.55586,7.0739 -12.40937,7.0739 -6.85351,0 -12.40938,-3.1671 -12.40938,-7.0739 0,-3.90681 5.55587,-7.0739 12.40938,-7.0739 6.85351,0 12.40937,3.16709 12.40937,7.0739 z"
+         sodipodi:ry="7.0738969"
+         sodipodi:rx="12.409376"
+         sodipodi:cy="300.35608"
+         sodipodi:cx="-180.03967"
+         id="path5739"
+         style="color:#000000;fill:url(#linearGradient5749);fill-opacity:1.0;fill-rule:nonzero;stroke:#000000;stroke-width:0.79602110000000004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter3882-4-2-1-0-1);enable-background:accumulate"
+         sodipodi:type="arc" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5741"
+         d="m 792.912,510.93837 -0.87216,-5.48898 c -2.03448,0.30102 -2.16121,0 -2.16121,0 l -1.0356,5.48898 z"
+         style="opacity:0.95416666999999999;fill:none;fill-opacity:0.42477878000000002;stroke:#000000;stroke-width:0.18665883999999999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5743"
+         d="m 801.44124,507.77606 -4.60612,-3.65881 c -0.64164,0.34999 -1.02119,0.69997 -2.01282,0.87496 0.38489,0.67057 3.28369,4.80882 3.28369,4.80882 z"
+         style="opacity:0.95416666999999999;fill:none;fill-opacity:0.42477878000000002;stroke:#000000;stroke-width:0.15882136999999999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5745"
+         d="m 780.55359,507.80522 4.60611,-3.6588 c 0.64164,0.34999 1.0212,0.69996 2.01282,0.87495 -0.38489,0.67058 -3.28368,4.80882 -3.28368,4.80882 z"
+         style="opacity:0.95416666999999999;fill:none;fill-opacity:0.42477878000000002;stroke:#000000;stroke-width:0.15882136999999999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <g
+       inkscape:export-ydpi="407.91037"
+       inkscape:export-xdpi="407.91037"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       id="g5751"
+       transform="translate(-48.083262,-35.001786)">
+      <g
+         id="g5753"
+         transform="translate(25.00548,-2.5000139)"
+         style="opacity:0">
+        <rect
+           style="fill:#000000;fill-opacity:1;stroke:none"
+           id="rect5755"
+           width="5.0010915"
+           height="2.4999797"
+           x="775.84314"
+           y="529.24689" />
+        <rect
+           style="opacity:0.68018021;fill:#000000;fill-opacity:1;stroke:none"
+           id="rect5757"
+           width="5.0010715"
+           height="2.4999862"
+           x="750.83765"
+           y="476.74692" />
+      </g>
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="csscccc"
+         id="path5759"
+         d="m 27.590382,376.32267 c 2.593807,-1.50519 -6.773207,6.46341 -6.773207,6.64969 0,2.98143 4.45033,5.70242 9.788374,5.70241 5.09681,0 9.310774,-1.81843 9.678164,-4.61303 l 0.451648,-0.73863 -6.821486,-7.06247 c -2.696867,-1.07437 -6.323493,0.062 -6.323493,0.062 z"
+         style="fill:none;stroke:#000000;stroke-width:3.70000005;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter7866-1-4-4-44)"
+         inkscape:connector-curvature="0"
+         transform="matrix(1.1030858,0,0,0.86868597,757.02255,172.44565)" />
+      <path
+         inkscape:export-ydpi="959.51685"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccsccc"
+         inkscape:connector-curvature="0"
+         style="fill:url(#linearGradient5771);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.35943419;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3882-4-2-14-70)"
+         d="m 181.82114,453.47384 c -0.78992,0.90251 -7.24385,5.08626 -7.29206,6.21448 0,2.92024 4.83263,5.47736 10.67311,5.47735 5.57654,0 10.70133,-2.18854 10.71312,-5.39852 0.063,-1.34681 -6.06017,-4.94082 -6.89531,-5.92058 -5.09238,0.55539 -2.47281,-2.10539 -7.19886,-0.37273 z"
+         id="path5761"
+         transform="matrix(1.1141809,-0.00403688,0.0041068,1.0952105,582.61848,2.3396956)" />
+      <path
+         inkscape:export-ydpi="959.51685"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         transform="matrix(0.37795906,0,0,0.3273299,858.92513,401.26334)"
+         d="m -167.6303,300.35608 c 0,3.9068 -5.55586,7.0739 -12.40937,7.0739 -6.85351,0 -12.40938,-3.1671 -12.40938,-7.0739 0,-3.90681 5.55587,-7.0739 12.40938,-7.0739 6.85351,0 12.40937,3.16709 12.40937,7.0739 z"
+         sodipodi:ry="7.0738969"
+         sodipodi:rx="12.409376"
+         sodipodi:cy="300.35608"
+         sodipodi:cx="-180.03967"
+         id="path5763"
+         style="color:#000000;fill:url(#linearGradient5773);fill-opacity:1.0;fill-rule:nonzero;stroke:#000000;stroke-width:0.79602110000000004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter3882-4-2-1-0-1);enable-background:accumulate"
+         sodipodi:type="arc" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5765"
+         d="m 792.912,510.93837 -0.87216,-5.48898 c -2.03448,0.30102 -2.16121,0 -2.16121,0 l -1.0356,5.48898 z"
+         style="opacity:0.95416666999999999;fill:none;fill-opacity:0.42477878000000002;stroke:#000000;stroke-width:0.18665883999999999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5767"
+         d="m 801.44124,507.77606 -4.60612,-3.65881 c -0.64164,0.34999 -1.02119,0.69997 -2.01282,0.87496 0.38489,0.67057 3.28369,4.80882 3.28369,4.80882 z"
+         style="opacity:0.95416666999999999;fill:none;fill-opacity:0.42477878000000002;stroke:#000000;stroke-width:0.15882136999999999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5769"
+         d="m 780.55359,507.80522 4.60611,-3.6588 c 0.64164,0.34999 1.0212,0.69996 2.01282,0.87495 -0.38489,0.67058 -3.28368,4.80882 -3.28368,4.80882 z"
+         style="opacity:0.95416667;fill:#f92305;fill-opacity:0.42477878;stroke:#000000;stroke-width:0.15882137;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <g
+       inkscape:export-ydpi="407.91037"
+       inkscape:export-xdpi="407.91037"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       id="g5775"
+       transform="translate(-13.788582,-34.648233)">
+      <g
+         id="g5777"
+         transform="translate(25.00548,-2.5000139)"
+         style="opacity:0">
+        <rect
+           style="fill:#000000;fill-opacity:1;stroke:none"
+           id="rect5779"
+           width="5.0010915"
+           height="2.4999797"
+           x="775.84314"
+           y="529.24689" />
+        <rect
+           style="opacity:0.68018021;fill:#000000;fill-opacity:1;stroke:none"
+           id="rect5781"
+           width="5.0010715"
+           height="2.4999862"
+           x="750.83765"
+           y="476.74692" />
+      </g>
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="csscccc"
+         id="path5783"
+         d="m 27.590382,376.32267 c 2.593807,-1.50519 -6.773207,6.46341 -6.773207,6.64969 0,2.98143 4.45033,5.70242 9.788374,5.70241 5.09681,0 9.310774,-1.81843 9.678164,-4.61303 l 0.451648,-0.73863 -6.821486,-7.06247 c -2.696867,-1.07437 -6.323493,0.062 -6.323493,0.062 z"
+         style="fill:none;stroke:#000000;stroke-width:3.70000005;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter7866-1-4-4-44)"
+         inkscape:connector-curvature="0"
+         transform="matrix(1.1030858,0,0,0.86868597,757.02255,172.44565)" />
+      <path
+         inkscape:export-ydpi="959.51685"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccsccc"
+         inkscape:connector-curvature="0"
+         style="fill:url(#linearGradient5795);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.35943419;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3882-4-2-14-70)"
+         d="m 181.82114,453.47384 c -0.78992,0.90251 -7.24385,5.08626 -7.29206,6.21448 0,2.92024 4.83263,5.47736 10.67311,5.47735 5.57654,0 10.70133,-2.18854 10.71312,-5.39852 0.063,-1.34681 -6.06017,-4.94082 -6.89531,-5.92058 -5.09238,0.55539 -2.47281,-2.10539 -7.19886,-0.37273 z"
+         id="path5785"
+         transform="matrix(1.1141809,-0.00403688,0.0041068,1.0952105,582.61848,2.3396956)" />
+      <path
+         inkscape:export-ydpi="959.51685"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         transform="matrix(0.37795906,0,0,0.3273299,858.92513,401.26334)"
+         d="m -167.6303,300.35608 c 0,3.9068 -5.55586,7.0739 -12.40937,7.0739 -6.85351,0 -12.40938,-3.1671 -12.40938,-7.0739 0,-3.90681 5.55587,-7.0739 12.40938,-7.0739 6.85351,0 12.40937,3.16709 12.40937,7.0739 z"
+         sodipodi:ry="7.0738969"
+         sodipodi:rx="12.409376"
+         sodipodi:cy="300.35608"
+         sodipodi:cx="-180.03967"
+         id="path5787"
+         style="color:#000000;fill:url(#linearGradient5797);fill-opacity:1.0;fill-rule:nonzero;stroke:#000000;stroke-width:0.79602110000000004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter3882-4-2-1-0-1);enable-background:accumulate"
+         sodipodi:type="arc" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5789"
+         d="m 792.912,510.93837 -0.87216,-5.48898 c -2.03448,0.30102 -2.16121,0 -2.16121,0 l -1.0356,5.48898 z"
+         style="opacity:0.95416667;fill:#f92305;fill-opacity:0.42477878;stroke:#000000;stroke-width:0.18665884;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5791"
+         d="m 801.44124,507.77606 -4.60612,-3.65881 c -0.64164,0.34999 -1.02119,0.69997 -2.01282,0.87496 0.38489,0.67057 3.28369,4.80882 3.28369,4.80882 z"
+         style="opacity:0.95416666999999999;fill:none;fill-opacity:0.42477878000000002;stroke:#000000;stroke-width:0.15882136999999999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="964.49908"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path5793"
+         d="m 780.55359,507.80522 4.60611,-3.6588 c 0.64164,0.34999 1.0212,0.69996 2.01282,0.87495 -0.38489,0.67058 -3.28368,4.80882 -3.28368,4.80882 z"
+         style="opacity:0.95416667;fill:#f92305;fill-opacity:0.42477878;stroke:#000000;stroke-width:0.15882137;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+    <g
+       id="g7058"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       inkscape:export-xdpi="407.91037"
+       inkscape:export-ydpi="407.91037"
+       transform="translate(20.506097,-33.941126)">
+      <g
+         style="opacity:0"
+         transform="translate(25.00548,-2.5000139)"
+         id="g6956">
+        <rect
+           y="529.24689"
+           x="775.84314"
+           height="2.4999797"
+           width="5.0010915"
+           id="rect7285-5"
+           style="fill:#000000;fill-opacity:1;stroke:none" />
+        <rect
+           y="476.74692"
+           x="750.83765"
+           height="2.4999862"
+           width="5.0010715"
+           id="rect7287-6"
+           style="opacity:0.68018021;fill:#000000;fill-opacity:1;stroke:none" />
+      </g>
+      <path
+         transform="matrix(1.1030858,0,0,0.86868597,757.02255,172.44565)"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#000000;stroke-width:3.70000005;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter7866-1-4-4-44)"
+         d="m 27.590382,376.32267 c 2.593807,-1.50519 -6.773207,6.46341 -6.773207,6.64969 0,2.98143 4.45033,5.70242 9.788374,5.70241 5.09681,0 9.310774,-1.81843 9.678164,-4.61303 l 0.451648,-0.73863 -6.821486,-7.06247 c -2.696867,-1.07437 -6.323493,0.062 -6.323493,0.062 z"
+         id="path9891-9"
+         sodipodi:nodetypes="csscccc"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-ydpi="964.49908" />
+      <path
+         transform="matrix(1.1141809,-0.00403688,0.0041068,1.0952105,582.61848,2.3396956)"
+         id="path9895-6"
+         d="m 181.82114,453.47384 c -0.78992,0.90251 -7.24385,5.08626 -7.29206,6.21448 0,2.92024 4.83263,5.47736 10.67311,5.47735 5.57654,0 10.70133,-2.18854 10.71312,-5.39852 0.063,-1.34681 -6.06017,-4.94082 -6.89531,-5.92058 -5.09238,0.55539 -2.47281,-2.10539 -7.19886,-0.37273 z"
+         style="fill:url(#linearGradient6968);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.35943419;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3882-4-2-14-70)"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccsccc"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-ydpi="959.51685" />
+      <path
+         sodipodi:type="arc"
+         style="color:#000000;fill:url(#linearGradient6998);fill-opacity:1.0;fill-rule:nonzero;stroke:#000000;stroke-width:0.79602110000000004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter3882-4-2-1-0-1);enable-background:accumulate"
+         id="path9897-6"
+         sodipodi:cx="-180.03967"
+         sodipodi:cy="300.35608"
+         sodipodi:rx="12.409376"
+         sodipodi:ry="7.0738969"
+         d="m -167.6303,300.35608 c 0,3.9068 -5.55586,7.0739 -12.40937,7.0739 -6.85351,0 -12.40938,-3.1671 -12.40938,-7.0739 0,-3.90681 5.55587,-7.0739 12.40938,-7.0739 6.85351,0 12.40937,3.16709 12.40937,7.0739 z"
+         transform="matrix(0.37795906,0,0,0.3273299,858.92513,401.26334)"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         inkscape:export-xdpi="959.51685"
+         inkscape:export-ydpi="959.51685" />
+      <path
+         style="opacity:0.95416667;fill:#f92305;fill-opacity:0.42477878;stroke:#000000;stroke-width:0.18665884;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 792.912,510.93837 -0.87216,-5.48898 c -2.03448,0.30102 -2.16121,0 -2.16121,0 l -1.0356,5.48898 z"
+         id="path9923-6"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-ydpi="964.49908" />
+      <path
+         style="opacity:0.95416667;fill:#f92305;fill-opacity:0.42477878;stroke:#000000;stroke-width:0.15882137;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 801.44124,507.77606 -4.60612,-3.65881 c -0.64164,0.34999 -1.02119,0.69997 -2.01282,0.87496 0.38489,0.67057 3.28369,4.80882 3.28369,4.80882 z"
+         id="path9925-9"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-ydpi="964.49908" />
+      <path
+         style="opacity:0.95416667;fill:#f92305;fill-opacity:0.42477878;stroke:#000000;stroke-width:0.15882137;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 780.55359,507.80522 4.60611,-3.6588 c 0.64164,0.34999 1.0212,0.69996 2.01282,0.87495 -0.38489,0.67058 -3.28368,4.80882 -3.28368,4.80882 z"
+         id="path9925-9-3"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="/home/fede/projects/lightyears/data/tower_00.png"
+         inkscape:export-xdpi="964.49908"
+         inkscape:export-ydpi="964.49908" />
     </g>
   </g>
   <path

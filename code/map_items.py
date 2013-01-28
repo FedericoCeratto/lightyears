@@ -295,7 +295,7 @@ class FloatingVehicle(Vehicle):
         if self._status == 'lift':
             # lift
             if self._height < self._flight_height:
-                self._height += 2 # FIXME: was .2
+                self._height += 2
             else:
                 # wait
                 self._anim_startstop_cnt += 1
@@ -681,7 +681,7 @@ class Node(Building):
         self._sp_finished = sprites.AnimatedSprite('node.anim')
         self._sp_venting = sprites.AnimatedSprite('node_venting.anim')
         self._sp_under_construction = sprites.AnimatedSprite(
-            'node_under_construction.anim')
+            'node_under_construction.anim', building=self)
         self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
         self.draw_obj = self._sp_incomplete
         self._hissing_started = 0
@@ -887,7 +887,7 @@ class SuperNode(Node):
         self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT * 2
         self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
         self._sp_under_construction = sprites.AnimatedSprite(
-            'node_under_construction.anim')
+            'node_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('node_super.anim')
         self._sp_venting = sprites.AnimatedSprite('node_super.anim')
 
@@ -1097,15 +1097,19 @@ class City_Node(Node):
 
 
 class Well_Node(Node):
-    def __init__(self,(x,y),name="Steam Maker", rocks=[]):
-        Node.__init__(self,(x,y),name)
-        self.base_colour = (255,0,192)
-        self._sp_finished = draw_obj.Draw_Obj("maker.png", 1.11)
-        self._sp_incomplete = draw_obj.Draw_Obj("maker_u.png", 1)
+    """Node that extracts steam"""
+    def __init__(self, *args, **kwargs):
+        kwargs['name'] = 'Well node'
+        super(Well_Node, self).__init__(*args, **kwargs)
+        self._sp_under_construction = sprites.AnimatedSprite(
+            'maker_under_construction.anim', building=self)
+        self._sp_incomplete = sprites.Sprite('maker_incomplete.png', 1.3)
+        self._sp_finished = sprites.Sprite('maker_00.png', 1.3)
+        self._sp_venting = self._sp_finished
         self.draw_obj = self._sp_incomplete
+        self.base_colour = (255,0,192)
         self.emits_steam = True
         self.production = 0
-
 
     def Steam_Think(self):
         if not self.Needs_Work():

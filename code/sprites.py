@@ -186,6 +186,7 @@ class AnimatedSprite(Sprite):
         # ...
 
         assert filename.endswith('.anim')
+        self._filename = filename
         self._frames = []
         self._current_frame_num = 0
         self._rotation = 0
