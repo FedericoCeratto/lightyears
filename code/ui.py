@@ -24,7 +24,7 @@ from stats import Get_Font
 import logging
 log = logging.getLogger(__name__)
 
-#FIXME: pipe mode creates nodes on click
+#FIXME: nodes should not be created outside of game area
 
 
 class Gauge(object):
@@ -222,13 +222,15 @@ class MechanicalCounter(object):
 
 class User_Interface(object):
     def __init__(self, net, (width, height), g):
-        self.net = net
-        self.control_menu = ControlMenu()
+        self._first_draw = True
         self._game_data = g
+        self.blink = 0xff
+        self.net = net
+
+        self.control_menu = ControlMenu()
+        map_items.controlmenu_router = self.control_menu
 
         self.Reset()
-        self.blink = 0xff
-        self._first_draw = True
 
         # Although there is only one base image, it is scaled and
         # cropped on startup to create different backdrops.
@@ -265,7 +267,6 @@ class User_Interface(object):
         #self.vehicle_list.extend(
         #    [Tank(network=self.net, vehicles=self.vehicle_list) for x in xrange(10)]
         #)
-        map_items.item_completion_router = self
 
 
     def Update_Area(self, area):

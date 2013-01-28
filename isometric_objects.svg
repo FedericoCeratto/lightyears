@@ -29,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="680.40177"
-     inkscape:cy="112.71109"
+     inkscape:cx="631.30268"
+     inkscape:cy="60.797835"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -12239,7 +12239,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -17993,7 +17993,7 @@
     <g
        inkscape:export-ydpi="407.91037"
        inkscape:export-xdpi="407.91037"
-       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/maker_00.png"
        id="g5703"
        transform="translate(-68.589359,5.3033009)">
       <g
@@ -18079,7 +18079,7 @@
     <g
        inkscape:export-ydpi="407.91037"
        inkscape:export-xdpi="407.91037"
-       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/maker_incomplete.png"
        id="g5727"
        transform="translate(-71.417786,-77.07464)">
       <g
@@ -18165,7 +18165,7 @@
     <g
        inkscape:export-ydpi="407.91037"
        inkscape:export-xdpi="407.91037"
-       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/maker_under_construction_00.png"
        id="g5751"
        transform="translate(-48.083262,-35.001786)">
       <g
@@ -18251,7 +18251,7 @@
     <g
        inkscape:export-ydpi="407.91037"
        inkscape:export-xdpi="407.91037"
-       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/maker_under_construction_01.png"
        id="g5775"
        transform="translate(-13.788582,-34.648233)">
       <g
@@ -18336,7 +18336,7 @@
     </g>
     <g
        id="g7058"
-       inkscape:export-filename="/home/fede/projects/lightyears/data/well_incomplete.png"
+       inkscape:export-filename="/home/fede/projects/lightyears/data/maker_under_construction_02.png"
        inkscape:export-xdpi="407.91037"
        inkscape:export-ydpi="407.91037"
        transform="translate(20.506097,-33.941126)">

@@ -870,7 +870,7 @@ class Node(Building):
         """Internal trigger on item completion."""
         try:
             controlmenu_router.notify_item_completion(self.name_type)
-        except:
+        except Exception, e:
             pass
 
 #TODO: implement capacity
