@@ -679,7 +679,7 @@ class Node(Building):
         self.base_colour = (255,192,0)
         self.steam = Steam_Model()
         self._sp_finished = sprites.AnimatedSprite('node.anim')
-        self._sp_venting = sprites.AnimatedSprite('node_venting.anim')
+        self._sp_venting = sprites.AnimatedSprite('venting.anim')
         self._sp_under_construction = sprites.AnimatedSprite(
             'node_under_construction.anim', building=self)
         self._sp_incomplete = sprites.Sprite('node_incomplete.png', 1.3)
@@ -769,6 +769,7 @@ class Node(Building):
         if self.health == 0:
             # The node has never been built
             self.draw_obj = self._sp_incomplete
+
         elif self.Needs_Work():
             # It's being built or repaired
             if self.draw_obj != self._sp_under_construction:
@@ -776,18 +777,18 @@ class Node(Building):
                 self._sp_under_construction.reset_animation()
 
             self.draw_obj = self._sp_under_construction
+
+        elif self.steam.venting:
+            # It's venting steam
+            # Start hissing every 30 seconds
+            now = time.time()
+            if now - self._hissing_started > 30:
+                self._hissing_started = now
+                sound.FX("hissing_leak")
+
         else:
-            if self.steam.venting:
-                # It's venting steam
-                self.draw_obj = self._sp_venting
-                # start hissing every 30 seconds
-                now = time.time()
-                if now - self._hissing_started > 30:
-                    self._hissing_started = now
-                    sound.FX("hissing_leak")
-            else:
-                # It's working normally
-                self.draw_obj = self._sp_finished
+            # It's working normally
+            self.draw_obj = self._sp_finished
 
 
     def _status_changed_to_finished(self):
@@ -862,6 +863,10 @@ class Node(Building):
 
         self.draw_obj.Draw(output, self.pos, (0,0))
 
+        if self.steam.venting:
+            # The node is venting steam. Overlay steam cloud.
+            self._sp_venting.Draw(output, self.pos, (0,0))
+
 
     def Sound_Effect(self):
         sound.FX("node_rap")
@@ -889,7 +894,6 @@ class SuperNode(Node):
         self._sp_under_construction = sprites.AnimatedSprite(
             'node_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('node_super.anim')
-        self._sp_venting = sprites.AnimatedSprite('node_super.anim')
 
 
 class ResearchNode(Node):
@@ -901,7 +905,6 @@ class ResearchNode(Node):
         self._sp_under_construction = sprites.AnimatedSprite(
             'research_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('research.anim')
-        self._sp_venting = sprites.AnimatedSprite('research.anim')
 
 
 class HydroponicsNode(Node):
@@ -913,7 +916,6 @@ class HydroponicsNode(Node):
         self._sp_under_construction = sprites.AnimatedSprite(
             'hydroponics_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('hydroponics.anim')
-        self._sp_venting = sprites.AnimatedSprite('hydroponics.anim')
 
 
 class TowerNode(Node):
@@ -926,7 +928,6 @@ class TowerNode(Node):
         self._sp_under_construction = sprites.AnimatedSprite(
             'tower_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('tower.anim')
-        self._sp_venting = sprites.AnimatedSprite('tower.anim')
 
 
 buildings = {
@@ -1105,7 +1106,6 @@ class Well_Node(Node):
             'maker_under_construction.anim', building=self)
         self._sp_incomplete = sprites.Sprite('maker_incomplete.png', 1.3)
         self._sp_finished = sprites.Sprite('maker_00.png', 1.3)
-        self._sp_venting = self._sp_finished
         self.draw_obj = self._sp_incomplete
         self.base_colour = (255,0,192)
         self.emits_steam = True

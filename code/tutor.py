@@ -23,185 +23,81 @@ def On(width):
 
     Message(None, "welcome",
         "Welcome to 20,000 Light Years Into Space!",
-        "You are playing the interactive tutorial. As you play, " +
-        "information boxes like this one will appear on your screen. " +
-        "When each message appears, read it, and then follow the " +
-        "instructions that it provides.\n" +
-        "To proceed, select the City, which is in the centre of the map.",
+        "You are playing the interactive tutorial. As you play, information boxes like this one will appear on your screen. When each message appears, read it, and then follow the instructions that it provides.\nTo proceed, select the City, which is in the centre of the map.",
         False)
 
 
 def City_Selected():
     Message("welcome", "citysel",
         "Your City",
-        "To win the game, you must upgrade the city. Upgrades " +
-        "raise the Technology Level of the City. Currently, the City " +
-        "is at level 1 - you can see this on the right hand side of " +
-        "the screen ('Tech Level'). When the City's Tech Level " + 
-        "reaches " + str(DIFFICULTY.CITY_MAX_TECH_LEVEL) + ", you win.\n" +
-        "You can upgrade the City at any time, but you should wait " +
-        "until you have secured some more supplies of steam.\n" +
-        "Now click on the structure to the right of the City.",
+        "To win the game, you must upgrade the city. Upgrades raise the Technology Level of the City. Currently, the City is at level 1 - you can see this on the right hand side of the screen ('Tech Level'). When the City's Tech Level reaches its maximum (depending on the game difficulty), you win.\nYou can upgrade the City at any time, but you should wait until you have secured some more supplies of steam.\nNow click on the structure to the right of the City.",
         False)
 
 def Steam_Maker_Selected(first):
     if first:
         Message("citysel", "steamsel",
             "The First Steam Maker",
-            "You have just selected a Steam Maker. " +
-            "Steam Makers are the " +
-            "source of your steam supply. You'll need " +
-            "to build more of these " +
-            "in order to win the game, and you'll need " +
-            "to connect them to your " +
-            "city via Pipes.\n" +
-            "Steam Makers have to be built on top of Steam " +
-            "Sources. These are producing clouds of steam - " +
-            "there are about ten of them, " +
-            "dotted around the map.\n" +
-            "Click 'Build Node', then click on one of the Steam " +
-            "Sources. Ideally, you should choose one that's near the City.",
+            "You have just selected a Steam Maker. Steam Makers are the source of your steam supply. You'll need to build more of these in order to win the game, and you'll need to connect them to your city via Pipes.\nSteam Makers have to be built on top of Steam Sources. These are producing clouds of steam - there are about ten of them, dotted around the map.\nClick 'Build Node', then click on one of the Steam Sources. Ideally, you should choose one that's near the City.",
             False)
     else:
         Message("steamsel", "newsteam",
             "The New Steam Maker",
-            "You've just built a new Steam Maker. " +
-            "Or, more accurately, you've planned the construction " +
-            "of a new Steam Maker. It won't actually be built until " +
-            "it is connected by some Pipes to your City.\n" +
-            "Your next job is to connect your Steam Maker to your City. " +
-            "For this, you'll need to build a Pipe.\n" +
-            "Click 'Build Pipe', then click first on the City, and " +
-            "then on the new Steam Maker.",
+            "You've just built a new Steam Maker. Or, more accurately, you've planned the construction of a new Steam Maker. It won't actually be built until it is connected by some Pipes to your City.\nYour next job is to connect your Steam Maker to your City. For this, you'll need to build a Pipe.\nClick 'Build Pipe', then click first on the City, and then on the new Steam Maker.",
             False)
 
 def Pipe_Added():
     Message("newsteam", "building",
         "Building", 
-        "Now you've planned the beginnings of your network. " +
-        "You have two Steam Makers, one operational, the other " +
-        "under construction, and Pipes linking them to the City.\n" +
-        "Please wait while the new Steam Maker is " +
-        "built. While construction is in progress, try clicking on the " +
-        "Pipes and the Steam Makers. You'll see some information about " +
-        "them, including the progress of construction!",
+        "Now you've planned the beginnings of your network. You have two Steam Makers, one operational, the other under construction, and Pipes linking them to the City.\nPlease wait while the new Steam Maker is built. While construction is in progress, try clicking on the Pipes and the Steam Makers. You'll see some information about them, including the progress of construction!",
         False)
 
 def All_Nodes_Finished():
     Message("building", "nodesready",
         "Building Complete!", 
-        "Great! Your City is now supplied with Steam from two sources.\n" +
-        "You can safely upgrade it now. Click 'Upgrade', and then " +
-        "click on the City. The upgrade will begin immediately.",
+        "Great! Your City is now supplied with Steam from two sources.\nYou can safely upgrade it now. Click 'Upgrade', and then click on the City. The upgrade will begin immediately.",
         False)
 
 def City_Upgrade_Running():
     Message("nodesready", "upgraderunning",
         "Upgrade In Progress",
-        "The City upgrade is now in progress. As soon as you started " +
-        "the upgrade, two things happened:\n" +
-        "- You got an extra Work Unit. Now, two of your buildings " +
-        "can be built simultaneously. Currently, one Work Unit is being " +
-        "used to upgrade the City. The other one is spare.\n" +
-        "- The City's steam requirement increased. Note the figures for " +
-        "Supply and Demand on the right hand side. Demand has just " +
-        "gone up. Fortunately, as you have two Steam Makers, Supply will " +
-        "be able to match it.\n" +
-        "Now you should strengthen your network. Later in the game, you'll " +
-        "be under attack in a variety of nasty ways.\n" +
-        "To do that, create a new Node somewhere between the two Steam " +
-        "Makers. Nodes are just connection points. They store steam, " +
-        "but they don't produce it or consume it.\n" +
-        "Click 'Build Node' and then click on the position of " +
-        "your new node.",
+        "The City upgrade is now in progress. As soon as you started the upgrade, two things happened:\n- You got an extra Work Unit. Now, two of your buildings can be built simultaneously. Currently, one Work Unit is being used to upgrade the City. The other one is spare.\n- The City's steam requirement increased. Note the figures for Supply and Demand on the right hand side. Demand has just gone up. Fortunately, as you have two Steam Makers, Supply will be able to match it.\nNow you should strengthen your network. Later in the game, you'll be under attack in a variety of nasty ways.\nTo do that, create a new Node somewhere between the two Steam Makers. Nodes are just connection points. They store steam, but they don't produce it or consume it.\nClick 'Build Node' and then click on the position of your new node.",
         False)
         
 def Node_Selected():
     Message("upgraderunning", "makinglinks",
         "Making New Links",
-        "Your network's strength depends on the number of links. " +
-        "Generally, the more routes between two points, the better. The only " +
-        "disadvantage of adding new routes is that they consume Work Units " +
-        "during construction and repair. Don't worry about that for now.\n" +
-        "Now build three new Pipes, each running " +
-        "from your new Node: one to the City, and two for the two " +
-        "Steam Makers. These connections make your network stronger. " + 
-        "Wait for these to be built.",
+        "Your network's strength depends on the number of links. Generally, the more routes between two points, the better. The only disadvantage of adding new routes is that they consume Work Units during construction and repair. Don't worry about that for now.\nNow build three new Pipes, each running from your new Node: one to the City, and two for the two Steam Makers. These connections make your network stronger. Wait for these to be built.",
         False)
 
 def Number_Of_Pipes_Is(pipe_count):
     if pipe_count >= 5:
         Message("makinglinks", "networkbasics",
             "Almost There...",
-            "Excellent. Your network is now strong enough to withstand " +
-            "attacks. You are almost ready to begin playing for real! " +
-            "But before you do, you have to understand how steam flows. " +
-            "Please click on one of the pipes.",
+            "Excellent. Your network is now strong enough to withstand attacks. You are almost ready to begin playing for real! But before you do, you have to understand how steam flows. Please click on one of the pipes.",
             False)
 
 def Pipe_Selected():
     Message("networkbasics", "networkbasics2",
         "Steam is Water..",
-        "To understand the network, it helps to imagine that the steam " +
-        "is just (liquid) water. The City is like a drain: it is draining " +
-        "water out of the system. The Steam Makers are like taps: they are " +
-        "adding water to the system. In both cases, the flow rate " +
-        "depends only on the amount of Upgrades you have applied.\n" +
-        "Flow rates are given in Flow Units (U). Flow rates are represented " +
-        "by the green dots that move along the pipes. The movement of the " +
-        "dots is proportional to the velocity of the flow.\n" +
-        "Now click on one of the nodes.",
+        "To understand the network, it helps to imagine that the steam is just (liquid) water. The City is like a drain: it is draining water out of the system. The Steam Makers are like taps: they are adding water to the system. In both cases, the flow rate depends only on the amount of Upgrades you have applied.\nFlow rates are given in Flow Units (U). Flow rates are represented by the green dots that move along the pipes. The movement of the dots is proportional to the velocity of the flow.\nNow click on one of the nodes.",
         False)
 
 def Any_Node_Selected():
     Message("networkbasics2", "networkbasics3",
         "Pressure..",
-        "Water always finds it's own level. If you have two water tanks " +
-        "and you connect them with a pipe, the water level will try to " +
-        "equalise. The same effect happens here, but with steam.\n" +
-        "All of the Nodes are steam storage tanks. The 'level' is " +
-        "steam pressure. It is constantly trying to equalise.\n" +
-        "Pressure is given in Pressure Units (P). " +
-        "Now you've selected a Node, you can see its pressure on the right " +
-        "hand side. Pressure is limited: to increase the limit, you can " +
-        "upgrade the node, but there's no need to do that yet.\n" +
-        "You lose the game if the pressure at the City falls too low (below " +
-        str(PRESSURE_DANGER) + " P) for more than a certain " +
-        "period of time (" + str(DIFFICULTY.GRACE_TIME) + " days, in " +
-        "Beginner mode). To avoid that, ensure that Supply matches Demand.\n" +
+        "Water always finds it's own level. If you have two water tanks and you connect them with a pipe, the water level will try to equalise. The same effect happens here, but with steam.\nAll of the Nodes are steam storage tanks. The 'level' is steam pressure. It is constantly trying to equalise.\nPressure is given in Pressure Units (P). Now you've selected a Node, you can see its pressure on the right hand side. Pressure is limited: to increase the limit, you can upgrade the node, but there's no need to do that yet.\nYou lose the game if the pressure at the City falls too low (below " + str(PRESSURE_DANGER) + " P) for more than a certain period of time (" + str(DIFFICULTY.GRACE_TIME) + " days, in Beginner mode). To avoid that, ensure that Supply matches Demand.\n" +
         "We're almost done. Please click on a pipe again.",False)
 
 def Pipe_Selected_2():
     Message("networkbasics3", "networkbasics4",
         "Rules Of Thumb",
-        "The steam pressures in your Nodes will never equalise, because " +
-        "steam is being added and removed from the network. However, you " +
-        "may wonder why pressure and flow vary so much.\n" +
-        "The answer is Resistance. Each pipe has only a limited capacity. " +
-        "There's a limit to the rate at which steam can move, imposed " +
-        "by each pipe. Resistance is a hidden property: you can't see " +
-        "it, but it affects the game. Longer pipes have more resistance " +
-        "than short ones.\n" +
-        "All of this will reduce to a few rules of thumb.\n" +
-        "- Build one Steam Maker per City Upgrade.\n" +
-        "- Make lots of Pipes.\n" +
-        "- Don't do an Upgrade unless the steam pressure at your City " +
-        "is stable.\n" +
-        "Now you're ready to experience an attack. Please click on your " +
+        "The steam pressures in your Nodes will never equalise, because steam is being added and removed from the network. However, you may wonder why pressure and flow vary so much.\nThe answer is Resistance. Each pipe has only a limited capacity. There's a limit to the rate at which steam can move, imposed by each pipe. Resistance is a hidden property: you can't see it, but it affects the game. Longer pipes have more resistance than short ones.\nAll of this will reduce to a few rules of thumb.\n- Build one Steam Maker per City Upgrade.\n- Make lots of Pipes.\n- Don't do an Upgrade unless the steam pressure at your City is stable.\nNow you're ready to experience an attack. Please click on your " +
         "City.", False)
 
 def City_Selected_2():
     Message("networkbasics4", "attack",
         "Alien Attack",
-        "The Aliens are coming!\n" +
-        "You can't fight the aliens: all you can do is rebuild " +
-        "your network. They'll try to destroy your Nodes and Pipes: " +
-        "they'll only be able to put your Nodes out of action, but " +
-        "they can destroy your Pipes.\n" +
-        "The attack will last for two minutes. If sound is enabled, " +
-        "you will hear an alarm " +
-        "before each wave of alien attackers.\n" +
-        "When you're ready for them, " +
+        "The Aliens are coming!\nYou can't fight the aliens: all you can do is rebuild your network. They'll try to destroy your Nodes and Pipes: they'll only be able to put your Nodes out of action, but they can destroy your Pipes.\nThe attack will last for two minutes. If sound is enabled, you will hear an alarm before each wave of alien attackers.\nWhen you're ready for them, " +
         "click on the planet's surface.", False)
 
 def Nothing_Selected():
