@@ -565,8 +565,10 @@ class Network(object):
             x = random.randint(0, mx - 1)
             y = random.randint(0, my - 1)
             if teaching:
-                if x < cx:
-                    x += cx
+                #if x < cx:
+                #    x += cx
+                pass
+
             # occupied
             if self.ground_grid.has_key((x,y)):
                 continue
