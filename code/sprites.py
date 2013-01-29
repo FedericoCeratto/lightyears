@@ -245,6 +245,7 @@ class AnimatedSprite(Sprite):
                 # Pick a frame number based on the building health
                 # (fallback to linear if the health is not set)
                 h = self.building.health / float(self.building.max_health)
+                h = min(h, 0.999) # h >= 1 would pick a frame that does not exists
                 self._current_frame_num = int(len(self._frames) * h)
 
             else:
