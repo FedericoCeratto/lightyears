@@ -205,7 +205,7 @@ class Main_Loop(object):
         self.Summary(g)
 
         if g.challenge == menu.Menu.tutorial:
-            tutor.On(( menu_margin * 40 ) / 100)
+            tutor.On(( menu_margin * 50 ) / 100)
 
         cur_time = g.game_time.time()
 
