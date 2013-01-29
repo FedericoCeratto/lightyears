@@ -28,8 +28,9 @@ class StaticSprite(object):
 
         if pwidth:
             aw, ah = img.get_size()
-            pheight = int(float(ah) / aw * pwidth)
-            img = smoothscale(img, (pwidth, pheight))
+            if pwidth != aw:
+                pheight = int(float(ah) / aw * pwidth)
+                img = smoothscale(img, (pwidth, pheight))
 
         self._img = img
         self._phalfsize = PVector(self._img.get_size()) / 2
