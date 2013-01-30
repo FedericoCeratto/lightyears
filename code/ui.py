@@ -834,13 +834,16 @@ class ControlMenu(object):
 
     def _draw_dashboard_text(self, output, pos, action):
         """Draw dashboard text"""
-        linepos = pos + PVector(25, -35)
+        linepos = pos + PVector(22, -35)
 
         # Print first line
         line = "%s" % action.capitalize()
-        txt = Get_Font(18).render(line, True, CITY_COLOUR)
+        if 'hydroponics node' in line:
+            line = 'Build hydroponics' # Shorten title
+
+        txt = Get_Font(14).render(line, True, CITY_COLOUR)
         output.blit(txt, linepos)
-        linepos += PVector(4, 13)
+        linepos += PVector(6, 13)
 
 
         dashboard_infos = {
@@ -859,7 +862,7 @@ class ControlMenu(object):
 
         # Print other lines
         for line in lines:
-            txt = Get_Font(16).render(line, True, CITY_COLOUR)
+            txt = Get_Font(12).render(line, True, CITY_COLOUR)
             output.blit(txt, linepos)
             linepos += PVector(0, 13)
 
