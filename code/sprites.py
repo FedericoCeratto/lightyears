@@ -5,13 +5,82 @@
 
 # Animated sprites
 
+from pygame.transform import smoothscale, rotate
 from random import randint
 from time import time
+import logging
+import pygame
 
 from primitives import Get_Grid_Size, GVector, PVector
-from pygame.transform import smoothscale, rotate
-from resource import Path as path
-import pygame
+from resource import Path as data_path
+
+log = logging.getLogger(__name__)
+
+def memoize(fn):
+    """Memoization decorator.
+    Keyword arguments are not supported.
+    """
+    _cache = {}
+
+    def memoizer(*args):
+        try:
+            return _cache[args]
+        except KeyError:
+            _cache[args] = fn(*args)
+            return _cache[args]
+
+    return memoizer
+
+
+@memoize
+def load_image(filename):
+    """Load an image."""
+    return pygame.image.load(data_path(filename))
+
+@memoize
+def load_animation(filename):
+    """Load an animation."""
+    frames = []
+    ratio = None
+    scale = 1.0
+    sequence = 'linear'
+
+    with open(data_path(filename)) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+
+            if line.startswith('# Scale:'):
+                scale = float(line[8:])
+                continue
+
+            if line.startswith('# Sequence: health'):
+                sequence = 'health'
+                continue
+
+            if line.startswith('# Sequence: random'):
+                sequence = 'random'
+                continue
+
+            if line.startswith('#'):
+                continue # Ignore comments
+
+            img_fname, interval = line.split()
+            interval = float(interval) / 1000
+            img = load_image(img_fname)
+            img = img.convert_alpha()
+            frames.append((img, interval))
+            if ratio is None: # Calculate ratio on first image
+                ratio = img.get_height() / float(img.get_width())
+
+    assert frames, "%s did not load any frame" % filename
+    assert sequence in ('linear', 'random', 'health'), \
+        "Animation sequence must be linear, health or random"
+
+    log.debug("Loaded anim %s" % filename)
+    return scale, sequence, ratio, frames
+
 
 class StaticSprite(object):
     """A sprite that does not support dynamic rotation/scaling"""
@@ -19,7 +88,7 @@ class StaticSprite(object):
         """Load image from disk"""
         assert filename.endswith('.png')
         self.gcenter = GVector(0, 0)
-        img = pygame.image.load(path(filename))
+        img = load_image(filename)
         if prerotate:
             img = rotate(img, prerotate)
 
@@ -101,7 +170,7 @@ class Sprite(object):
         self._rotation = 0
         self._zoom = 1
         self.scale(scale)
-        i = pygame.image.load(path(filename))
+        i = load_image(filename)
         self._ratio = i.get_height() / float(i.get_width())
         self._rawimg = i
         self._img = None
@@ -192,45 +261,15 @@ class AnimatedSprite(Sprite):
         self._current_frame_num = 0
         self._rotation = 0
         self._zoom = 1
-        self.scale(1.0)
         self.sequence = 'linear' # linear, health or random
         self.building = building
 
-        with open(path(filename)) as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-
-                if line.startswith('# Scale:'):
-                    self.scale(float(line[8:]))
-                    continue
-
-                if line.startswith('# Sequence: health'):
-                    self.sequence = 'health'
-                    continue
-
-                if line.startswith('# Sequence: random'):
-                    self.sequence = 'random'
-                    continue
-
-                if line.startswith('#'):
-                    continue # Ignore comments
-
-                img_fname, interval = line.split()
-                interval = float(interval) / 1000
-                img = pygame.image.load(path(img_fname))
-                img = img.convert_alpha()
-                self._frames.append((img, interval))
-
-        f.close()
-        assert self._frames, "%s did not load any frame" % filename
-        assert self.sequence in ('linear', 'random', 'health'), \
-            "Animation sequence must be linear, health or random"
-        self._ratio = img.get_height() / float(img.get_width())
+        scale, self.sequence, self._ratio, self._frames = load_animation(filename)
+        self.scale(scale)
 
         self._rawimg, sleeptime = self._frames[self._current_frame_num]
         self._frame_expiry_time = time() + sleeptime
+
 
     def update_current_img(self):
         """Update current image"""
