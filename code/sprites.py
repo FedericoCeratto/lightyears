@@ -26,6 +26,7 @@ def memoize(fn):
         try:
             return _cache[args]
         except KeyError:
+            #log.debug("calling", repr(fn), repr(args))
             _cache[args] = fn(*args)
             return _cache[args]
 
@@ -103,7 +104,6 @@ class StaticSprite(object):
 
         self._img = img
         self._phalfsize = PVector(self._img.get_size()) / 2
-        self._grayscale_img = None
 
     @property
     def phalfsize(self):
@@ -129,11 +129,9 @@ class StaticSprite(object):
         """Set sprite center in game units."""
         self.gcenter = GVector(x, y)
 
+    @memoize
     def grayed_out(self):
         """Generate a grayscale image"""
-        if self._grayscale_img:
-            return self._grayscale_img
-
         w, h = self._img.get_size()
         new = pygame.Surface((w, h), pygame.SRCALPHA)
 
@@ -143,9 +141,9 @@ class StaticSprite(object):
                 v = 0.3 * red + 0.59 * green + 0.11 * blue
                 new.set_at((x, y), (v, v, v, alpha))
 
-        self._grayscale_img = new
         return new
 
+    @memoize
     def highlight(self):
         """Generate a hightlighted image"""
         w, h = self._img.get_size()
@@ -189,34 +187,40 @@ class Sprite(object):
 
     def transform(self):
         """Apply enqueued transformations"""
-        #if self._img and self._zoom == 1 and self._rotation == 0:
-        #    return # No change needed
+        self._rotation = round(self._rotation, 3)
+        self._zoom = round(self._zoom, 3)
+        self._ratio = round(self._ratio, 3)
 
-        img = self._rawimg
+        self._img = self._transform(self._rawimg, self._rotation, self._scaling,
+            self._zoom, self._ratio)
+        self._zoom = 1.0
+        self._rotation = 0.0
 
-        if self._scaling:
-            w, h = self._scaling
+    @staticmethod
+    @memoize
+    def _transform(img, rotation, scaling, zoom, ratio):
+
+        if scaling:
+            w, h = scaling
         else:
             w = img.get_width()
 
-        if self._zoom != 1:
-            w *= self._zoom
-            self._zoom = 1
+        if zoom != 1:
+            w *= zoom
 
         if h is None:
-            h = self._ratio * w
+            h = ratio * w
 
         w *= Get_Grid_Size()
         h *= Get_Grid_Size()
-        img = smoothscale(img, map(int, (w, h)))
+        new = smoothscale(img, map(int, (w, h)))
 
-        if self._rotation:
-            center = img.get_rect().center
-            img = rotate(img, self._rotation)
-            img.get_rect().center = center
-            self._rotation = 0
+        if rotation:
+            center = new.get_rect().center
+            new = rotate(new, rotation)
+            new.get_rect().center = center
 
-        self._img = img
+        return new
 
     def update_current_img(self):
         """Update current image"""
