@@ -26,13 +26,16 @@ log = logging.getLogger(__name__)
 
 #FIXME: nodes should not be created outside of game area
 
+import sprites
 
 class Gauge(object):
     """Round steampunk gauge"""
     def __init__(self):
-        self._diameter = d = 80 # diameter
+        self._diameter = d = 80
+        # The dial and hand axes are conveniently located
+        # at the center of the pictures.
         self.back_img = resource.Load_Image("gauge.png", scale_to=(d, d))
-        self.hand_img = resource.Load_Image("gauge_hand.png")
+        self._sp_hand = sprites.Sprite("gauge_hand.png")
         self.red_hand_img = resource.Load_Image("gauge_hand_red.png", scale_to=(d, d))
         self.glass_img = resource.Load_Image("gauge_glass.png", scale_to=(d, d))
         self._animated_pressure = 0
@@ -40,18 +43,25 @@ class Gauge(object):
         self._vibration = random.randint(0, 200)
         self._pos = None # Set at runtime
 
+    @property
+    def center(self):
+        return self._center
+
+    @center.setter
+    def center(self, c):
+        """Set rotation axis"""
+        s = self.back_img.get_size()
+        self._center = PVector(c)
+        self._pos = self._center - PVector(s) / 2
+
     def rotate_hand(self, bar=None):
         """Rotate pressure hand"""
         if bar is None:
             bar = 0
         angle = 199 - bar / 27.0 * 170
-        w = h = int(self._diameter)
-        img = pygame.transform.rotate(self.hand_img, angle)
-        img = pygame.transform.smoothscale(img, (w, h))
-
-        newrect = img.get_rect()
-        newrect.center = (w/2, h/2)
-        return img, newrect
+        w = self._diameter / 14
+        self._sp_hand.rotate(angle)
+        self._sp_hand.scale(w)
 
     def rotate_red_hand(self, bar=None):
         """Rotate red hand"""
@@ -68,7 +78,10 @@ class Gauge(object):
 
     def draw(self, output, bar=None, red=None):
         """Draw gauge and hand"""
-        # the pressure displayed by the gauge will reach "bar" eventually
+        # Draw the dial
+        output.blit(self.back_img, self._pos)
+
+        # The pressure displayed by the gauge will reach "bar" eventually
         delta = (bar - self._animated_pressure) * self._speed
         self._animated_pressure += delta
 
@@ -87,10 +100,11 @@ class Gauge(object):
 
         self._vibration += 1
 
-        hand, hand_rect = self.rotate_hand(bar=bar)
+        self.rotate_hand(bar=bar)
+        self._sp_hand.draw(output, pcenter=self._center)
+        #self._sp_hand.pcenter = self._center
 
-        output.blit(self.back_img, self._pos)
-        output.blit(hand, self._pos + hand_rect)
+        #output.blit(hand, self._pos + hand_rect)
 
         if red:
             hand, hand_rect = self.rotate_red_hand(bar=red)
@@ -420,8 +434,8 @@ class User_Interface(object):
             #TODO: hack
             self._first_draw = False
             ptl = self.control_menu._ptopleft
-            self.gauges['city_pressure']._pos = ptl + PVector(-25, -90)
-            self.gauges['selected_pressure']._pos = ptl + PVector(65, -90)
+            self.gauges['city_pressure'].center = ptl + PVector(16, -50)
+            self.gauges['selected_pressure'].center = ptl + PVector(105, -50)
             self.valve._pos = ptl + PVector(150, -104)
             self.day_counter._pos = ptl + PVector(120, 210)
 

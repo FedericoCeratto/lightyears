@@ -27,8 +27,11 @@ def memoize(fn):
             return _cache[args]
         except KeyError:
             #log.debug("calling", repr(fn), repr(args))
-            _cache[args] = fn(*args)
-            return _cache[args]
+            out = fn(*args)
+            if len(_cache) < 300:
+                _cache[args] = out
+
+            return out
 
     return memoizer
 
@@ -187,38 +190,38 @@ class Sprite(object):
 
     def transform(self):
         """Apply enqueued transformations"""
-        self._rotation = round(self._rotation, 3)
+        self._rotation = round(self._rotation, 1)
         self._zoom = round(self._zoom, 3)
         self._ratio = round(self._ratio, 3)
 
-        self._img = self._transform(self._rawimg, self._rotation, self._scaling,
-            self._zoom, self._ratio)
+        self._img = self._transform(self._rawimg, self._rotation, self._scaling[0],
+            self._zoom)
         self._zoom = 1.0
         self._rotation = 0.0
 
     @staticmethod
     @memoize
-    def _transform(img, rotation, scaling, zoom, ratio):
+    def _transform(img, rotation, final_width, zoom):
 
-        if scaling:
-            w, h = scaling
+        # Either final_width (game unit) is specified or zoom
+        if final_width is None:
+            final_width = img.get_width() * zoom
         else:
-            w = img.get_width()
-
-        if zoom != 1:
-            w *= zoom
-
-        if h is None:
-            h = ratio * w
-
-        w *= Get_Grid_Size()
-        h *= Get_Grid_Size()
-        new = smoothscale(img, map(int, (w, h)))
+            final_width *= Get_Grid_Size()
 
         if rotation:
-            center = new.get_rect().center
-            new = rotate(new, rotation)
-            new.get_rect().center = center
+            new = rotate(img, rotation)
+            new.get_rect().center = img.get_rect().center
+
+        else:
+            new = img.copy()
+
+        if new.get_width() != final_width:
+            # Scaling is required
+            w, h = img.get_size()
+            final_height = int(float(final_width) / w * h)
+            final_width = int(final_width)
+            return smoothscale(new, (final_width, final_height))
 
         return new
 
@@ -226,13 +229,13 @@ class Sprite(object):
         """Update current image"""
         self.transform()
 
-    def draw(self, output, *args):
+    def draw(self, output, pos=None, pcenter=None):
         """Draw current frame on a surface"""
         self.update_current_img()
 
-        if len(args):
-            pcenter = GVector(args[0]).pvector
-        else:
+        if pos:
+            pcenter = GVector(pos).pvector
+        elif pcenter is None:
             pcenter = self.gcenter.pvector
 
         phalfsize = PVector(self._img.get_size()) / 2
