@@ -31,7 +31,7 @@ AUDIO_TRANS_TBL = {
     "ring" : "ack8",            # ack 8
     "whoosh1" : "ack9",         # ack 9
     "applause" : "dack1",       # double ack 1
-    "computer" : "dack2",       # double ack 2
+    "boiler" : "boiler",
     "emergency" : "alert1",     # emergency tone 1
     "firealrm" : "alert3",      # emergency tone 2
     "stormbeeps" : "alert2",    # emergency tone 3

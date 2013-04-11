@@ -1096,7 +1096,7 @@ class City_Node(Node):
         return Building.Get_Tech_Level(self) + (" of %d" % DIFFICULTY.CITY_MAX_TECH_LEVEL )
 
     def Sound_Effect(self):
-        sound.FX("computer")
+        sound.FX("boiler")
 
 
 class Well_Node(Node):
