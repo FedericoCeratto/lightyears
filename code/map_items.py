@@ -995,6 +995,8 @@ class City_Node(Node):
         self.total_steam = 0
         self.metal_quantity = 50000 #FIXME
         self.metal_production = 0
+        self._sp_under_construction = sprites.AnimatedSprite(
+            'city_under_construction.anim', building=self)
 
     def Begin_Upgrade(self):
         # Upgrade a city for higher capacity
