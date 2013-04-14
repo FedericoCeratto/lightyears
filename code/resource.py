@@ -48,7 +48,8 @@ AUDIO_TRANS_TBL = {
     "hissing_leak": "hissing_leak",  # node venting steam
     "node_rap": "node_rap",          # node
     'game_intro_00': 'intro_00',
-    'game_intro_01': 'intro_00',
+    'game_intro_01': 'intro_01',
+    'game_intro_04': 'intro_04',
 }
 
 

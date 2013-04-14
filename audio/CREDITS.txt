@@ -6,7 +6,7 @@ Copyright: © Bart Kelsey
 Website: http://opengameart.org
 License: Public Domain
 
-Files: intro_00.ogg intro_01.ogg
+Files: intro_00.ogg intro_01.ogg intro_04.ogg
 Copyright: © Federico Ceratto <federico.ceratto@gmail.com>
 Website: https://github.com/FedericoCeratto/lightyears
 License: GPLv2
