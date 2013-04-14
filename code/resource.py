@@ -7,15 +7,19 @@
 import pygame, os, sys
 from pygame.locals import *
 
+from logging import getLogger
+
 from mail import New_Mail
 from primitives import *
+
+log = getLogger(__name__)
 
 __img_cache = dict()
 __snd_cache = dict()
 __snd_disabled = False
 
 if not pygame.mixer or not pygame.mixer.get_init():
-	__snd__disabled = True
+    __snd__disabled = True
 
 DATA_DIR = os.path.abspath(os.path.join(
                 os.path.dirname(sys.argv[ 0 ]), "data"))
@@ -43,6 +47,8 @@ AUDIO_TRANS_TBL = {
     "pipe_upgrade": "pipe_upgrade",  # pipe being upgraded
     "hissing_leak": "hissing_leak",  # node venting steam
     "node_rap": "node_rap",          # node
+    'game_intro_00': 'intro_00',
+    'game_intro_01': 'intro_00',
 }
 
 
@@ -115,10 +121,12 @@ def Load_Sound(name):
     if __snd_disabled:
         return None
 
-    if __snd_cache.has_key(name):
-        return __snd_cache[ name ]
+    try:
+        return __snd_cache[name]
+    except KeyError:
+        pass
 
-    #print "Caching new sound:",name
+    log.debug("Caching new sound: %s" % name)
     fname = AUDIO_TRANS_TBL.get(name, name)
     fname = Path(fname + ".ogg", True)
     try:

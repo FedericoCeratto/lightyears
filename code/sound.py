@@ -6,14 +6,16 @@
 
 import pygame 
 from pygame.locals import *
+from logging import getLogger
 
 import resource, config
 
+log = getLogger(__name__)
 
 
 def FX(name):
     s = resource.Load_Sound(name) # (comes from a cache)
-    if ( s is not None ) and not config.cfg.mute:
+    if s and not config.cfg.mute:
         s.play()
 
 
@@ -29,8 +31,7 @@ class Persisting_Sound:
         self.schan = None
 
     def Set(self, volume):
-        if (( self.sobj is None )
-        or ( self.sobj2 is None )):
+        if not (self.sobj and self.sobj2):
             return
 
         if config.cfg.mute:
@@ -50,9 +51,7 @@ class Persisting_Sound:
                 self.schan.queue(self.sobj2)
 
     def Fade_Out(self):
-        if (( self.sobj is None )
-        or ( self.sobj2 is None )
-        or ( self.schan is None )):
+        if not (self.sobj and self.sobj2 and self.schan):
             return
 
         self.schan.queue(self.sobj2)
