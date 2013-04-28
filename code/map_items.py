@@ -9,6 +9,7 @@
 import pygame, math
 from pygame import gfxdraw
 from pygame.locals import *
+from random import choice
 
 import bresenham , intersect , extra , stats , resource , draw_obj , sound
 from primitives import *
@@ -421,17 +422,17 @@ class Tank(Vehicle):
         self._drive()
 
 class Well(Item):
-    def __init__(self, (x,y), name="Well"):
+    def __init__(self, pos, name="Well"):
         Item.__init__(self, name)
-        self.pos = (x,y)
+        self.pos = pos
         self.draw_obj = draw_obj.Draw_Obj("well.png", 1)
         self.emits_steam = True
 
 class Rock(Item):
     """Just a big rock, of random size"""
-    def __init__(self, (x, y), size, name="Rock"):
+    def __init__(self, pos, size, name="Rock"):
         Item.__init__(self, name)
-        self.pos = (x,y)
+        self.pos = pos
         self.rock_img = resource.Load_Image("rock.png")
         self.shadow_img = resource.Load_Image("rock_shadow.png")
 
@@ -671,10 +672,10 @@ class Building(Item):
         return (r,g,b)
 
 class Node(Building):
-    def __init__(self,(x,y),name="Node", rocks=[]):
+    def __init__(self, pos, name="Node", rocks=[]):
         Building.__init__(self,name)
         self.pipes = []
-        self.pos = (x,y)
+        self.pos = pos
         self.max_health = NODE_HEALTH_UNITS * HEALTH_UNIT
         self.base_colour = (255,192,0)
         self.steam = Steam_Model()
@@ -906,6 +907,9 @@ class ResearchNode(Node):
             'research_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('research.anim')
 
+    def Sound_Effect(self):
+        sound_name = choice(('scanning_area', 'computer_beeps'))
+        sound.FX(sound_name)
 
 class HydroponicsNode(Node):
     """Hydroponics node"""
@@ -917,6 +921,9 @@ class HydroponicsNode(Node):
             'hydroponics_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('hydroponics.anim')
 
+    def Sound_Effect(self):
+        sound_name = choice(('leaves_00'))
+        sound.FX(sound_name)
 
 class TowerNode(Node):
     """Tower node"""
@@ -929,6 +936,9 @@ class TowerNode(Node):
             'tower_under_construction.anim', building=self)
         self._sp_finished = sprites.AnimatedSprite('tower.anim')
 
+    def Sound_Effect(self):
+        sound_name = "robot_squeak_%s" % choice(('0', '1', '2'))
+        sound.FX(sound_name)
 
 buildings = {
     'Pipe': {
@@ -984,8 +994,8 @@ buildings = {
 
 
 class City_Node(Node):
-    def __init__(self,(x,y),name="City"):
-        Node.__init__(self,(x,y),name)
+    def __init__(self, pos, name="City"):
+        Node.__init__(self, pos, name)
         self.base_colour = CITY_COLOUR
         self.avail_work_units = 1 
         self.city_upgrade = 0
@@ -1204,7 +1214,8 @@ class Pipe(Building):
         # a very soft target.
         return Building.Take_Damage(self, dmg_level * (self.length + 1.0))
 
-    def Draw_Mini(self, output, (x,y) ):
+    def Draw_Mini(self, output, pos):
+        x, y = pos
         (x1,y1) = Grid_To_Scr(self.n1.pos)
         (x2,y2) = Grid_To_Scr(self.n2.pos)
         x1 -= x ; x2 -= x
