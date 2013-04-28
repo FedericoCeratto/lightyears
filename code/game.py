@@ -8,6 +8,7 @@
 
 import pygame , random , sys , math , time , pickle
 from pygame.locals import *
+from random import choice
 
 import bresenham , intersect , extra , stats , mail , gametime
 import menu , startup , save_menu , save_game , config , resource
@@ -32,7 +33,8 @@ class Game_Data:
 
 class Main_Loop(object):
     def __init__(self):
-        pass
+        intro = choice(('00', '01', '04'))
+        sound.FX("intro_%s" % intro)
 
     def run(self, screen, clock, (width, height), restore_pos,
         challenge, mreactor=None):
@@ -134,9 +136,6 @@ class Main_Loop(object):
 
         # UI setup
         ui = User_Interface(g.net, (width,height), g)
-        inputs = [
-            (controls_rect, ui.Control_Mouse_Down, ui.Control_Mouse_Move),
-            (game_screen_rect, ui.Game_Mouse_Down, ui.Game_Mouse_Move) ]
         self._exit_options = [
             (menu.Menu.menu, "Exit to Main Menu", []),
             (menu.Menu.quit, "Quit", [ K_F10 ])]
@@ -414,22 +413,29 @@ class Main_Loop(object):
                     quit = True
 
                 elif e.type in (MOUSEBUTTONDOWN, MOUSEMOTION):
-                    if (( e.type == MOUSEBUTTONDOWN ) 
-                    and ( e.button != 1 )):
+                    if (e.type == MOUSEBUTTONDOWN and e.button != 1):
                         if not menu_inhibit:
                             ui.Right_Mouse_Down()
 
-                    elif not menu_inhibit:
-                        for (rect, click, move) in inputs:
-                            if ( rect.collidepoint(e.pos)):
-                                (x,y) = e.pos
-                                x -= rect.left
-                                y -= rect.top
-                                if e.type == MOUSEMOTION:
-                                    move((x,y))
-                                else:
-                                    click((x,y))
-                    elif menu_inhibit:
+                    elif not menu_inhibit: # In game
+                        (x,y) = e.pos
+                        if controls_rect.collidepoint(e.pos):
+                            x -= controls_rect.left
+                            y -= controls_rect.top
+                            if e.type == MOUSEMOTION:
+                                ui.Control_Mouse_Move((x,y))
+                            else:
+                                ui.Control_Mouse_Down((x,y))
+
+                        elif game_screen_rect.collidepoint(e.pos):
+                            x -= game_screen_rect.left
+                            y -= game_screen_rect.top
+                            if e.type == MOUSEMOTION:
+                                ui.Game_Mouse_Move((x,y))
+                            else:
+                                ui.Game_Mouse_Down((x,y))
+
+                    elif menu_inhibit: # Displaying menu
                         if e.type == MOUSEMOTION:
                             current_menu.Mouse_Move(e.pos)
                         else:
