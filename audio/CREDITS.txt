@@ -6,7 +6,18 @@ Copyright: © Bart Kelsey
 Website: http://opengameart.org
 License: Public Domain
 
-Files: intro_00.ogg intro_01.ogg intro_04.ogg
+Files: intro_00.ogg intro_01.ogg intro_04.ogg computer_beeps.ogg
 Copyright: © Federico Ceratto <federico.ceratto@gmail.com>
 Website: https://github.com/FedericoCeratto/lightyears
 License: GPLv2
+
+Files: scanning_area.ogg
+Copyright: © Gobusto
+Website: http://opengameart.org/content/robot-scanning-area
+License: CC-BY-SA 3.0
+
+Files: robot_squeak_0.ogg robot_squeak_1.ogg robot_squeak_2.ogg
+Copyright: © Lee Barkovich
+Website: http://www.archive.org/details/Berklee44Barkovich http://www.lbarkovich.com/
+License: Creative Commons Attribution 3.0
+

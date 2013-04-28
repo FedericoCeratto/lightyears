@@ -25,9 +25,7 @@ DATA_DIR = os.path.abspath(os.path.join(
                 os.path.dirname(sys.argv[ 0 ]), "data"))
 
 AUDIO_TRANS_TBL = {
-    "bamboo" : "ack1",          # ack 1
     "bamboo1" : "ack2",         # ack 2
-    "bamboo2" : "ack3",         # ack 3
     "crisp" : "ack4",           # ack 4
     "destroy" : "ack5",         # ack 5
     "double" : "ack6",          # ack 6
@@ -50,6 +48,8 @@ AUDIO_TRANS_TBL = {
     'game_intro_00': 'intro_00',
     'game_intro_01': 'intro_01',
     'game_intro_04': 'intro_04',
+    'scanning_area': 'scanning_area',
+    'computer_beeps': 'computer_beeps',
 }
 
 
