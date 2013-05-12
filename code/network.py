@@ -230,7 +230,7 @@ class Network(object):
         node.locate_nearby_rocks(self.rock_list)
 
     def Add_Grid_Item(self, item, inhibit_effects=False):
-        gpos = item.pos
+        gpos = tuple(item.pos)
         assert isinstance(gpos[0], int)
         assert isinstance(gpos[1], int)
         if item.Is_Destroyed():

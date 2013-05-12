@@ -157,6 +157,11 @@ class Point(object):
             assert y is None, 'y cannot be set when the first param is a tuple'
             self.tup = x
 
+        elif isinstance(x, list):
+            assert len(x) == 2
+            assert y is None, 'y cannot be set when the first param is a list'
+            self.tup = tuple(x)
+
         else:
             assert y is not None, 'y must be set'
             self.tup = (x, y)
