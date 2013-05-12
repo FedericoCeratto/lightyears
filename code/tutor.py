@@ -42,39 +42,43 @@ def Steam_Maker_Selected(first):
             "The First Steam Maker",
             """You have just selected a Steam Maker. Steam Makers are the source of your steam supply. You'll need to build more of these in order to win the game, and you'll need to connect them to your city via Pipes.
 Steam Makers have to be built on top of Steam Sources. These are producing clouds of steam - there are about ten of them, dotted around the map.
-Click 'Build Node', then click on one of the Steam Sources. Ideally, you should choose one that's near the City.""",
+Click 'Build Node' or 'n', then click on one of the Steam Sources. Ideally, you should choose one that's near the City.""",
             False)
     else:
         Message("steamsel", "newsteam",
             "The New Steam Maker",
-            """You've just built a new Steam Maker. Or, more accurately, you've planned the construction of a new Steam Maker. It won't actually be built until it is connected by some Pipes to your City.
+            """You've just planned the construction of a new Steam Maker. It won't actually be built until it is connected by some Pipes to your City.
 Your next job is to connect your Steam Maker to your City. For this, you'll need to build a Pipe.
-Click 'Build Pipe', then click first on the City, and then on the new Steam Maker.""",
+Click 'Build Pipe' or 'p', then click first on the City, and then on the new Steam Maker.""",
             False)
 
 def Pipe_Added():
     Message("newsteam", "building",
         "Building", 
         """Now you've planned the beginnings of your network. You have two Steam Makers, one operational, the other under construction, and Pipes linking them to the City.
-Please wait while the new Steam Maker is built. While construction is in progress, try clicking on the Pipes and the Steam Makers. You'll see some information about them, including the progress of construction!""",
+Please wait while the new Steam Maker is built. While construction is in progress, try clicking on the Pipes and the Steam Makers. You'll see some information about them, including the progress of construction.
+The gauge on the right shows nodes pressure or pipes flow depending on the selected item.""",
         False)
 
 def All_Nodes_Finished():
     Message("building", "nodesready",
         "Building Complete!", 
         """Great! Your City is now supplied with Steam from two sources.
-You can safely upgrade it now. Click 'Upgrade', and then click on the City. The upgrade will begin immediately.""",
+
+Building or upgrading structures requires amounts of metal. Consider building nodes in proximity to some rocks to extract new metal. When planning a new node, a gray area appears around the selected location.
+Metal extraction will be carried on automatically withing the gray area at a rate that depends on the rock size and the distance from the node.
+
+You can safely upgrade the City now. Click 'Upgrade' or 'u', and then click on the City. The upgrade will begin immediately.""",
         False)
 
 def City_Upgrade_Running():
     Message("nodesready", "upgraderunning",
         "Upgrade In Progress",
         """The City upgrade is now in progress. As soon as you started the upgrade, two things happened:
-- You got an extra Work Unit. Now, two of your buildings can be built simultaneously. Currently, one Work Unit is being used to upgrade the City. The other one is spare.
+- You got an extra Work Unit. Now two of your buildings can be built simultaneously. Currently, one Work Unit is being used to upgrade the City. The other one is spare.
 - The City's steam requirement increased. Note the figures for Supply and Demand on the right hand side. Demand has just gone up. Fortunately, as you have two Steam Makers, Supply will be able to match it.
-Now you should strengthen your network. Later in the game, you'll be under attack in a variety of nasty ways.
-To do that, create a new Node somewhere between the two Steam Makers. Nodes are just connection points. They store steam, but they don't produce it or consume it.
-Click 'Build Node' and then click on the position of your new node.""",
+Now you should strengthen your network. Later in the game, you'll be under attack in a variety of nasty ways. Create a new Node somewhere between the two Steam Makers.
+Nodes are just connection points. They store steam, but they don't produce it or consume it.  Different types of buildings are available: basic, hydroponics, research, super and turret nodes. Some provide higher storage capacity and better armor to withstand attacks. Click 'Build Node' or 'n' and then click on the position of your new node.""",
         False)
         
 def Node_Selected():
@@ -96,6 +100,7 @@ def Pipe_Selected():
         "Steam is Water..",
         """To understand the network, it helps to imagine that the steam is just (liquid) water. The City is like a drain: it is draining water out of the system. The Steam Makers are like taps: they are adding water to the system. In both cases, the flow rate depends only on the amount of Upgrades you have applied.
 Flow rates are given in Flow Units (U). Flow rates are represented by the green dots that move along the pipes. The movement of the dots is proportional to the velocity of the flow.
+You open or close a pipe by selecting it and pressing the space bar.
 Now click on one of the nodes.""",
         False)
 
@@ -105,9 +110,9 @@ def Any_Node_Selected():
         """Water always finds it's own level. If you have two water tanks and you connect them with a pipe, the water level will try to equalise. The same effect happens here, but with steam.
 All of the Nodes are steam storage tanks. The 'level' is steam pressure. It is constantly trying to equalise.
 Pressure is given in Pressure Units (P). Now you've selected a Node, you can see its pressure on the right hand side. Pressure is limited: to increase the limit, you can upgrade the node, but there's no need to do that yet.
-You lose the game if the pressure at the City falls too low (below " + str(PRESSURE_DANGER) + " P) for more than a certain period of time (" + str(DIFFICULTY.GRACE_TIME) + " days, in Beginner mode). To avoid that, ensure that Supply matches Demand.
-" +
-        "We're almost done. Please click on a pipe again.""",
+You lose the game if the pressure at the City falls too low for some time. To avoid that, ensure that Supply matches Demand.
+The gauge on the left displays Supply (black hand) and Demand (red hand).
+We're almost done. Please click on a pipe again.""",
         False)
 
 def Pipe_Selected_2():
@@ -119,7 +124,7 @@ All of this will reduce to a few rules of thumb.
 - Build one Steam Maker per City Upgrade.
 - Make lots of Pipes.
 - Don't do an Upgrade unless the steam pressure at your City is stable.
-Now you're ready to experience an attack. Please click on yourCity.""",
+Now you're ready to experience an attack. Please click on your City.""",
         False)
 
 def City_Selected_2():
