@@ -21,7 +21,7 @@ def On(width):
     global __tutor
     __tutor = Tutor_Memory(width)
 
-    Message(None, "welcome",
+    set_message(None, "welcome",
         "Welcome to 20,000 Light Years Into Space!",
         """You are playing the interactive tutorial. As you play, information boxes like this one will appear on your screen. When each message appears, read it, and then follow the instructions that it provides.
 To proceed, select the City, which is in the centre of the map.""",
@@ -29,7 +29,7 @@ To proceed, select the City, which is in the centre of the map.""",
 
 
 def City_Selected():
-    Message("welcome", "citysel",
+    set_message("welcome", "citysel",
         "Your City",
         """To win the game, you must upgrade the city. Upgrades raise the Technology Level of the City. Currently, the City is at level 1 - you can see this on the right hand side of the screen ('Tech Level'). When the City's Tech Level reaches its maximum (depending on the game difficulty), you win.
 You can upgrade the City at any time, but you should wait until you have secured some more supplies of steam.
@@ -38,14 +38,14 @@ Now click on the structure close to the City.""",
 
 def Steam_Maker_Selected(first):
     if first:
-        Message("citysel", "steamsel",
+        set_message("citysel", "steamsel",
             "The First Steam Maker",
             """You have just selected a Steam Maker. Steam Makers are the source of your steam supply. You'll need to build more of these in order to win the game, and you'll need to connect them to your city via Pipes.
 Steam Makers have to be built on top of Steam Sources. These are producing clouds of steam - there are about ten of them, dotted around the map.
 Click 'Build Node' or 'n', then click on one of the Steam Sources. Ideally, you should choose one that's near the City.""",
             False)
     else:
-        Message("steamsel", "newsteam",
+        set_message("steamsel", "newsteam",
             "The New Steam Maker",
             """You've just planned the construction of a new Steam Maker. It won't actually be built until it is connected by some Pipes to your City.
 Your next job is to connect your Steam Maker to your City. For this, you'll need to build a Pipe.
@@ -53,7 +53,7 @@ Click 'Build Pipe' or 'p', then click first on the City, and then on the new Ste
             False)
 
 def Pipe_Added():
-    Message("newsteam", "building",
+    set_message("newsteam", "building",
         "Building", 
         """Now you've planned the beginnings of your network. You have two Steam Makers, one operational, the other under construction, and Pipes linking them to the City.
 Please wait while the new Steam Maker is built. While construction is in progress, try clicking on the Pipes and the Steam Makers. You'll see some information about them, including the progress of construction.
@@ -61,7 +61,7 @@ The gauge on the right shows nodes pressure or pipes flow depending on the selec
         False)
 
 def All_Nodes_Finished():
-    Message("building", "nodesready",
+    set_message("building", "nodesready",
         "Building Complete!", 
         """Great! Your City is now supplied with Steam from two sources.
 
@@ -72,7 +72,7 @@ You can safely upgrade the City now. Click 'Upgrade' or 'u', and then click on t
         False)
 
 def City_Upgrade_Running():
-    Message("nodesready", "upgraderunning",
+    set_message("nodesready", "upgraderunning",
         "Upgrade In Progress",
         """The City upgrade is now in progress. As soon as you started the upgrade, two things happened:
 - You got an extra Work Unit. Now two of your buildings can be built simultaneously. Currently, one Work Unit is being used to upgrade the City. The other one is spare.
@@ -82,7 +82,7 @@ Nodes are just connection points. They store steam, but they don't produce it or
         False)
         
 def Node_Selected():
-    Message("upgraderunning", "makinglinks",
+    set_message("upgraderunning", "makinglinks",
         "Making New Links",
         """Your network's strength depends on the number of links. Generally, the more routes between two points, the better. The only disadvantage of adding new routes is that they consume Work Units during construction and repair. Don't worry about that for now.
 Now build three new Pipes, each running from your new Node: one to the City, and two for the two Steam Makers. These connections make your network stronger. Wait for these to be built.""",
@@ -90,13 +90,13 @@ Now build three new Pipes, each running from your new Node: one to the City, and
 
 def Number_Of_Pipes_Is(pipe_count):
     if pipe_count >= 5:
-        Message("makinglinks", "networkbasics",
+        set_message("makinglinks", "networkbasics",
             "Almost There...",
             """Excellent. Your network is now strong enough to withstand attacks. You are almost ready to begin playing for real! But before you do, you have to understand how steam flows. Please click on one of the pipes.""",
             False)
 
 def Pipe_Selected():
-    Message("networkbasics", "networkbasics2",
+    set_message("networkbasics", "networkbasics2",
         "Steam is Water..",
         """To understand the network, it helps to imagine that the steam is just (liquid) water. The City is like a drain: it is draining water out of the system. The Steam Makers are like taps: they are adding water to the system. In both cases, the flow rate depends only on the amount of Upgrades you have applied.
 Flow rates are given in Flow Units (U). Flow rates are represented by the green dots that move along the pipes. The movement of the dots is proportional to the velocity of the flow.
@@ -105,7 +105,7 @@ Now click on one of the nodes.""",
         False)
 
 def Any_Node_Selected():
-    Message("networkbasics2", "networkbasics3",
+    set_message("networkbasics2", "networkbasics3",
         "Pressure..",
         """Water always finds it's own level. If you have two water tanks and you connect them with a pipe, the water level will try to equalise. The same effect happens here, but with steam.
 All of the Nodes are steam storage tanks. The 'level' is steam pressure. It is constantly trying to equalise.
@@ -116,7 +116,7 @@ We're almost done. Please click on a pipe again.""",
         False)
 
 def Pipe_Selected_2():
-    Message("networkbasics3", "networkbasics4",
+    set_message("networkbasics3", "networkbasics4",
         "Rules Of Thumb",
         """The steam pressures in your Nodes will never equalise, because steam is being added and removed from the network. However, you may wonder why pressure and flow vary so much.
 The answer is Resistance. Each pipe has only a limited capacity. There's a limit to the rate at which steam can move, imposed by each pipe. Resistance is a hidden property: you can't see it, but it affects the game. Longer pipes have more resistance than short ones.
@@ -128,7 +128,7 @@ Now you're ready to experience an attack. Please click on your City.""",
         False)
 
 def City_Selected_2():
-    Message("networkbasics4", "attack",
+    set_message("networkbasics4", "attack",
         "Alien Attack",
         """The Aliens are coming!
 You can't fight the aliens: all you can do is rebuild your network. They'll try to destroy your Nodes and Pipes: they'll only be able to put your Nodes out of action, but they can destroy your Pipes.
@@ -137,7 +137,7 @@ When you're ready for them, click on the planet's surface.""",
     False)
 
 def Nothing_Selected():
-    Message("attack", "running",
+    set_message("attack", "running",
         "Alien Attack",
         """Remember:
 - Rebuild Pipes that are destroyed by aliens.
@@ -148,7 +148,7 @@ The Aliens disappear after 2 minutes. Good luck.""",
 
 
 def Aliens_Gone():
-    Message("running", "ended",
+    set_message("running", "ended",
         "You Survived",
         """Good work! You survived the attack.
 Now you are ready to play for real. Now click 'Exit to Main Menu' and begin your first game!
@@ -229,12 +229,10 @@ def Off():
     global __tutor
     __tutor = None
 
-def Message(previous_msg_name, this_msg_name, 
-            title, text, sf):
+def set_message(previous_msg_name, this_msg_name, title, text, sf):
     global __tutor
-    t = __tutor
-    if t is not None:
-        t.Add_Message((previous_msg_name, this_msg_name,
+    if __tutor is not None:
+        __tutor.Add_Message((previous_msg_name, this_msg_name,
                 title, text, sf))
 
 def Draw(screen, g):
@@ -309,8 +307,11 @@ class Tutor_Memory(object):
 
     def __Draw_H(self, title, text, height):
         width = self.width
-        margin = 10
+        top_margin = 10
+        title_bottom_margin = 10
+        body_bottom_margin = 10
         body_left_margin = 135
+        minimum_height = 180
         fs1 = 12
         fs2 = 14
         newline_gap = 12
@@ -322,15 +323,15 @@ class Tutor_Memory(object):
         tsurf = stats.Get_Font(fs1).render(title, True, (250,250,200))
         tsurf_r = tsurf.get_rect()
         tsurf_r.center = bbox.center
-        tsurf_r.top = margin
+        tsurf_r.top = top_margin
 
         surf.blit(tsurf, tsurf_r.topleft)
 
-        y = tsurf_r.bottom + margin
+        y = tsurf_r.bottom + title_bottom_margin
         # line edging for title
         extra.Line_Edging(surf, Rect(0,0,width,y), True)
 
-        y += margin
+        y += top_margin
         x = body_left_margin
         height = y
 
@@ -361,7 +362,9 @@ class Tutor_Memory(object):
 
             surf.blit(tsurf, tsurf_r.topleft)
             x = tsurf_r.right
-            height = tsurf_r.bottom + margin
+            height = tsurf_r.bottom + body_bottom_margin
+            if height < minimum_height:
+                height = minimum_height
 
             if newline:
                 x = body_left_margin
