@@ -26,6 +26,7 @@ class Config(object):
         self.mute = True
         self.font_scale = fs
         self.seen_before = False
+        # Hotkeys can be overridden from the configuration file
         self.keys = {
             'n': 'build node',
             's': 'build super node',

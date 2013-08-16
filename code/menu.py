@@ -12,6 +12,8 @@ from primitives import *
 
 import stats , extra , resource , render , sound
 
+from logging import getLogger
+log = getLogger(__name__)
 
 class Menu(object):
     def __init__(self, menu_options, force_width=0, title=None):
@@ -79,8 +81,9 @@ class Menu(object):
             sound.FX("click")
 
     def Key_Press(self, k):
+        """Handle key press on general menu."""
         for (num, name, hotkeys) in self._options:
-            if (( hotkeys is not None ) and ( k in hotkeys )):
+            if hotkeys is not None and k in hotkeys:
                 self.selection = num
                 self.update_required = True
                 sound.FX("click")
