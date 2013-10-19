@@ -1,0 +1,2 @@
+recursive-include audio *.ogg
+recursive-include data *.png *.anim
