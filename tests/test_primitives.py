@@ -1,8 +1,8 @@
+# test primitives
+
 from nose.tools import raises
 from nose.tools import assert_almost_equal
-import primitives
-
-## test primitive
+from code import primitives
 
 def test_point():
     p = primitives.Point(1,1)
