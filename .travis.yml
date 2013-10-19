@@ -8,9 +8,9 @@ install:
   - pip install python-zmq --use-mirrors
   - pip install python-pygame --use-mirrors
 
-script: 
-  - nosetests code/test/test.py
-  - coverage run --source=code tests/test.py
+script:
+  - nosetests tests/test_primitives.py
+  #- coverage run --source=code tests/test.py
 
-after_success:
-  - coveralls
+#after_success:
+#  - coveralls
